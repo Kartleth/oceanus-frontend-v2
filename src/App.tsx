@@ -1,10 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.tsx
+import { useEffect, useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import { fetchData } from './api/apiService';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const responseData = await fetchData();
+        setData(responseData);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      }
+    };
+
+    getData();
+  }, []);
 
   return (
     <>
@@ -28,8 +44,16 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div>
+        <h2>Datos del backend:</h2>
+        {data ? (
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        ) : (
+          <p>Cargando datos...</p>
+        )}
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
