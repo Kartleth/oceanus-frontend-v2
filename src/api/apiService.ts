@@ -1,3 +1,4 @@
+//. Este archivo encapsula la lógica necesaria para realizar solicitudes HTTP, como obtener, enviar, actualizar o eliminar datos.
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchData = async (): Promise<any> => {
