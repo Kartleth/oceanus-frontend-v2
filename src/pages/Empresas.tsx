@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "../components/Layout";
 
-export default function Personal() {
+export default function Empresas() {
   return (
     <Layout>
-      <h1>Estas en la pagina de Personal</h1>
+      <h1>Estas en la pagina de Empresas</h1>
     </Layout>
   );
 }
