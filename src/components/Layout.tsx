@@ -17,7 +17,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex h-screen bg-gradient-to-r from-aqua to-softAqua">
+    <div className="flex h-screen bg-gradient-to-r from-softAqua to-lightsky">
+      {/* Sidebar */}
       <Sidebar>
         <SidebarItem icon={<Users2Icon size={20} />} text="Personal" />
         <SidebarItem icon={<ReceiptText size={20} />} text="Contratos" />
