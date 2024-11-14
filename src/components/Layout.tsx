@@ -17,7 +17,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gradient-to-r from-aqua to-softAqua">
       <Sidebar>
         <SidebarItem icon={<Users2Icon size={20} />} text="Personal" />
         <SidebarItem icon={<ReceiptText size={20} />} text="Contratos" />
@@ -29,16 +29,14 @@ export default function Layout({ children }: LayoutProps) {
         <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" />
         <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" />*/}
       </Sidebar>
-
-      {/* Main content */}
       <div className="flex-1 ml-[260px] pt-[60px]">
         {" "}
-        {/* Ajustamos para dejar espacio al Sidebar */}
         {/* Navbar */}
+        <Navbar />
         {/* Main content */}
         <main className="p-6">{children}</main>
         {/* Footer */}
-        <Footer />
+        {/* <Footer />*/}
       </div>
     </div>
   );

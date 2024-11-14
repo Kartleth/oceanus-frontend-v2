@@ -1,6 +1,7 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { createContext, useContext, useState, ReactNode } from "react";
 import logo from "../assets/oceanus-logo.svg";
+import Navbar from "./Navbar";
 
 // Definición del tipo para el contexto
 interface SidebarContextType {
@@ -17,7 +18,7 @@ export default function Sidebar({ children }: SidebarProps) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <aside className={`h-screen ${expanded ? "w-64" : "w-16"} transition-all`}>
+    <aside className={`h-screen ${expanded ? "w-64" : "w-16"} transition-all z-20`}>
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         {/* Cabecera del sidebar */}
         <div className="p-4 pb-2 flex justify-between items-center">
@@ -84,10 +85,10 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
 
   return (
     <li
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-2 px-3 my-2 font-medium rounded-md cursor-pointer transition-colors group ${
         active
-          ? "bg-gradient-to-tr from-[#C4EEF8] to-[#E5F7FB] text-[#0C5668]"
-          : "hover:bg-[#E5F7FB] text-gray-600"
+          ? "bg-gradient-to-tr from-softAqua to-lightSky text-ocean"
+          : "hover:bg-lightSky text-gray-600"
       }`}
     >
       {icon}
@@ -100,13 +101,13 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
       </span>
       {alert && (
         <div
-          className={`absolute right-2 w-2 h-2 rounded bg-[#E5F7FB] ${
+          className={`absolute right-2 w-2 h-2 rounded bg-lightSky ${
             expanded ? "" : "top-2"
           }`}
         />
       )}
       {!expanded && (
-        <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-[#E5F7FB] text-[#117991] text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0">
+        <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-lightSky text-gray-600 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0">
           {text}
         </div>
       )}
