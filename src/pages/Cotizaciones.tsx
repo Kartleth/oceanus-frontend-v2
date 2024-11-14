@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "../components/Layout";
+import MainTitle from "../components/MainTitle";
 
 export default function Cotizaciones() {
   return (
     <Layout>
-      <h1>Estas en la pagina de cotizaciones</h1>
+      <MainTitle>Cotizaciones</MainTitle>
     </Layout>
   );
 }

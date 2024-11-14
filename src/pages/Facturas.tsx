@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "../components/Layout";
+import MainTitle from "../components/MainTitle";
 
 export default function Facturas() {
   return (
     <Layout>
-      <h1>Estas en la pagina de Facturas</h1>
+      <MainTitle>Facturas</MainTitle>
     </Layout>
   );
 }

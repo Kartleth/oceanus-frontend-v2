@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "../components/Layout";
+import MainTitle from "../components/MainTitle";
 
 export default function Personal() {
   return (
     <Layout>
-      <h1>Estas en la pagina de Personal</h1>
+      <MainTitle>Personal</MainTitle>
     </Layout>
   );
 }

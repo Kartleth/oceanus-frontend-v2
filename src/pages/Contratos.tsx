@@ -1,8 +1,9 @@
 import Layout from "../components/Layout";
+import MainTitle from "../components/MainTitle";
 export default function Contratos() {
   return (
     <Layout>
-      <h1>Estas en la pagina de contratos</h1>
+      <MainTitle>Contratos</MainTitle>
     </Layout>
   );
 }
