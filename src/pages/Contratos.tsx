@@ -3,7 +3,9 @@ import MainTitle from "../components/MainTitle";
 export default function Contratos() {
   return (
     <Layout>
-      <MainTitle>Contratos</MainTitle>
+      <div>
+        <MainTitle>Contratos</MainTitle>
+      </div>
     </Layout>
   );
 }

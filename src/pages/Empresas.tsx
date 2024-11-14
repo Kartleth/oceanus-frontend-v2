@@ -5,7 +5,9 @@ import MainTitle from "../components/MainTitle";
 export default function Empresas() {
   return (
     <Layout>
-      <MainTitle>Empresas</MainTitle>
+      <div>
+        <MainTitle>Empresas</MainTitle>
+      </div>
     </Layout>
   );
 }

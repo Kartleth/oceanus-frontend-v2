@@ -5,7 +5,9 @@ import MainTitle from "../components/MainTitle";
 export default function Facturas() {
   return (
     <Layout>
-      <MainTitle>Facturas</MainTitle>
+      <div>
+        <MainTitle>Facturas</MainTitle>
+      </div>
     </Layout>
   );
 }

@@ -5,7 +5,9 @@ import MainTitle from "../components/MainTitle";
 export default function Cotizaciones() {
   return (
     <Layout>
-      <MainTitle>Cotizaciones</MainTitle>
+      <div>
+        <MainTitle>Cotizaciones</MainTitle>
+      </div>
     </Layout>
   );
 }

@@ -17,7 +17,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children }: Readonly<LayoutProps>) {
   return (
     <div className="flex h-screen bg-gradient-to-r from-softAqua to-lightsky">
       {/* Sidebar */}
@@ -48,12 +48,12 @@ export default function Layout({ children }: LayoutProps) {
         <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" />
         <SidebarItem icon={<BarChart3 size={20} />} text="Statistics" />*/}
       </Sidebar>
-      <div className="flex-1 ml-[260px] pt-[60px]">
+      <div className="flex">
         {" "}
         {/* Navbar */}
         <Navbar />
         {/* Main content */}
-        <main className="p-6">{children}</main>
+        <main className="p-6 ">{children}</main>
         {/* Footer */}
         {/* <Footer />*/}
       </div>
