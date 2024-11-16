@@ -1,7 +1,6 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { createContext, useContext, useState, ReactNode } from "react";
 import logo from "../assets/oceanus-logo.svg";
-import Navbar from "./Navbar";
 
 // Definición del tipo para el contexto
 interface SidebarContextType {
