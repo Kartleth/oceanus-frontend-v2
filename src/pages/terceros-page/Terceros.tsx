@@ -6,14 +6,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout";
 
 export default function Terceros() {
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
         <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
+        <Separator className="h-6 w-px bg-gray-300 mx-2" />
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

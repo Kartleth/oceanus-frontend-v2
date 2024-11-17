@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/Layout";
-import MainTitle from "../../components/MainTitle";
-import MainButton from "@/components/MainButton";
-import { Payment, columns } from "../../components/usersTable/columns";
-import { DataTable } from "../../components/usersTable/data-table";
+import Layout from "../../components/layout";
+import MainTitle from "./MainTitle";
+import MainButton from "@/pages/borrar/MainButton";
+import { Payment, columns } from "./usersTable/columns";
+import { DataTable } from "./usersTable/data-table";
 
 // Función para obtener datos
 async function getData(): Promise<Payment[]> {
