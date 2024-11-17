@@ -96,6 +96,9 @@ export default function Personal(): JSX.Element {
         <MainButton>Cargar Excel</MainButton>
       </div>
 
+      <hr className="mb-8 bg-gradient-to-r from-lightSky via-aqua to-deepSea h-[2px] border-none" />
+
+
       <div className="container mx-auto py-0">
         <DataTable columns={columns} data={data} />
       </div>
