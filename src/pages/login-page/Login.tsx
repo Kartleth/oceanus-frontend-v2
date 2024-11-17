@@ -1,5 +1,4 @@
-import MainTitle from "../components/MainTitle";
-import logo from "../assets/oceanus-logo.svg";
+import logo from "../../assets/oceanus-logo.svg";
 
 import {
   Card,

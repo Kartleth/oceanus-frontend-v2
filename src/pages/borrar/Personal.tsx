@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../components/Layout";
-import MainTitle from "../components/MainTitle";
+import Layout from "../../components/Layout";
+import MainTitle from "../../components/MainTitle";
 import MainButton from "@/components/MainButton";
-import { Payment, columns } from "./../components/usersTable/columns";
-import { DataTable } from "./../components/usersTable/data-table";
+import { Payment, columns } from "../../components/usersTable/columns";
+import { DataTable } from "../../components/usersTable/data-table";
 
 // Función para obtener datos
 async function getData(): Promise<Payment[]> {
@@ -97,7 +97,6 @@ export default function Personal(): JSX.Element {
       </div>
 
       <hr className="mb-8 bg-gradient-to-r from-lightSky via-aqua to-deepSea h-[2px] border-none" />
-
 
       <div className="container mx-auto py-0">
         <DataTable columns={columns} data={data} />
