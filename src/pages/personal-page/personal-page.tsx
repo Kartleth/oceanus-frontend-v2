@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Upload } from "lucide-react";
 
 export function Page_personal() {
   return (
@@ -29,9 +30,9 @@ export function Page_personal() {
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button>Agregar trabajador</Button>
-        <Button>Subir Excel</Button>
-        <Button>Botón 1</Button>
-        <Button>Botón 2</Button>
+        <Button>
+          <Upload /> Subir Excel
+        </Button>
       </div>
 
       <div className="px-3">
