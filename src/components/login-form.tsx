@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import logoSVG from "/src/assets/oceanus-logo.svg";
 import {
   Card,
   CardContent,
@@ -14,6 +15,9 @@ export function LoginForm() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-ocean via-deepSea to-aqua">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
+          <div className="flex justify-center mb-4">
+            <img src={logoSVG} alt="Oceanus Logo" className="h-20" />
+          </div>
           <CardTitle className="text-2xl">Inicio de sesión</CardTitle>
           <CardDescription>
             Ingrese su usuario a continuación para iniciar sesión en OceanusDB{" "}
