@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 
 export function LoginForm() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-ocean via-deepSea to-aqua">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Inicio de sesión</CardTitle>
@@ -36,7 +36,7 @@ export function LoginForm() {
               </div>
               <Input id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-deepSea hover:bg-ocean">
               Iniciar sesión
             </Button>
           </div>
