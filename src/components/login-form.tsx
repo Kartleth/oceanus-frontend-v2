@@ -16,13 +16,13 @@ export function LoginForm() {
         <CardHeader>
           <CardTitle className="text-2xl">Inicio de sesión</CardTitle>
           <CardDescription>
-            Ingrese su cuenta a continuación para iniciar sesión en su cuenta{" "}
+            Ingrese su usuario a continuación para iniciar sesión en OceanusDB{" "}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Cuenta</Label>
+              <Label htmlFor="email">Usuario</Label>
               <Input
                 id="email"
                 type="email"
