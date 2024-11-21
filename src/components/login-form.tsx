@@ -1,3 +1,5 @@
+import { useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import logoSVG from "/src/assets/oceanus-logo.svg";
 import {
@@ -11,6 +13,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export function LoginForm() {
+  const [usuario, setUsuario] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Enviar una solicitud POST al backend
+      const response = await axios.post("http://localhost:3001/usuarios/login", {
+        usuario,
+        password,
+      });
+
+      // Si la respuesta es exitosa
+      console.log("Login exitoso:", response.data);
+      // Aquí puedes manejar la respuesta, por ejemplo, redirigir al usuario
+    } catch (err) {
+      setError("Usuario o contraseña incorrectos");
+      console.error("Error de login:", err);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-ocean via-deepSea to-aqua">
       <Card className="mx-auto max-w-sm">
@@ -24,13 +48,16 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {error && <p className="text-red-500 mb-2">{error}</p>} {/* Mostrar error */}
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Usuario</Label>
+              <Label htmlFor="usuario">Usuario</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
+                id="usuario"
+                type="text"
+                placeholder="Ingrese su usuario"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
                 required
               />
             </div>
@@ -38,9 +65,20 @@ export function LoginForm() {
               <div className="flex items-center">
                 <Label htmlFor="password">Contraseña</Label>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                placeholder="Ingrese su contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
-            <Button type="submit" className="w-full bg-deepSea hover:bg-ocean">
+            <Button
+              type="submit"
+              onClick={handleLogin}
+              className="w-full bg-deepSea hover:bg-ocean"
+            >
               Iniciar sesión
             </Button>
           </div>
