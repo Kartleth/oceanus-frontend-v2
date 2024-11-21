@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
+import { TriangleAlert } from 'lucide-react';
 
 export function LoginForm() {
   const [usuario, setUsuario] = useState("");
@@ -21,14 +23,17 @@ export function LoginForm() {
     e.preventDefault();
     try {
       // Enviar una solicitud POST al backend
-      const response = await axios.post("http://localhost:3001/usuarios/login", {
-        usuario,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:3001/usuarios/login",
+        {
+          usuario,
+          password,
+        }
+      );
 
       // Si la respuesta es exitosa
       console.log("Login exitoso:", response.data);
-      // Aquí puedes manejar la respuesta, por ejemplo, redirigir al usuario
+      //aqui va la ruta a donde pueda ir
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
       console.error("Error de login:", err);
@@ -48,7 +53,8 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {error && <p className="text-red-500 mb-2">{error}</p>} {/* Mostrar error */}
+          {error && <p className="text-red-500 mb-2">{error}</p>}{" "}
+          {/* Mostrar error */}
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="usuario">Usuario</Label>
