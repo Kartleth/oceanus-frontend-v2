@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logoSVG from "/src/assets/oceanus-logo.svg";
 import {
@@ -11,14 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
-import { TriangleAlert } from 'lucide-react';
 
 export function LoginForm() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -33,7 +32,7 @@ export function LoginForm() {
 
       // Si la respuesta es exitosa
       console.log("Login exitoso:", response.data);
-      //aqui va la ruta a donde pueda ir
+      navigate("/personal");
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
       console.error("Error de login:", err);
