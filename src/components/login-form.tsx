@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CircleAlert, Terminal, TriangleAlert } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 
 export function LoginForm() {
   const [usuario, setUsuario] = useState("");
@@ -52,7 +54,15 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {error && <p className="text-red-500 mb-2">{error}</p>}{" "}
+          {error && (
+            <Alert className="bg-red-100 border-red-200 mb-5">
+              <CircleAlert className="h-4 w-4" color="#F44336" />
+              <AlertTitle className="text-red-500">Error</AlertTitle>
+              <AlertDescription className="text-red-500">
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
           {/* Mostrar error */}
           <div className="grid gap-4">
             <div className="grid gap-2">
