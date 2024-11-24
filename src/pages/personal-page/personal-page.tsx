@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { CirclePlus, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Page_personal() {
   return (
@@ -29,9 +30,12 @@ export function Page_personal() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button>
-          <CirclePlus />
-          Agregar trabajador
+        <Button asChild={true}>
+          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
+          <Link to="agregar-trabajador">
+            <CirclePlus />
+            Agregar trabajador
+          </Link>
         </Button>
         <Button>
           <Upload /> Subir Excel
