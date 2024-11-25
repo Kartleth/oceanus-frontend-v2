@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { CirclePlus, Link, Upload } from "lucide-react";
+import { CirclePlus, Link, Slash, Upload } from "lucide-react";
 
 export function VerDetallesPersonal() {
   return (
@@ -27,7 +27,9 @@ export function VerDetallesPersonal() {
               </BreadcrumbPage>
             </BreadcrumbItem>
 
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator>
+              <Slash />
+            </BreadcrumbSeparator>
 
             <BreadcrumbItem>
               <BreadcrumbPage className="line-clamp-1 text-xl">
@@ -38,8 +40,10 @@ export function VerDetallesPersonal() {
         </Breadcrumb>
       </header>
 
-      <div className="py-6 px-3 space-x-2 flex justify-end">
-
+      <div className="py-6 px-6 space-x-2 flex-col">
+        <h1 className="text-2xl font-medium justify-start">
+          Nombre del trabajador
+        </h1>
       </div>
 
     </Layout>
