@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { string, z } from "zod";
 import Layout from "@/components/layout";
 import {
   Breadcrumb,
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/datepicker";
 
 const datosPersonalesSchema = z.object({
   name: z
@@ -84,6 +85,17 @@ const datosPersonalesSchema = z.object({
     }),
 });
 
+const datosMedicosSchema = z.object({
+  alegias: z.string({ message: "Introduce el tipo de alergias." }).optional(),
+  enfermedadCronica: z
+    .string({ message: "Introduce si padeces de una enfermedad cronica." })
+    .optional(),
+  lesiones: z.string({ message: "Introduce lesiones." }).optional(),
+  alergiasMedicamentos: z.string({message:""}),
+});
+const datosAcademicosSchema = z.object({});
+const datosContratacionSchema = z.object({});
+
 type DatosPersonalesForm = z.infer<typeof datosPersonalesSchema>;
 
 export function PageAgregarTrabajador() {
@@ -123,6 +135,171 @@ export function PageAgregarTrabajador() {
                     <FormLabel>Nombre</FormLabel>
                     <FormControl>
                       <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="fechaNacimiento"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fecha de Nacimiento</FormLabel>
+                    <FormControl>
+                      <DatePicker
+                        date={field.value}
+                        onChange={field.onChange}
+                        maxDate={new Date()}
+                        minDate={new Date(1914, 0, 1)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="curp"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Curp</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="rfc"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>RFC</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="clave"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de INE</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="estadoCivil"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Estado Civil</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="numeroCasa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de Casa</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="numeroCelular"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de Celular</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="correoElectronico"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Correo Electronico </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="direccion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Direccion </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="numeroLicencia"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero licencia </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="numeroPasaporte"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de Pasaporte </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosPersonalesForm.control}
+                name="fechaIngreso"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fecha de ingreso </FormLabel>
+                    <FormControl>
+                      <DatePicker
+                        date={field.value}
+                        onChange={field.onChange}
+                        minDate={undefined}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
