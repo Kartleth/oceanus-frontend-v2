@@ -16,13 +16,13 @@ export default function Empresas() {
   return (
     <Layout>
       <div>
-        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
           <SidebarTrigger className="-ml-1" />
           <Separator className="h-6 w-px bg-gray-300 mx-2" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage className="line-clamp-1 text-xl">
+                <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
                   Empresas
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -32,7 +32,7 @@ export default function Empresas() {
       </div>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button>
+        <Button  className="bg-deepSea hover:bg-deepLightSea">
           <CirclePlus />
           Agregar empresa
         </Button>

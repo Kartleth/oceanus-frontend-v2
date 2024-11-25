@@ -14,13 +14,13 @@ import { CirclePlus, Upload } from "lucide-react";
 export function Page_personal() {
   return (
     <Layout>
-      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b p-4 bg-gray-50">
         <SidebarTrigger className="-ml-1" />
         <Separator className="h-6 w-px bg-gray-300 mx-2" />
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
+              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
                 Personal
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -29,11 +29,13 @@ export function Page_personal() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button>
+        <Button
+          className="bg-deepSea hover:bg-deepLightSea"
+        >
           <CirclePlus />
           Agregar trabajador
         </Button>
-        <Button>
+        <Button className="bg-deepSea hover:bg-deepLightSea">
           <Upload /> Subir Excel
         </Button>
       </div>

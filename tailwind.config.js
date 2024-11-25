@@ -11,6 +11,7 @@ export default {
   			lightSky: '#E5F7FB',
   			softAqua: '#C4EEF8',
   			aqua: '#58D1EC',
+			deepLightSea: '#1698B6',
   			deepSea: '#117991',
   			ocean: '#0C5668',
   			midnightBlue: '#29333F',
