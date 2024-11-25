@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import { Link } from "react-router-dom";
 
 const data: EmployeInformation[] = [
   {
@@ -212,7 +213,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
                 navigator.clipboard.writeText(EmployeInformation.id)
               }
             >
-              Ver detalles
+              <Link to="/detalles-trabajador">Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>

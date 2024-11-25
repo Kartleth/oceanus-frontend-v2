@@ -7,6 +7,7 @@ import Terceros from "./pages/terceros-page/Terceros";
 import Cotizaciones from "./pages/cotizaciones-page/Cotizaciones";
 import { Page_personal } from "./pages/personal-page/personal-page";
 import { LoginForm } from "./components/login-form";
+import { VerDetallesPersonal } from "./pages/ver-detalles-personal/Ver-detalles-personal";
 
 function App() {
   return (
@@ -14,12 +15,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Page_personal />} />
         <Route path="/personal" element={<Page_personal />} />
-        <Route path="/login" element={<LoginForm/>} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/contratos" element={<Contratos />} />
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/facturas" element={<Facturas />} />
         <Route path="/personal_terceros" element={<Terceros />} />
         <Route path="/cotizaciones" element={<Cotizaciones />} />
+        <Route path="/detalles-trabajador" element={<VerDetallesPersonal />} />
       </Routes>
     </BrowserRouter>
   );

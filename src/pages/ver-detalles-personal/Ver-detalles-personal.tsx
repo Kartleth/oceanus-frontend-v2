@@ -1,17 +1,19 @@
 import { DataTableDemo } from "@/components/data-table-personal";
+import Layout from "@/components/layout";
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
-import { Layout, CirclePlus, Upload, Slash } from "lucide-react";
+import { CirclePlus, Link, Upload } from "lucide-react";
 
-export function Detalles_personal() {
+export function VerDetallesPersonal() {
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -24,29 +26,22 @@ export function Detalles_personal() {
                 Personal
               </BreadcrumbPage>
             </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
+
+            <BreadcrumbSeparator />
+
             <BreadcrumbItem>
-              <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+              <BreadcrumbPage className="line-clamp-1 text-xl">
+                Detalles
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button>
-          <CirclePlus />
-          Agregar trabajador
-        </Button>
-        <Button>
-          <Upload /> Subir Excel
-        </Button>
+
       </div>
 
-      <div className="px-3">
-        <DataTableDemo></DataTableDemo>
-      </div>
     </Layout>
   );
 }
