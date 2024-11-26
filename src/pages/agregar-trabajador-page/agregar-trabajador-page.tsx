@@ -91,20 +91,56 @@ const datosMedicosSchema = z.object({
     .string({ message: "Introduce si padeces de una enfermedad cronica." })
     .optional(),
   lesiones: z.string({ message: "Introduce lesiones." }).optional(),
-  alergiasMedicamentos: z.string({message:""}),
+  alergiasMedicamentos: z.string({ message: "" }),
+  numeroSeguro: z.string({ required_error: "Numero seguro obligatorio." }),
+  relacionPersona: z.string({
+    required_error: "Relacion con trabajador obligaoria.",
+  }),
+  numeroEmergencia: z.string({
+    required_error: "Numero de emergencia obligatorio.",
+  }),
+  tipoSangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
+  genero: z.string({ required_error: "Genero obligatorio." }),
 });
-const datosAcademicosSchema = z.object({});
+
+const datosAcademicosSchema = z.object({
+  cadulaProfesional: z
+    .string({ required_error: "Ingresa cedula profesional." })
+    .optional(),
+  carrera: z.string({ required_error: "Carrera obligatorio." }),
+  experienciaLaboral: z
+    .string({ required_error: "Ingresa experiencia laboral." })
+    .optional(),
+  certificaciones: z
+    .string({ required_error: "Introduce certificaciones." })
+    .optional(),
+  gradosEstudios: z.string({ required_error: "Nivel de estudios obligatorio" }),
+});
 const datosContratacionSchema = z.object({});
 
 type DatosPersonalesForm = z.infer<typeof datosPersonalesSchema>;
+type DatosMedicosForm = z.infer<typeof datosMedicosSchema>;
+type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
+type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const datosAcademicosForm = useForm<DatosAcademicosForm>({
+    resolver: zodResolver(datosAcademicosSchema),
+  });
+  function onSubmitAcd(values: DatosAcademicosForm) {
+    console.log(values);
+  }
+  const datosMedicosForm = useForm<DatosMedicosForm>({
+    resolver: zodResolver(datosPersonalesSchema),
+  });
+  function onSubmitMed(values: DatosMedicosForm) {
+    console.log(values);
+  }
+
   const datosPersonalesForm = useForm<DatosPersonalesForm>({
     resolver: zodResolver(datosPersonalesSchema),
   });
   function onSubmit(values: DatosPersonalesForm) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
   }
   return (
@@ -311,9 +347,201 @@ export function PageAgregarTrabajador() {
         </section>
         <section>
           <h1>Datos Médicos</h1>
+          <Form {...datosMedicosForm}>
+            <form onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}>
+              <FormField
+                control={datosMedicosForm.control}
+                name="alegias"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Alergias</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="alergiasMedicamentos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Alergias a Medicamentos</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="enfermedadCronica"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enfermedad Cronica</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="genero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Genero</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="lesiones"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lesiones</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="numeroEmergencia"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de emergencia</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="numeroSeguro"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero de seguro</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="relacionPersona"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Relacion con la persona</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosMedicosForm.control}
+                name="tipoSangre"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de sangre</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button>Guardar</Button>
+            </form>
+          </Form>
         </section>
         <section>
           <h1>Datos Académicos</h1>
+          <Form {...datosPersonalesForm}>
+            <form onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}>
+              <FormField
+                control={datosAcademicosForm.control}
+                name="cadulaProfesional"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cedula Profesional</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosAcademicosForm.control}
+                name="carrera"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Carrera</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosAcademicosForm.control}
+                name="certificaciones"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Certificaciones</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosAcademicosForm.control}
+                name="experienciaLaboral"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Experiencia Laboral</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosAcademicosForm.control}
+                name="gradosEstudios"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Grados de Estudios</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button>Guardar</Button>
+            </form>
+          </Form>
         </section>
         <section>
           <h1>Datos de Contratación</h1>
