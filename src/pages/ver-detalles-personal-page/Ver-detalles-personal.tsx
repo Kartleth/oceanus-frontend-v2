@@ -14,6 +14,7 @@ import {
   FileUser,
   GraduationCap,
   IdCard,
+  Link,
   Slash,
   Stethoscope,
   UserRound,
@@ -56,7 +57,7 @@ export function VerDetallesPersonal() {
           </Button>
           <Button>
             <FileUser />
-            Generar reporte
+              Generar reporte
           </Button>
         </div>
       </div>
