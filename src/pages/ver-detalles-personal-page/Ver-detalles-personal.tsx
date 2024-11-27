@@ -56,7 +56,7 @@ export function VerDetallesPersonal() {
             Generar credencial
           </Button>
           <Button>
-            <FileUser />
+              <FileUser/>
               Generar reporte
           </Button>
         </div>
