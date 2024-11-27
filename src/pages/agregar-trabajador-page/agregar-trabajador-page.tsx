@@ -116,7 +116,12 @@ const datosAcademicosSchema = z.object({
     .optional(),
   gradosEstudios: z.string({ required_error: "Nivel de estudios obligatorio" }),
 });
-const datosContratacionSchema = z.object({});
+const datosContratacionSchema = z.object({
+  tipoContrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
+  estadoEmpleado: z.string({ required_error: "Campo obligatorio." }),
+  fechaInicioContrato: z.string({ required_error: "Campo obligatorio." }),
+  fechaFinContrato: z.string({ required_error: "Campo obligatorio" }),
+});
 
 type DatosPersonalesForm = z.infer<typeof datosPersonalesSchema>;
 type DatosMedicosForm = z.infer<typeof datosMedicosSchema>;
@@ -124,6 +129,12 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const datosContratacionForm = useForm<DatosContratacionForm>({
+    resolver: zodResolver(datosContratacionSchema),
+  });
+  function onSubmitCon(values: DatosContratacionForm) {
+    console.log(values);
+  }
   const datosAcademicosForm = useForm<DatosAcademicosForm>({
     resolver: zodResolver(datosAcademicosSchema),
   });
@@ -131,7 +142,7 @@ export function PageAgregarTrabajador() {
     console.log(values);
   }
   const datosMedicosForm = useForm<DatosMedicosForm>({
-    resolver: zodResolver(datosPersonalesSchema),
+    resolver: zodResolver(datosMedicosSchema),
   });
   function onSubmitMed(values: DatosMedicosForm) {
     console.log(values);
@@ -472,7 +483,7 @@ export function PageAgregarTrabajador() {
         </section>
         <section>
           <h1>Datos Académicos</h1>
-          <Form {...datosPersonalesForm}>
+          <Form {...datosAcademicosForm}>
             <form onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}>
               <FormField
                 control={datosAcademicosForm.control}
@@ -545,6 +556,63 @@ export function PageAgregarTrabajador() {
         </section>
         <section>
           <h1>Datos de Contratación</h1>
+          <Form {...datosContratacionForm}>
+            <form onSubmit={datosContratacionForm.handleSubmit(onSubmitCon)}>
+              <FormField
+                control={datosContratacionForm.control}
+                name="tipoContrato"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de contrato</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosContratacionForm.control}
+                name="estadoEmpleado"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Estado del Empleado</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={datosContratacionForm.control}
+                name="fechaInicioContrato"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fecha de Ingreso del Contrato</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={datosContratacionForm.control}
+                name="fechaFinContrato"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fecha final del Contrato</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button>Guardar</Button>
+            </form>
+          </Form>
         </section>
       </main>
     </Layout>
