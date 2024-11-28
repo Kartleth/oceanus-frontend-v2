@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
@@ -20,9 +21,7 @@ export function Page_personal() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
-                Personal
-              </BreadcrumbPage>
+              <BreadcrumbLink href="/personal">Personal</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

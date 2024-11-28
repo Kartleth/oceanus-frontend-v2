@@ -2,6 +2,7 @@ import Layout from "@/components/layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -14,8 +15,6 @@ import {
   FileUser,
   GraduationCap,
   IdCard,
-  Link,
-  Slash,
   Stethoscope,
   UserRound,
 } from "lucide-react";
@@ -31,19 +30,15 @@ export function VerDetallesPersonal() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
-                Personal
-              </BreadcrumbPage>
+              <BreadcrumbLink href="/personal">Personal</BreadcrumbLink>
             </BreadcrumbItem>
 
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
+            <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
+              <BreadcrumbLink href="/detalles-trabajador">
                 Detalles
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -56,8 +51,8 @@ export function VerDetallesPersonal() {
             Generar credencial
           </Button>
           <Button>
-              <FileUser/>
-              Generar reporte
+            <FileUser />
+            Generar reporte
           </Button>
         </div>
       </div>

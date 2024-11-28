@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
@@ -31,29 +32,24 @@ export default function VerReportePersonal() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
+              <BreadcrumbLink href="/personal">
                 Personal
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
 
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
+            <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
+              <BreadcrumbLink href="/detalles-trabajador">
                 Detalles
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
 
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
+              <BreadcrumbLink href="/reporte-de-empleado">
                 Reporte de empleado
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -84,7 +80,7 @@ export default function VerReportePersonal() {
       <div className="p-6 grid gap-6 md:grid-cols-2">
         <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
+            <CardTitle className="text-xl flex items-center gap-2">
               <UserRound className="w-6 h-6" />
               Datos personales
             </CardTitle>
@@ -109,7 +105,7 @@ export default function VerReportePersonal() {
 
         <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
+            <CardTitle className="text-xl flex items-center gap-2">
               <Stethoscope className="w-6 h-6" /> Datos médicos
             </CardTitle>
           </CardHeader>
@@ -132,7 +128,7 @@ export default function VerReportePersonal() {
 
         <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
+            <CardTitle className="text-xl flex items-center gap-2">
               <GraduationCap className="w-6 h-6" />
               Datos académicos
             </CardTitle>
@@ -153,7 +149,7 @@ export default function VerReportePersonal() {
 
         <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
+            <CardTitle className="text-xl flex items-center gap-2">
               <BookUser />
               Datos de contratación
             </CardTitle>
