@@ -22,6 +22,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
+import {
+  FormSelect,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const datosPersonalesSchema = z.object({
   name: z
@@ -251,7 +259,14 @@ export function PageAgregarTrabajador() {
                   <FormItem>
                     <FormLabel>Estado Civil</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <FormSelect
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Selecciona un estado civil"
+                      >
+                        <SelectItem value="soltero">Soltero(a)</SelectItem>
+                        <SelectItem value="casado">Casado(a)</SelectItem>
+                      </FormSelect>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -404,14 +419,27 @@ export function PageAgregarTrabajador() {
                 name="genero"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Genero</FormLabel>
+                    <FormLabel>Género</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un género" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="masculino">Masculino</SelectItem>
+                          <SelectItem value="femenino">Femenino</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={datosMedicosForm.control}
                 name="lesiones"
@@ -597,7 +625,7 @@ export function PageAgregarTrabajador() {
                   </FormItem>
                 )}
               />
-               <FormField
+              <FormField
                 control={datosContratacionForm.control}
                 name="fechaFinContrato"
                 render={({ field }) => (
