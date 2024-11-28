@@ -4,7 +4,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "react-router-dom";
 
 export function VerDetallesPersonal() {
   return (
@@ -50,9 +50,8 @@ export function VerDetallesPersonal() {
             <IdCard />
             Generar credencial
           </Button>
-          <Button>
-            <FileUser />
-            Generar reporte
+          <Button asChild={true}>
+            <Link to="/reporte-de-empleado">Generar reporte</Link>
           </Button>
         </div>
       </div>
