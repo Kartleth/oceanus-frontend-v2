@@ -2,14 +2,13 @@ import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbPage,
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
-import { DataTableContratos } from "@/components/data-table-contratos";
+import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
-import { CirclePlus, Upload } from "lucide-react";
+import { CirclePlus} from "lucide-react";
 import { DataTableEmpresas } from "@/components/data-table-empresas";
 
 export default function Empresas() {
@@ -22,9 +21,7 @@ export default function Empresas() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
-                  Empresas
-                </BreadcrumbPage>
+                <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -32,7 +29,7 @@ export default function Empresas() {
       </div>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button  className="bg-deepSea hover:bg-deepLightSea">
+        <Button className="bg-deepSea hover:bg-deepLightSea">
           <CirclePlus />
           Agregar empresa
         </Button>

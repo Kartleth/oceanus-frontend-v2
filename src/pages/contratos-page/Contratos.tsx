@@ -2,11 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbPage,
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
 import { DataTableContratos } from "@/components/data-table-contratos";
 import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
@@ -20,20 +20,18 @@ export default function Contratos() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
-                Contratos
-              </BreadcrumbPage>
+              <BreadcrumbLink href="/contratos">Contratos</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button  className="bg-deepSea hover:bg-deepLightSea">
+        <Button className="bg-deepSea hover:bg-deepLightSea">
           <CirclePlus />
           Agregar contrato
         </Button>
-        <Button  className="bg-deepSea hover:bg-deepLightSea">
+        <Button className="bg-deepSea hover:bg-deepLightSea">
           <Upload /> Subir Excel
         </Button>
       </div>

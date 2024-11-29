@@ -2,12 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbPage,
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
-import { DataTableEmpresas } from "@/components/data-table-empresas";
+import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import { DataTableFacturas } from "@/components/data-table-facturas";
@@ -20,10 +19,8 @@ export default function Facturas() {
         <Separator className="h-6 w-px bg-gray-300 mx-2" />{" "}
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
-                Facturas
-              </BreadcrumbPage>
+          <BreadcrumbItem>
+              <BreadcrumbLink href="/facturas">Facturas</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

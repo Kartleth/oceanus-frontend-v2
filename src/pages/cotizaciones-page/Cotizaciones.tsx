@@ -2,11 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbPage,
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
 
 export default function Cotizaciones() {
   return (
@@ -17,10 +17,10 @@ export default function Cotizaciones() {
         <Separator className="h-6 w-px bg-gray-300 mx-2" />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
+          <BreadcrumbItem>
+              <BreadcrumbLink href="/cotizaciones">
                 Cotizaciones
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

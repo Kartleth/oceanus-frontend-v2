@@ -61,7 +61,7 @@ export default function VerReportePersonal() {
         </Avatar>
         <h1 className="font-medium text-2xl w-1/2">Nombre de trabajador</h1>
         <div className="px-6 w-full flex justify-end">
-          <Button>
+          <Button className="bg-deepSea hover:bg-deepLightSea">
             <Printer />
             Imprimir reporte
           </Button>

@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   FileText,
-  FileUser,
   GraduationCap,
   IdCard,
   Stethoscope,
@@ -46,11 +45,11 @@ export function VerDetallesPersonal() {
       <div className="py-6 px-3 flex flex-wrap md:flex-nowrap items-center justify-between space-y-4 md:space-y-0">
         <h1 className="font-medium text-2xl">Nombre del trabajador</h1>
         <div className="flex space-x-2">
-          <Button>
+          <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
             Generar credencial
           </Button>
-          <Button asChild={true}>
+          <Button asChild={true} className="bg-deepSea hover:bg-deepLightSea">
             <Link to="/reporte-de-empleado">Generar reporte</Link>
           </Button>
         </div>

@@ -2,11 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbPage
+  BreadcrumbLink,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
 
 export default function Terceros() {
   return (
@@ -17,9 +17,9 @@ export default function Terceros() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
+              <BreadcrumbLink href="/personal_terceros">
                 Personal de terceros
-              </BreadcrumbPage>
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
