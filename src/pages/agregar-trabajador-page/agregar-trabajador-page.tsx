@@ -127,8 +127,20 @@ const datosAcademicosSchema = z.object({
 const datosContratacionSchema = z.object({
   tipoContrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
   estadoEmpleado: z.string({ required_error: "Campo obligatorio." }),
-  fechaInicioContrato: z.string({ required_error: "Campo obligatorio." }),
-  fechaFinContrato: z.string({ required_error: "Campo obligatorio" }),
+  fechaInicioContrato: z
+    .date({
+      required_error: "Fecha de ingreso obligatoria.",
+    })
+    .min(new Date(1914, 0, 1), {
+      message: "Fecha de ingreso no puede ser antes de 1914.",
+    }),
+  fechaFinContrato: z
+    .date({
+      required_error: "Fecha de ingreso obligatoria.",
+    })
+    .min(new Date(1914, 0, 1), {
+      message: "Fecha de ingreso no puede ser antes de 1914.",
+    }),
 });
 
 type DatosPersonalesForm = z.infer<typeof datosPersonalesSchema>;
@@ -593,7 +605,15 @@ export function PageAgregarTrabajador() {
                   <FormItem>
                     <FormLabel>Tipo de contrato</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <FormSelect
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Selecciona tipo de contrato"
+                      >
+                        <SelectItem value="soltero">Indefinido</SelectItem>
+                        <SelectItem value="casado">Temporal</SelectItem>
+                        <SelectItem value="casado">Por Obra</SelectItem>
+                      </FormSelect>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -606,7 +626,14 @@ export function PageAgregarTrabajador() {
                   <FormItem>
                     <FormLabel>Estado del Empleado</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <FormSelect
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Selecciona estado empleado"
+                      >
+                        <SelectItem value="soltero">Activo</SelectItem>
+                        <SelectItem value="casado">Inactivo</SelectItem>
+                      </FormSelect>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -619,7 +646,11 @@ export function PageAgregarTrabajador() {
                   <FormItem>
                     <FormLabel>Fecha de Ingreso del Contrato</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <DatePicker
+                        date={field.value}
+                        onChange={field.onChange}
+                        minDate={undefined}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -632,7 +663,11 @@ export function PageAgregarTrabajador() {
                   <FormItem>
                     <FormLabel>Fecha final del Contrato</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <DatePicker
+                        date={field.value}
+                        onChange={field.onChange}
+                        minDate={undefined}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
