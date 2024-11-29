@@ -11,7 +11,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { Layout, CirclePlus, Upload, Slash } from "lucide-react";
 
-export function Detalles_personal() {
+export function DetallesPersonal() {
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -24,6 +24,15 @@ export function Detalles_personal() {
                 Personal
               </BreadcrumbPage>
             </BreadcrumbItem>
+
+            <BreadcrumbSeparator />
+
+            <BreadcrumbItem>
+              <BreadcrumbPage className="line-clamp-1 text-xl">
+                Personal
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+
             <BreadcrumbSeparator>
               <Slash />
             </BreadcrumbSeparator>

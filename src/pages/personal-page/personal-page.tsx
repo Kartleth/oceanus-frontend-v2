@@ -3,8 +3,8 @@ import Layout from "@/components/layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
+  BreadcrumbLink,
+  BreadcrumbList
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -20,9 +20,7 @@ export function Page_personal() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl text-deepSea">
-                Personal
-              </BreadcrumbPage>
+              <BreadcrumbLink href="/personal">Personal</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
