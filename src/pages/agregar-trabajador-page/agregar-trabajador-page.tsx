@@ -31,6 +31,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 const datosPersonalesSchema = z.object({
   name: z
     .string({
@@ -190,493 +197,527 @@ export function PageAgregarTrabajador() {
         </Breadcrumb>
       </header>
       <main>
-        <section>
-          <h1>Datos Personales</h1>
-          <Form {...datosPersonalesForm}>
-            <form onSubmit={datosPersonalesForm.handleSubmit(onSubmit)}>
-              <FormField
-                control={datosPersonalesForm.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nombre</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="fechaNacimiento"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fecha de Nacimiento</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onChange={field.onChange}
-                        maxDate={new Date()}
-                        minDate={new Date(1914, 0, 1)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="curp"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Curp</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="rfc"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>RFC</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="clave"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de INE</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="estadoCivil"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estado Civil</FormLabel>
-                    <FormControl>
-                      <FormSelect
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        placeholder="Selecciona un estado civil"
-                      >
-                        <SelectItem value="soltero">Soltero(a)</SelectItem>
-                        <SelectItem value="casado">Casado(a)</SelectItem>
-                      </FormSelect>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="numeroCasa"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de Casa</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="numeroCelular"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de Celular</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="correoElectronico"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Correo Electronico </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="direccion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Direccion </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="numeroLicencia"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero licencia </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="numeroPasaporte"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de Pasaporte </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosPersonalesForm.control}
-                name="fechaIngreso"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fecha de ingreso </FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onChange={field.onChange}
-                        minDate={undefined}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button>Guardar</Button>
-            </form>
-          </Form>
-        </section>
-        <section>
-          <h1>Datos Médicos</h1>
-          <Form {...datosMedicosForm}>
-            <form onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}>
-              <FormField
-                control={datosMedicosForm.control}
-                name="alegias"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alergias</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="alergiasMedicamentos"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alergias a Medicamentos</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="enfermedadCronica"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Enfermedad Cronica</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="genero"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Género</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un género" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="masculino">Masculino</SelectItem>
-                          <SelectItem value="femenino">Femenino</SelectItem>
-                          <SelectItem value="otro">Otro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Accordion type="single" collapsible>
+          <AccordionItem value="datos-personales">
+            <AccordionTrigger>Datos Personales</AccordionTrigger>
+            <AccordionContent>
+              <section>
+                <h1>Datos Personales</h1>
+                <Form {...datosPersonalesForm}>
+                  <form onSubmit={datosPersonalesForm.handleSubmit(onSubmit)}>
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="fechaNacimiento"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Fecha de Nacimiento</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={field.value}
+                              onChange={field.onChange}
+                              maxDate={new Date()}
+                              minDate={new Date(1914, 0, 1)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="curp"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Curp</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="rfc"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>RFC</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="clave"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de INE</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="estadoCivil"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Estado Civil</FormLabel>
+                          <FormControl>
+                            <FormSelect
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              placeholder="Selecciona un estado civil"
+                            >
+                              <SelectItem value="soltero">
+                                Soltero(a)
+                              </SelectItem>
+                              <SelectItem value="casado">Casado(a)</SelectItem>
+                            </FormSelect>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="numeroCasa"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de Casa</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="numeroCelular"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de Celular</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="correoElectronico"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Correo Electronico </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="direccion"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Direccion </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="numeroLicencia"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero licencia </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="numeroPasaporte"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de Pasaporte </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosPersonalesForm.control}
+                      name="fechaIngreso"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Fecha de ingreso </FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={field.value}
+                              onChange={field.onChange}
+                              minDate={undefined}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button>Guardar</Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-medicos">
+            <AccordionTrigger>Datos Médicos</AccordionTrigger>
+            <AccordionContent>
+              <section>
+                <h1>Datos Médicos</h1>
+                <Form {...datosMedicosForm}>
+                  <form onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}>
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="alegias"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Alergias</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="alergiasMedicamentos"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Alergias a Medicamentos</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="enfermedadCronica"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Enfermedad Cronica</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="genero"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Género</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecciona un género" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="masculino">
+                                  Masculino
+                                </SelectItem>
+                                <SelectItem value="femenino">
+                                  Femenino
+                                </SelectItem>
+                                <SelectItem value="otro">Otro</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-              <FormField
-                control={datosMedicosForm.control}
-                name="lesiones"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Lesiones</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="numeroEmergencia"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de emergencia</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="numeroSeguro"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Numero de seguro</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="relacionPersona"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Relacion con la persona</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosMedicosForm.control}
-                name="tipoSangre"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de sangre</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button>Guardar</Button>
-            </form>
-          </Form>
-        </section>
-        <section>
-          <h1>Datos Académicos</h1>
-          <Form {...datosAcademicosForm}>
-            <form onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}>
-              <FormField
-                control={datosAcademicosForm.control}
-                name="cadulaProfesional"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cedula Profesional</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosAcademicosForm.control}
-                name="carrera"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Carrera</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosAcademicosForm.control}
-                name="certificaciones"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Certificaciones</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosAcademicosForm.control}
-                name="experienciaLaboral"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Experiencia Laboral</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosAcademicosForm.control}
-                name="gradosEstudios"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Grados de Estudios</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button>Guardar</Button>
-            </form>
-          </Form>
-        </section>
-        <section>
-          <h1>Datos de Contratación</h1>
-          <Form {...datosContratacionForm}>
-            <form onSubmit={datosContratacionForm.handleSubmit(onSubmitCon)}>
-              <FormField
-                control={datosContratacionForm.control}
-                name="tipoContrato"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de contrato</FormLabel>
-                    <FormControl>
-                      <FormSelect
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        placeholder="Selecciona tipo de contrato"
-                      >
-                        <SelectItem value="soltero">Indefinido</SelectItem>
-                        <SelectItem value="casado">Temporal</SelectItem>
-                        <SelectItem value="casado">Por Obra</SelectItem>
-                      </FormSelect>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosContratacionForm.control}
-                name="estadoEmpleado"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estado del Empleado</FormLabel>
-                    <FormControl>
-                      <FormSelect
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        placeholder="Selecciona estado empleado"
-                      >
-                        <SelectItem value="soltero">Activo</SelectItem>
-                        <SelectItem value="casado">Inactivo</SelectItem>
-                      </FormSelect>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosContratacionForm.control}
-                name="fechaInicioContrato"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fecha de Ingreso del Contrato</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onChange={field.onChange}
-                        minDate={undefined}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={datosContratacionForm.control}
-                name="fechaFinContrato"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fecha final del Contrato</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onChange={field.onChange}
-                        minDate={undefined}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button>Guardar</Button>
-            </form>
-          </Form>
-        </section>
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="lesiones"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Lesiones</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="numeroEmergencia"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de emergencia</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="numeroSeguro"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Numero de seguro</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="relacionPersona"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Relacion con la persona</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="tipoSangre"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tipo de sangre</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button>Guardar</Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-academicos">
+            <AccordionTrigger>Datos Académicos</AccordionTrigger>
+            <AccordionContent>
+              <section>
+                <h1>Datos Académicos</h1>
+                <Form {...datosAcademicosForm}>
+                  <form
+                    onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}
+                  >
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="cadulaProfesional"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Cedula Profesional</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="carrera"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Carrera</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="certificaciones"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Certificaciones</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="experienciaLaboral"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Experiencia Laboral</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="gradosEstudios"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Grados de Estudios</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button>Guardar</Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-contratacion">
+            <AccordionTrigger>Datos de Contratación</AccordionTrigger>
+            <AccordionContent>
+              <section>
+                <h1>Datos de Contratación</h1>
+                <Form {...datosContratacionForm}>
+                  <form
+                    onSubmit={datosContratacionForm.handleSubmit(onSubmitCon)}
+                  >
+                    <FormField
+                      control={datosContratacionForm.control}
+                      name="tipoContrato"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tipo de contrato</FormLabel>
+                          <FormControl>
+                            <FormSelect
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              placeholder="Selecciona tipo de contrato"
+                            >
+                              <SelectItem value="soltero">
+                                Indefinido
+                              </SelectItem>
+                              <SelectItem value="casado">Temporal</SelectItem>
+                              <SelectItem value="casado">Por Obra</SelectItem>
+                            </FormSelect>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosContratacionForm.control}
+                      name="estadoEmpleado"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Estado del Empleado</FormLabel>
+                          <FormControl>
+                            <FormSelect
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              placeholder="Selecciona estado empleado"
+                            >
+                              <SelectItem value="soltero">Activo</SelectItem>
+                              <SelectItem value="casado">Inactivo</SelectItem>
+                            </FormSelect>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosContratacionForm.control}
+                      name="fechaInicioContrato"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Fecha de Ingreso del Contrato</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={field.value}
+                              onChange={field.onChange}
+                              minDate={undefined}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosContratacionForm.control}
+                      name="fechaFinContrato"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Fecha final del Contrato</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={field.value}
+                              onChange={field.onChange}
+                              minDate={undefined}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button>Guardar</Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </main>
     </Layout>
   );
