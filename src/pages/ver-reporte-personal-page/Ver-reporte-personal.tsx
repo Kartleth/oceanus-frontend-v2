@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
 import {
   BookUser,
   GraduationCap,

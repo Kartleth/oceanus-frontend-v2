@@ -1,5 +1,5 @@
 import { DataTableDemo } from "@/components/data-table-personal";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
