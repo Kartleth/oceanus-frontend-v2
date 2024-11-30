@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { string, z } from "zod";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -37,6 +37,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useState } from "react";
+
+type AccordionValue =
+  | "datos-personales"
+  | "datos-medicos"
+  | "datos-academicos"
+  | "datos-contratacion"
+  | string;
 
 const datosPersonalesSchema = z.object({
   name: z
@@ -156,6 +164,7 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacionForm>({
     resolver: zodResolver(datosContratacionSchema),
   });
@@ -167,19 +176,22 @@ export function PageAgregarTrabajador() {
   });
   function onSubmitAcd(values: DatosAcademicosForm) {
     console.log(values);
+    setValue("datos-contratacion")
   }
   const datosMedicosForm = useForm<DatosMedicosForm>({
     resolver: zodResolver(datosMedicosSchema),
   });
   function onSubmitMed(values: DatosMedicosForm) {
     console.log(values);
+    setValue("datos-academicos")
   }
 
   const datosPersonalesForm = useForm<DatosPersonalesForm>({
     resolver: zodResolver(datosPersonalesSchema),
   });
-  function onSubmit(values: DatosPersonalesForm) {
+  function onSubmit(values: DatosPersonalesForm){
     console.log(values);
+    setValue("datos-medicos")
   }
   return (
     <Layout>
@@ -196,15 +208,24 @@ export function PageAgregarTrabajador() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
-      <main>
-        <Accordion type="single" collapsible>
+      <main className="p-4">
+        <Accordion
+          type="single"
+          collapsible
+          value={value}
+          onValueChange={setValue}
+        >
           <AccordionItem value="datos-personales">
-            <AccordionTrigger>Datos Personales</AccordionTrigger>
-            <AccordionContent>
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Datos Personales
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <section>
-                <h1>Datos Personales</h1>
                 <Form {...datosPersonalesForm}>
-                  <form onSubmit={datosPersonalesForm.handleSubmit(onSubmit)}>
+                  <form
+                    className="grid grid-cols-3 gap-4"
+                    onSubmit={datosPersonalesForm.handleSubmit(onSubmit)}
+                  >
                     <FormField
                       control={datosPersonalesForm.control}
                       name="name"
@@ -392,19 +413,25 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Siguiente</Button>
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea ">
+                      Siguiente
+                    </Button>
                   </form>
                 </Form>
               </section>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-medicos">
-            <AccordionTrigger>Datos Médicos</AccordionTrigger>
-            <AccordionContent>
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Datos Médicos
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <section>
-                <h1>Datos Médicos</h1>
                 <Form {...datosMedicosForm}>
-                  <form onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}>
+                  <form
+                    className="grid grid-cols-3 gap-4"
+                    onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}
+                  >
                     <FormField
                       control={datosMedicosForm.control}
                       name="alegias"
@@ -539,19 +566,23 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Siguiente</Button>
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+                      Siguiente
+                    </Button>
                   </form>
                 </Form>
               </section>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-academicos">
-            <AccordionTrigger>Datos Académicos</AccordionTrigger>
-            <AccordionContent>
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Datos Académicos
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <section>
-                <h1>Datos Académicos</h1>
                 <Form {...datosAcademicosForm}>
                   <form
+                    className="grid grid-cols-3 gap-4"
                     onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}
                   >
                     <FormField
@@ -619,19 +650,23 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Guardar</Button>
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+                      Siguiente
+                    </Button>
                   </form>
                 </Form>
               </section>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-contratacion">
-            <AccordionTrigger>Datos de Contratación</AccordionTrigger>
-            <AccordionContent>
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Datos de Contratación
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <section>
-                <h1>Datos de Contratación</h1>
                 <Form {...datosContratacionForm}>
                   <form
+                    className="grid grid-cols-3 gap-4"
                     onSubmit={datosContratacionForm.handleSubmit(onSubmitCon)}
                   >
                     <FormField
@@ -711,7 +746,9 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Guardar</Button>
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+                      Guardar
+                    </Button>
                   </form>
                 </Form>
               </section>
