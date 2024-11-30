@@ -392,7 +392,7 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Guardar</Button>
+                    <Button>Siguiente</Button>
                   </form>
                 </Form>
               </section>
@@ -539,7 +539,7 @@ export function PageAgregarTrabajador() {
                         </FormItem>
                       )}
                     />
-                    <Button>Guardar</Button>
+                    <Button>Siguiente</Button>
                   </form>
                 </Form>
               </section>
