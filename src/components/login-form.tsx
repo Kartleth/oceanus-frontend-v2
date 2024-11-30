@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CircleAlert, Terminal, TriangleAlert } from "lucide-react";
+import { CircleAlert} from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 
 export function LoginForm() {

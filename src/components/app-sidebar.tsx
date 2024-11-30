@@ -24,7 +24,7 @@ const data = {
   user: {
     name: "AdminOceanus",
     email: "AdminOceanus@example.com",
-    avatar: "https://ui-avatars.com/api/?name=Admin+Oceanus",
+    avatar: "https://ui-avatars.com/api/?name=Admin+Oceanus&background=C4EEF8",
   },
   companys: [
     {
