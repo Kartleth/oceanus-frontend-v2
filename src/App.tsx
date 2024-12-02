@@ -22,7 +22,7 @@ function App() {
         <Route path="/facturas" element={<Facturas />} />
         <Route path="/personal_terceros" element={<Terceros />} />
         <Route path="/cotizaciones" element={<Cotizaciones />} />
-        <Route path="/detalles-trabajador" element={<VerDetallesPersonal />} />
+        <Route path="/detalles-trabajador/:id" element={<VerDetallesPersonal />} />
         <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
       </Routes>
     </BrowserRouter>

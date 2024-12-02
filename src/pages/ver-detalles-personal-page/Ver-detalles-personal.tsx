@@ -1,3 +1,7 @@
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+
 import Layout from "@/components/Layout";
 import {
   Breadcrumb,
@@ -21,6 +25,28 @@ import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 
 export function VerDetallesPersonal() {
+  const { id } = useParams();
+  const [empleado, setEmpleado] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/personas/${id}`)
+      .then((response) => {
+        setEmpleado(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError("Error al cargar los datos del empleado");
+        console.error(err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -43,7 +69,9 @@ export function VerDetallesPersonal() {
         </Breadcrumb>
       </header>
       <div className="py-6 px-3 flex flex-wrap md:flex-nowrap items-center justify-between space-y-4 md:space-y-0">
-        <h1 className="font-medium text-2xl">Nombre del trabajador</h1>
+        <h1 className="font-medium text-2xl">
+          {empleado?.nombre || "Nombre del trabajador"}
+        </h1>
         <div className="flex space-x-2">
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
@@ -71,7 +99,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Nombre de usuario"
+                  value={empleado?.nombre || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -82,7 +110,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="date"
-                  placeholder="1996-09-13"
+                  value={empleado?.fechanacimiento || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -93,7 +121,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  placeholder="6600000000"
+                  value={empleado?.numerocelular || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -104,7 +132,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="email"
-                  placeholder="correo@gmail.com"
+                  value={empleado?.correo || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -137,7 +165,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="date"
-                  placeholder=""
+                  value={empleado?.iniciocontrato || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -148,7 +176,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="date"
-                  placeholder=""
+                  value={empleado?.fincontrato || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -173,7 +201,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Nombre de usuario"
+                  value={empleado?.nombre || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -184,7 +212,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="date"
-                  placeholder=""
+                  value={empleado?.fechanacimiento || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -195,7 +223,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="CURPUSUARIO"
+                  value={empleado?.curp || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -206,7 +234,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="RFCDEUSUARIO"
+                  value={empleado?.rfc || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -217,7 +245,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  placeholder="6600000000"
+                  value={empleado?.numerofijo || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -228,7 +256,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  placeholder="6600000000"
+                  value={empleado?.numerocelular || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -239,7 +267,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Dirección de usuario"
+                  value={empleado?.direccion || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -250,7 +278,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Número de licencia"
+                  value={empleado?.numerolicencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -261,7 +289,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="N/A"
+                  value={empleado?.numeropasaporte || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -272,7 +300,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="date"
-                  placeholder=""
+                  value={empleado?.fechaingreso || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>

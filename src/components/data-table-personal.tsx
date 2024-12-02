@@ -129,7 +129,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
   },
   {
     accessorKey: "estado",
-    header: "estado",
+    header: "Estado",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("estado")}</div>
     ),
@@ -155,7 +155,9 @@ export const columns: ColumnDef<EmployeInformation>[] = [
                 navigator.clipboard.writeText(EmployeInformation.id)
               }
             >
-              <Link to="/detalles-trabajador">Ver detalles</Link>
+              <Link to={`/detalles-trabajador/${EmployeInformation.id}`}>
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
@@ -173,7 +175,6 @@ export const columns: ColumnDef<EmployeInformation>[] = [
 ];
 
 export function DataTableDemo() {
-
   const [data, setData] = React.useState<EmployeInformation[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -184,7 +185,6 @@ export function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
 
   React.useEffect(() => {
     axios
@@ -199,7 +199,6 @@ export function DataTableDemo() {
         setLoading(false);
       });
   }, []);
-
 
   const table = useReactTable({
     data,
@@ -220,7 +219,9 @@ export function DataTableDemo() {
     },
   });
 
-  {/* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/}
+  {
+    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
+  }
   if (loading) {
     return <div>Cargando...</div>;
   }
