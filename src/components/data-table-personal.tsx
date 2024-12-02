@@ -14,7 +14,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,75 +35,18 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
-
-const data: EmployeInformation[] = [
-  {
-    id: "id1",
-    employe_name: "Carlos López",
-    birthDate: "1990-05-14",
-    curp: "LOPC900514HDFRPL01",
-    rfc: "LOPC900514123",
-    status: "Activo",
-  },
-  {
-    id: "id2",
-    employe_name: "María García",
-    birthDate: "1985-12-22",
-    curp: "GARM851222MDFCRR02",
-    rfc: "GARM851222456",
-    status: "Activo",
-  },
-  {
-    id: "id3",
-    employe_name: "Juan Pérez",
-    birthDate: "1992-07-09",
-    curp: "PERJ920709HDFRPN03",
-    rfc: "PERJ920709789",
-    status: "Inactivo",
-  },
-  {
-    id: "id4",
-    employe_name: "Ana Ramírez",
-    birthDate: "1998-11-03",
-    curp: "RAMA981103MDFSRN04",
-    rfc: "RAMA981103321",
-    status: "Activo",
-  },
-  {
-    id: "id5",
-    employe_name: "Luis Torres",
-    birthDate: "1978-03-15",
-    curp: "TORL780315HDFTRL05",
-    rfc: "TORL780315654",
-    status: "Inactivo",
-  },
-  {
-    id: "id6",
-    employe_name: "Sofía Martínez",
-    birthDate: "2000-08-25",
-    curp: "MARS000825MDFTSF06",
-    rfc: "MARS000825987",
-    status: "Activo",
-  },
-  {
-    id: "id7",
-    employe_name: "Pedro Hernández",
-    birthDate: "1995-01-30",
-    curp: "HERP950130HDFNRP07",
-    rfc: "HERP950130654",
-    status: "Inactivo",
-  },
-];
+import axios from "axios";
 
 export type EmployeInformation = {
   id: string;
-  employe_name: string;
-  birthDate: string;
+  nombre: string;
+  fechanacimiento: Date;
   curp: string;
   rfc: string;
-  status: "Activo" | "Inactivo";
+  estado: string;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<EmployeInformation>[] = [
   {
     accessorKey: "id",
@@ -122,7 +64,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "employe_name",
+    accessorKey: "nombre",
     header: ({ column }) => {
       return (
         <Button
@@ -135,11 +77,11 @@ export const columns: ColumnDef<EmployeInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("employe_name")}</div>
+      <div className="lowercase">{row.getValue("nombre")}</div>
     ),
   },
   {
-    accessorKey: "birthDate",
+    accessorKey: "fechanacimiento",
     header: ({ column }) => {
       return (
         <Button
@@ -152,7 +94,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("birthDate")}</div>
+      <div className="lowercase">{row.getValue("fechanacimiento")}</div>
     ),
   },
   {
@@ -186,10 +128,10 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("rfc")}</div>,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "estado",
+    header: "estado",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("estado")}</div>
     ),
   },
   {
@@ -222,7 +164,6 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuItem>Generar credencial</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
-
             <DropdownMenuItem>Borrar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -232,6 +173,10 @@ export const columns: ColumnDef<EmployeInformation>[] = [
 ];
 
 export function DataTableDemo() {
+
+  const [data, setData] = React.useState<EmployeInformation[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -239,6 +184,22 @@ export function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:3001/personas")
+      .then((response) => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError("Error al cargar los datos");
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
 
   const table = useReactTable({
     data,
@@ -258,6 +219,15 @@ export function DataTableDemo() {
       rowSelection,
     },
   });
+
+  {/* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/}
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="w-full">
