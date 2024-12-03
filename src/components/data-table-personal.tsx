@@ -219,7 +219,13 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
             <DropdownMenuItem>Generar reporte</DropdownMenuItem>
-            <DropdownMenuItem>Generar credencial</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                navigator.clipboard.writeText(EmployeInformation.id)
+              }
+            >
+              <Link to="/generar-credencial">Generar credencial </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
 

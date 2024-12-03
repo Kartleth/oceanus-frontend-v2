@@ -10,6 +10,7 @@ import { LoginForm } from "./components/login-form";
 import { VerDetallesPersonal } from "./pages/ver-detalles-personal-page/Ver-detalles-personal";
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
+import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/personal_terceros" element={<Terceros />} />
         <Route path="/cotizaciones" element={<Cotizaciones />} />
         <Route path="/agregar-trabajador" element={<PageAgregarTrabajador />} />
+        <Route path="/generar-credencial" element={<PageGenerarCredencial />} />
         <Route path="/detalles-trabajador" element={<VerDetallesPersonal />} />
         <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
       </Routes>

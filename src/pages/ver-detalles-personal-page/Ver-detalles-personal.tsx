@@ -47,7 +47,7 @@ export function VerDetallesPersonal() {
         <div className="flex space-x-2">
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
-            Generar credencial
+            <Link to="/generar-credencial">Generar credencial </Link>
           </Button>
           <Button asChild={true} className="bg-deepSea hover:bg-deepLightSea">
             <Link to="/reporte-de-empleado">Generar reporte</Link>
