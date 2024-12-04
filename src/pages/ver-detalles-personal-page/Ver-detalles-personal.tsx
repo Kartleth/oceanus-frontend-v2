@@ -143,7 +143,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Carrera"
+                  value={empleado?.formacademica.carrera || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -154,7 +154,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Grado Académico"
+                  value={empleado?.formacademica.gradoestudios || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -445,7 +445,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.formacademica.cedula || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -456,7 +456,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.formacademica.carrera || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -467,7 +467,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.formacademica.explaboral || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -478,7 +478,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.formacademica.certificaciones || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -488,8 +488,8 @@ export function VerDetallesPersonal() {
                 </Label>
                 <Input
                   disabled
-                  type="number"
-                  placeholder="Número de seguro"
+                  type="text"
+                  value={empleado?.formacademica.gradoestudios || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
