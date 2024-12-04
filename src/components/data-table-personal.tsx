@@ -218,12 +218,10 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
-            <DropdownMenuItem>Generar reporte</DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(EmployeInformation.id)
-              }
-            >
+            <DropdownMenuItem>
+              <Link to="/reporte-de-empleado">Generar reporte</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
               <Link to="/generar-credencial">Generar credencial </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
