@@ -23,7 +23,7 @@ function App() {
         <Route path="/personal_terceros" element={<Terceros />} />
         <Route path="/cotizaciones" element={<Cotizaciones />} />
         <Route path="/detalles-trabajador/:id" element={<VerDetallesPersonal />} />
-        <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
+        <Route path="/reporte-de-empleado/:id" element={<VerReportePersonal />} />
       </Routes>
     </BrowserRouter>
   );
