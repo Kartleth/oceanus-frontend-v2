@@ -1,4 +1,4 @@
-import { useParams , Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import Layout from "@/components/Layout";
 import {
@@ -21,7 +21,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
-
 
 export function VerDetallesPersonal() {
   const { id } = useParams();
@@ -68,7 +67,7 @@ export function VerDetallesPersonal() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href="/detalles-trabajador">
+              <BreadcrumbLink href={`/detalles-trabajador/${id}`}>
                 Detalles
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -76,7 +75,7 @@ export function VerDetallesPersonal() {
         </Breadcrumb>
       </header>
       <div className="py-6 px-3 flex flex-wrap md:flex-nowrap items-center justify-between space-y-4 md:space-y-0">
-        <h1 className="font-medium text-2xl">
+        <h1 className="font-medium text-2xl px-3">
           {empleado?.nombre || "Nombre del trabajador"}
         </h1>
         <div className="flex space-x-2">
@@ -85,7 +84,7 @@ export function VerDetallesPersonal() {
             Generar credencial
           </Button>
           <Button asChild={true} className="bg-deepSea hover:bg-deepLightSea">
-            <Link to="/reporte-de-empleado">Generar reporte</Link>
+            <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
           </Button>
         </div>
       </div>
@@ -161,7 +160,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica?.gradoestudios || "No disponible"}
+                  value={
+                    empleado?.formacademica?.gradoestudios || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -341,7 +342,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico?.enfercronicas || "No disponible"}
+                  value={
+                    empleado?.datosmedico?.enfercronicas || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -373,7 +376,6 @@ export function VerDetallesPersonal() {
                 </Label>
                 <Input
                   disabled
-                  type="number"
                   value={empleado?.datosmedico?.numseguro || "No disponible"}
                   className="bg-white disabled:opacity-100"
                 />
@@ -384,8 +386,9 @@ export function VerDetallesPersonal() {
                 </Label>
                 <Input
                   disabled
-                  type="text"
-                  value={empleado?.datosmedico?.nombremergencia || "No disponible"}
+                  value={
+                    empleado?.datosmedico?.nombremergencia || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -396,7 +399,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico?.relaemergencia || "No disponible"}
+                  value={
+                    empleado?.datosmedico?.relaemergencia || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -407,7 +412,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  value={empleado?.datosmedico?.numemergencia || "No disponible"}
+                  value={
+                    empleado?.datosmedico?.numemergencia || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -485,7 +492,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica?.certificaciones || "No disponible"}
+                  value={
+                    empleado?.formacademica?.certificaciones || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -496,7 +505,9 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica?.gradoestudios || "No disponible"}
+                  value={
+                    empleado?.formacademica?.gradoestudios || "No disponible"
+                  }
                   className="bg-white disabled:opacity-100"
                 />
               </div>
