@@ -1,7 +1,5 @@
-import { useParams } from "react-router-dom";
+import { useParams , Link } from "react-router-dom";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-
 import Layout from "@/components/Layout";
 import {
   Breadcrumb,
@@ -22,11 +20,12 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 
 export function VerDetallesPersonal() {
   const { id } = useParams();
-  const [empleado, setEmpleado] = useState(null);
+  const [empleado, setEmpleado] = useState<Persona | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -151,7 +150,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.carrera || ""}
+                  value={empleado?.formacademica?.carrera || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -162,7 +161,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.gradoestudios || ""}
+                  value={empleado?.formacademica?.gradoestudios || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -331,7 +330,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.alergias || ""}
+                  value={empleado?.datosmedico?.alergias || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -342,7 +341,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.enfercronicas || ""}
+                  value={empleado?.datosmedico?.enfercronicas || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -353,7 +352,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.lesiones || ""}
+                  value={empleado?.datosmedico?.lesiones || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -364,7 +363,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.alergiasmed || ""}
+                  value={empleado?.datosmedico?.alergiasmed || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -375,7 +374,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  value={empleado?.datosmedico.numseguro || ""}
+                  value={empleado?.datosmedico?.numseguro || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -386,7 +385,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.nombremergencia || ""}
+                  value={empleado?.datosmedico?.nombremergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -397,7 +396,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.relaemergencia || ""}
+                  value={empleado?.datosmedico?.relaemergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -408,7 +407,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  value={empleado?.datosmedico.numemergencia || ""}
+                  value={empleado?.datosmedico?.numemergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -419,7 +418,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.tiposangre || ""}
+                  value={empleado?.datosmedico?.tiposangre || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -430,7 +429,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.datosmedico.genero || ""}
+                  value={empleado?.datosmedico?.genero || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -453,7 +452,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.cedula || ""}
+                  value={empleado?.formacademica?.cedula || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -464,7 +463,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.carrera || ""}
+                  value={empleado?.formacademica?.carrera || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -475,7 +474,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.explaboral || ""}
+                  value={empleado?.formacademica?.explaboral || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -486,7 +485,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.certificaciones || ""}
+                  value={empleado?.formacademica?.certificaciones || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -497,7 +496,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  value={empleado?.formacademica.gradoestudios || ""}
+                  value={empleado?.formacademica?.gradoestudios || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
