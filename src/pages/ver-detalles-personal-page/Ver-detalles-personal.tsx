@@ -15,12 +15,14 @@ import {
   FileText,
   GraduationCap,
   IdCard,
+  Printer,
   Stethoscope,
   UserRound,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 export function VerDetallesPersonal() {
   const { id } = useParams();
@@ -74,23 +76,34 @@ export function VerDetallesPersonal() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
-      <div className="py-6 px-3 flex flex-wrap md:flex-nowrap items-center justify-between space-y-4 md:space-y-0">
-        <h1 className="font-medium text-2xl px-3">
-          {empleado?.nombre || "Nombre del trabajador"}
+
+      <div className="flex items-center">
+        <Avatar>
+          <AvatarImage
+            src="https://github.com/shadcn.png"
+            alt="@shadcn"
+            className="w-60 rounded-full p-6"
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <h1 className="font-medium text-2xl w-1/2">
+          {empleado?.nombre || "No disponible"}
         </h1>
-        <div className="flex space-x-2">
+        <div className="px-3 w-full flex justify-end gap-2">
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
             Generar credencial
           </Button>
+
           <Button asChild={true} className="bg-deepSea hover:bg-deepLightSea">
             <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
           </Button>
         </div>
       </div>
+
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4">
-          <div className="rounded-xl bg-muted/50 p-4">
+          <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
               <UserRound className="w-6 h-6" />
               <h2 className="font-medium text-xl">Datos del usuario</h2>
