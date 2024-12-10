@@ -44,8 +44,16 @@ export function VerDetallesPersonal() {
       });
   }, [id]);
 
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>{error}</div>;
+  {
+    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
+  }
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Layout>
@@ -323,7 +331,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.datosmedico.alergias || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -334,7 +342,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.datosmedico.enfercronicas || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -345,7 +353,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.datosmedico.lesiones || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -356,7 +364,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Ninguna"
+                  value={empleado?.datosmedico.alergiasmed || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -367,7 +375,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  placeholder="Número de seguro"
+                  value={empleado?.datosmedico.numseguro || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -378,7 +386,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Nombre del padre"
+                  value={empleado?.datosmedico.nombremergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -389,7 +397,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Padre"
+                  value={empleado?.datosmedico.relaemergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -400,7 +408,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="number"
-                  placeholder="Número de emergencia"
+                  value={empleado?.datosmedico.numemergencia || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -411,7 +419,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Tipo de sangre"
+                  value={empleado?.datosmedico.tiposangre || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
@@ -422,7 +430,7 @@ export function VerDetallesPersonal() {
                 <Input
                   disabled
                   type="text"
-                  placeholder="Genero"
+                  value={empleado?.datosmedico.genero || ""}
                   className="bg-white disabled:opacity-100"
                 />
               </div>
