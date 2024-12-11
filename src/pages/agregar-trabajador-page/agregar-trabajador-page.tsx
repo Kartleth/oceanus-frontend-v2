@@ -38,6 +38,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
+import { useMutation } from "react-query";
 
 type AccordionValue =
   | "datos-personales"
@@ -164,34 +165,63 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const mutation = useMutation(async (data: any) => {
+    console.log(data);
+    const res = await fetch("http://localhost:3001/personas", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const resData = await res.json();
+    if (!res.ok) {
+      console.error(resData);
+    }
+    console.log(resData);
+  });
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacionForm>({
     resolver: zodResolver(datosContratacionSchema),
   });
   function onSubmitCon(values: DatosContratacionForm) {
     console.log(values);
+    guardarTrabajador();
   }
   const datosAcademicosForm = useForm<DatosAcademicosForm>({
     resolver: zodResolver(datosAcademicosSchema),
   });
   function onSubmitAcd(values: DatosAcademicosForm) {
     console.log(values);
-    setValue("datos-contratacion")
+    setValue("datos-contratacion");
   }
   const datosMedicosForm = useForm<DatosMedicosForm>({
     resolver: zodResolver(datosMedicosSchema),
   });
   function onSubmitMed(values: DatosMedicosForm) {
     console.log(values);
-    setValue("datos-academicos")
+    setValue("datos-academicos");
   }
 
   const datosPersonalesForm = useForm<DatosPersonalesForm>({
     resolver: zodResolver(datosPersonalesSchema),
   });
-  function onSubmit(values: DatosPersonalesForm){
+  function onSubmit(values: DatosPersonalesForm) {
     console.log(values);
-    setValue("datos-medicos")
+    setValue("datos-medicos");
+  }
+  function guardarTrabajador() {
+    const datosPersonales = datosPersonalesForm.getValues();
+    const datosMedicos = datosMedicosForm.getValues();
+    const datosAcademicos = datosAcademicosForm.getValues();
+    const datosContratacion = datosContratacionForm.getValues();
+    const trabajador = {
+      datosMedicos: datosMedicos,
+      datosAcademicos: datosAcademicos,
+      datosPersonales: { ...datosPersonales, ...datosContratacion },
+    };
+    console.log(trabajador);
+    mutation.mutate(trabajador);
   }
   return (
     <Layout>
@@ -681,11 +711,11 @@ export function PageAgregarTrabajador() {
                               defaultValue={field.value}
                               placeholder="Selecciona tipo de contrato"
                             >
-                              <SelectItem value="soltero">
+                              <SelectItem value="indefinido">
                                 Indefinido
                               </SelectItem>
-                              <SelectItem value="casado">Temporal</SelectItem>
-                              <SelectItem value="casado">Por Obra</SelectItem>
+                              <SelectItem value="temporal">Temporal</SelectItem>
+                              <SelectItem value="porObra">Por Obra</SelectItem>
                             </FormSelect>
                           </FormControl>
                           <FormMessage />

@@ -1,4 +1,5 @@
 // src/App.tsx
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Contratos from "./pages/contratos-page/Contratos";
 import Empresas from "./pages/empresas-page/Empresas";
@@ -12,24 +13,37 @@ import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-pe
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Page_personal />} />
-        <Route path="/personal" element={<Page_personal />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/contratos" element={<Contratos />} />
-        <Route path="/empresas" element={<Empresas />} />
-        <Route path="/facturas" element={<Facturas />} />
-        <Route path="/personal_terceros" element={<Terceros />} />
-        <Route path="/cotizaciones" element={<Cotizaciones />} />
-        <Route path="/agregar-trabajador" element={<PageAgregarTrabajador />} />
-        <Route path="/generar-credencial" element={<PageGenerarCredencial />} />
-        <Route path="/detalles-trabajador" element={<VerDetallesPersonal />} />
-        <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Page_personal />} />
+          <Route path="/personal" element={<Page_personal />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/contratos" element={<Contratos />} />
+          <Route path="/empresas" element={<Empresas />} />
+          <Route path="/facturas" element={<Facturas />} />
+          <Route path="/personal_terceros" element={<Terceros />} />
+          <Route path="/cotizaciones" element={<Cotizaciones />} />
+          <Route
+            path="/agregar-trabajador"
+            element={<PageAgregarTrabajador />}
+          />
+          <Route
+            path="/generar-credencial"
+            element={<PageGenerarCredencial />}
+          />
+          <Route
+            path="/detalles-trabajador"
+            element={<VerDetallesPersonal />}
+          />
+          <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
