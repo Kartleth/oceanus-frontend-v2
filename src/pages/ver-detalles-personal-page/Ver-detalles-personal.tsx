@@ -44,17 +44,6 @@ export function VerDetallesPersonal() {
       });
   }, [id]);
 
-  {
-    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
-  }
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -78,27 +67,39 @@ export function VerDetallesPersonal() {
       </header>
 
       <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            src="https://github.com/shadcn.png"
-            alt="@shadcn"
-            className="w-60 rounded-full p-6"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <h1 className="font-medium text-2xl w-1/2">
-          {empleado?.nombre || "No disponible"}
-        </h1>
-        <div className="px-3 w-full flex justify-end gap-2">
-          <Button className="bg-deepSea hover:bg-deepLightSea">
-            <IdCard />
-            Generar credencial
-          </Button>
+        {loading ? (
+          <div className="flex items-center space-x-4 w-full p-6">
+            <div className="w-full h-20 bg-gray-200 animate-pulse rounded-md"></div>
+          </div>
+        ) : (
+          <>
+            <Avatar>
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                alt="@shadcn"
+                className="w-60 rounded-full p-6"
+              />
+            </Avatar>
 
-          <Button asChild={true} className="bg-deepSea hover:bg-deepLightSea">
-            <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
-          </Button>
-        </div>
+            <h1 className="font-medium text-2xl w-1/2">
+              {empleado?.nombre || "No disponible"}
+            </h1>
+
+            <div className="px-3 w-full flex justify-end gap-2">
+              <Button className="bg-deepSea hover:bg-deepLightSea">
+                <IdCard />
+                Generar credencial
+              </Button>
+
+              <Button
+                asChild={true}
+                className="bg-deepSea hover:bg-deepLightSea"
+              >
+                <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-4">
@@ -115,91 +116,131 @@ export function VerDetallesPersonal() {
                 <Label htmlFor="" className="mb-2">
                   Nombre
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.nombre || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.nombre || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Fecha nacimiento
                 </Label>
-                <Input
-                  disabled
-                  type="date"
-                  value={empleado?.fechanacimiento || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={empleado?.fechanacimiento || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Teléfono
                 </Label>
-                <Input
-                  disabled
-                  type="number"
-                  value={empleado?.numerocelular || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="number"
+                    value={empleado?.numerocelular || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Email
                 </Label>
-                <Input
-                  disabled
-                  type="email"
-                  value={empleado?.correo || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="email"
+                    value={empleado?.correo || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Carrera
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.formacademica?.carrera || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.formacademica?.carrera || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Grado Académico
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={
-                    empleado?.formacademica?.gradoestudios || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.formacademica?.gradoestudios || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Inicio contrato
                 </Label>
-                <Input
-                  disabled
-                  type="date"
-                  value={empleado?.iniciocontrato || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={empleado?.iniciocontrato || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Fin contrato
                 </Label>
-                <Input
-                  disabled
-                  type="date"
-                  value={empleado?.fincontrato || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={empleado?.fincontrato || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -219,111 +260,161 @@ export function VerDetallesPersonal() {
                 <Label htmlFor="" className="mb-2">
                   Nombre
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.nombre || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.nombre || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Fecha nacimiento
                 </Label>
-                <Input
-                  disabled
-                  type="date"
-                  value={empleado?.fechanacimiento || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={empleado?.fechanacimiento || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   CURP
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.curp || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.curp || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   RFC
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.rfc || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.rfc || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número fijo
                 </Label>
-                <Input
-                  disabled
-                  type="number"
-                  value={empleado?.numerofijo || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="number"
+                    value={empleado?.numerofijo || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número de celular
                 </Label>
-                <Input
-                  disabled
-                  type="number"
-                  value={empleado?.numerocelular || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="number"
+                    value={empleado?.numerocelular || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Dirección
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.direccion || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.direccion || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número de licencia
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.numerolicencia || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.numerolicencia || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número de pasaporte
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.numeropasaporte || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.numeropasaporte || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Fecha de ingreso
                 </Label>
-                <Input
-                  disabled
-                  type="date"
-                  value={empleado?.fechaingreso || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={empleado?.fechaingreso || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -341,117 +432,169 @@ export function VerDetallesPersonal() {
                 <Label htmlFor="" className="mb-2">
                   Alergias
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.datosmedico?.alergias || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.datosmedico?.alergias || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Enfermedades cronicas
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={
-                    empleado?.datosmedico?.enfercronicas || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.datosmedico?.enfercronicas || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Lesiones
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.datosmedico?.lesiones || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.datosmedico?.lesiones || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Alergias a medicamentos
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.datosmedico?.alergiasmed || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.datosmedico?.alergiasmed || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número de seguro
                 </Label>
-                <Input
-                  disabled
-                  value={empleado?.datosmedico?.numseguro || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    value={empleado?.datosmedico?.numseguro || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Llamar en caso de emergencia
                 </Label>
-                <Input
-                  disabled
-                  value={
-                    empleado?.datosmedico?.nombremergencia || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    value={
+                      empleado?.datosmedico?.nombremergencia || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Relación
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={
-                    empleado?.datosmedico?.relaemergencia || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.datosmedico?.relaemergencia || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Número de emergencia
                 </Label>
-                <Input
-                  disabled
-                  type="number"
-                  value={
-                    empleado?.datosmedico?.numemergencia || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="number"
+                    value={
+                      empleado?.datosmedico?.numemergencia || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Tipo de sangre
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.datosmedico?.tiposangre || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.datosmedico?.tiposangre || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Genero
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.datosmedico?.genero || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.datosmedico?.genero || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -469,60 +612,88 @@ export function VerDetallesPersonal() {
                 <Label htmlFor="" className="mb-2">
                   Número de cedula
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.formacademica?.cedula || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.formacademica?.cedula || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Carrera
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.formacademica?.carrera || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empleado?.formacademica?.carrera || "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Experiencia laboral
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={empleado?.formacademica?.explaboral || "No disponible"}
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.formacademica?.explaboral || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Certificaciones
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={
-                    empleado?.formacademica?.certificaciones || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.formacademica?.certificaciones ||
+                      "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
                   Grado de estudio
                 </Label>
-                <Input
-                  disabled
-                  type="text"
-                  value={
-                    empleado?.formacademica?.gradoestudios || "No disponible"
-                  }
-                  className="bg-white disabled:opacity-100"
-                />
+                {/* Skeleton Loader */}
+                {!empleado ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={
+                      empleado?.formacademica?.gradoestudios || "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
               </div>
             </div>
           </div>
