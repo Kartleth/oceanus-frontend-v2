@@ -36,6 +36,8 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
+import { v4 as uuidv4 } from "uuid";
 
 export type EmployeInformation = {
   id: string;
@@ -223,7 +225,20 @@ export function DataTableDemo() {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   }
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className="w-full space-y-2">
+        {[...Array(5)].map(() => (
+          <div key={uuidv4()} className="rounded-md border p-4">
+            <div className="flex space-x-4">
+              <Skeleton className="h-6 w-1/4" />
+              <Skeleton className="h-6 w-1/3" />
+              <Skeleton className="h-6 w-1/5" />
+              <Skeleton className="h-6 w-1/6" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (error) {
