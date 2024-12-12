@@ -86,20 +86,27 @@ const datosPersonalesSchema = z.object({
     .string({
       required_error: "Numero de INE incorrecto.",
     })
-    .regex(/\d{10}/g, { message: "Numero de INE incorrecto." }),
+    .regex(/^\d{12,13}$/g, { message: "Numero de INE incorrecto." }),
   estadoCivil: z.string({ required_error: "Estado civil obligatorio." }),
   numeroCasa: z.string().optional(),
   numeroCelular: z
     .string({ required_error: "Numero celular obligatorio." })
-    .regex(/\d{10}/g, { message: "Numero de celular incorrecto." }),
+    .regex(/^\d{10}$/g, { message: "Numero de celular incorrecto." }),
   correoElectronico: z
     .string({ required_error: "El correo es obligatorio." })
+    .max(50, { message: "Correo incorrecto." })
     .email({ message: "Correo electronico incorrecto." }),
   direccion: z
     .string({ required_error: "Direccion obligatoria" })
     .min(10, { message: "Direccion minima de 10 caracteres." }),
-  numeroLicencia: z.string().optional(),
-  numeroPasaporte: z.string().optional(),
+  numeroLicencia: z
+    .string()
+    .max(15, { message: "Numero de Licencia Incorrecto." })
+    .optional(),
+  numeroPasaporte: z
+    .string()
+    .max(9, { message: "Numero de pasaporte incorrecto." })
+    .optional(),
   fechaIngreso: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
