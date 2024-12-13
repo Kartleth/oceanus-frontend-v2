@@ -38,6 +38,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { v4 as uuidv4 } from "uuid";
+import * as XLSX from "xlsx";
 
 export type EmployeInformation = {
   id: string;
@@ -221,6 +222,14 @@ export function DataTableDemo() {
     },
   });
 
+  /*AQUÍ VOY A PONER LA PARTE QUE ME PERMITE EXPORTAR DATOS PARA EXCEL*/
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Empleados");
+    XLSX.writeFile(workbook, "Personal_Oceanus.xlsx");
+  };
+
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   }
@@ -265,7 +274,7 @@ export function DataTableDemo() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
+            <DropdownMenuItem onClick={exportToExcel}>Exportar a Excel</DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>
           </DropdownMenuContent>
