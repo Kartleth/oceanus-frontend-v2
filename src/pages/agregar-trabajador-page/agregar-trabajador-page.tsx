@@ -132,6 +132,9 @@ const datosMedicosSchema = z.object({
   }),
   tipoSangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
   genero: z.string({ required_error: "Genero obligatorio." }),
+  nombreemergencia: z.string({
+    required_error: "Nombre de persona emergencia obligatorio.",
+  }),
 });
 
 const datosAcademicosSchema = z.object({
@@ -557,6 +560,19 @@ export function PageAgregarTrabajador() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de emergencia</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="nombreemergencia"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre de emergencia</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
