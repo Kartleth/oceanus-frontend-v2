@@ -223,11 +223,54 @@ export function DataTableDemo() {
   });
 
   /*AQUÍ VOY A PONER LA PARTE QUE ME PERMITE EXPORTAR DATOS PARA EXCEL*/
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(data);
+
+  const exportToExcel = (personas: any[]) => {
+    if (!personas || personas.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+
+    const datos = personas.map((persona) => ({
+      ID: persona.id,
+      Nombre: persona.nombre,
+      "Fecha de Nacimiento": persona.fechanacimiento,
+      CURP: persona.curp,
+      RFC: persona.rfc,
+      "Número Fijo": persona.numerofijo,
+      "Número Celular": persona.numerocelular,
+      Dirección: persona.direccion,
+      "Número de Licencia": persona.numerolicencia,
+      "Número de Pasaporte": persona.numeropasaporte,
+      "Fecha de Ingreso": persona.fechaingreso,
+      Estado: persona.estado,
+      "Tipo de Contrato": persona.tipocontrato,
+      "Inicio del Contrato": persona.iniciocontrato,
+      "Fin del Contrato": persona.fincontrato,
+      Correo: persona.correo,
+      INE: persona.ine,
+      "Estado Civil": persona.estadocivil,
+      "Cédula Profesional": persona.formacademica?.cedula || "N/A",
+      Carrera: persona.formacademica?.carrera || "N/A",
+      "Experiencia Laboral": persona.formacademica?.explaboral || "N/A",
+      Certificaciones: persona.formacademica?.certificaciones || "N/A",
+      "Grado de Estudios": persona.formacademica?.gradoestudios || "N/A",
+      Alergias: persona.datosmedico?.alergias || "N/A",
+      "Enfermedades Crónicas": persona.datosmedico?.enfercronicas || "N/A",
+      Lesiones: persona.datosmedico?.lesiones || "N/A",
+      "Alergias a Medicamentos": persona.datosmedico?.alergiasmed || "N/A",
+      "Número de Emergencia": persona.datosmedico?.numemergencia || "N/A",
+      "Número de Seguro": persona.datosmedico?.numseguro || "N/A",
+      "Tipo de Sangre": persona.datosmedico?.tiposangre || "N/A",
+      "Contacto de Emergencia": persona.datosmedico?.nombremergencia || "N/A",
+      Género: persona.datosmedico?.genero || "N/A",
+      "Relación de Emergencia": persona.datosmedico?.relaemergencia || "N/A",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Empleados");
-    XLSX.writeFile(workbook, "Personal_Oceanus.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
+
+    XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
 
   {
@@ -274,7 +317,9 @@ export function DataTableDemo() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem onClick={exportToExcel}>Exportar a Excel</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => exportToExcel(data)}>
+              Exportar a Excel
+            </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>
           </DropdownMenuContent>
