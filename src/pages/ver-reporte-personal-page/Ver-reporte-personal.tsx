@@ -27,7 +27,7 @@ export default function VerReportePersonal() {
   const { id } = useParams();
   const [empleado, setEmpleado] = useState<Persona | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -43,6 +43,7 @@ export default function VerReportePersonal() {
       });
   }, [id]);
 
+
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   }
@@ -53,6 +54,7 @@ export default function VerReportePersonal() {
   if (error) {
     return <div>{error}</div>;
   }
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -95,7 +97,9 @@ export default function VerReportePersonal() {
           {empleado?.nombre || "No disponible"}
         </h1>
         <div className="px-6 w-full flex justify-end">
-          <Button className="bg-deepSea hover:bg-deepLightSea">
+          <Button
+            className="bg-deepSea hover:bg-deepLightSea"
+          >
             <Printer />
             Imprimir reporte
           </Button>
