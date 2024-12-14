@@ -446,7 +446,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
@@ -775,7 +776,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
@@ -792,7 +794,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
