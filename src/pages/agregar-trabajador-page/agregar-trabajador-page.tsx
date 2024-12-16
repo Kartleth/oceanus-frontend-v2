@@ -105,7 +105,7 @@ const datosPersonalesSchema = z.object({
     .optional(),
   numeroPasaporte: z
     .string()
-    .max(9, { message: "Numero de pasaporte incorrecto." })
+    .max(9, { message: "Numero de pasaporte incorrecto, son maximo 9 numeros" })
     .optional(),
   fechaIngreso: z
     .date({
