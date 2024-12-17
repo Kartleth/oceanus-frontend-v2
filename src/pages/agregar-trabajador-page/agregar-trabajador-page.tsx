@@ -38,7 +38,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 type AccordionValue =
   | "datos-personales"
@@ -175,6 +175,7 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/personas", {
@@ -189,6 +190,7 @@ export function PageAgregarTrabajador() {
       console.error(resData);
     }
     console.log(resData);
+    queryClient.invalidateQueries(["trabajadores"]);
   });
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacionForm>({
@@ -758,8 +760,8 @@ export function PageAgregarTrabajador() {
                               defaultValue={field.value}
                               placeholder="Selecciona estado empleado"
                             >
-                              <SelectItem value="soltero">Activo</SelectItem>
-                              <SelectItem value="casado">Inactivo</SelectItem>
+                              <SelectItem value="activo">Activo</SelectItem>
+                              <SelectItem value="inactivo">Inactivo</SelectItem>
                             </FormSelect>
                           </FormControl>
                           <FormMessage />

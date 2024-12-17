@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Persona } from "@/modelos/personal";
 
 const data: EmployeInformation[] = [
   {
@@ -105,7 +107,7 @@ export type EmployeInformation = {
   status: "Activo" | "Inactivo";
 };
 
-export const columns: ColumnDef<EmployeInformation>[] = [
+export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -122,7 +124,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "employe_name",
+    accessorKey: "nombre",
     header: ({ column }) => {
       return (
         <Button
@@ -134,12 +136,10 @@ export const columns: ColumnDef<EmployeInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("employe_name")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("nombre")}</div>,
   },
   {
-    accessorKey: "birthDate",
+    accessorKey: "fechanacimiento",
     header: ({ column }) => {
       return (
         <Button
@@ -152,7 +152,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("birthDate")}</div>
+      <div className="lowercase">{row.getValue("fechanacimiento")}</div>
     ),
   },
   {
@@ -168,7 +168,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("curp")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("curp")}</div>,
   },
   {
     accessorKey: "rfc",
@@ -183,20 +183,20 @@ export const columns: ColumnDef<EmployeInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("rfc")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("rfc")}</div>,
   },
   {
-    accessorKey: "status",
+    accessorKey: "estado",
     header: "Status",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("estado")}</div>
     ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const EmployeInformation = row.original;
+      const Persona = row.original;
 
       return (
         <DropdownMenu>
@@ -210,7 +210,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(EmployeInformation.id)
+                navigator.clipboard.writeText(Persona.id.toString())
               }
             >
               <Link to="/detalles-trabajador">Ver detalles</Link>
@@ -236,6 +236,28 @@ export const columns: ColumnDef<EmployeInformation>[] = [
 ];
 
 export function DataTableDemo() {
+  const trabajadoresQuery = useQuery({
+    queryKey: ["trabajadores"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:3001/personas", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const personaParse = Persona.array().safeParse(resData);
+      if (!personaParse.success) {
+        console.error(personaParse.error);
+        throw new Error(personaParse.error.toString());
+      }
+      return personaParse.data;
+    },
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -245,7 +267,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: trabajadoresQuery.data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
