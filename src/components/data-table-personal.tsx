@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Persona } from "@/modelos/personal";
 
 const data: EmployeInformation[] = [
@@ -196,7 +196,25 @@ export const columns: ColumnDef<Persona>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const queryClient = useQueryClient();
       const Persona = row.original;
+      const detelePersona = useMutation(async () => {
+        const res = await fetch(
+          `http://localhost:3001/personas/${Persona.id}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const resData = await res.json();
+        if (!res.ok) {
+          console.error(resData);
+        }
+        console.log(resData);
+        queryClient.invalidateQueries(["trabajadores"]);
+      });
 
       return (
         <DropdownMenu>
@@ -227,7 +245,13 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
 
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                detelePersona.mutate();
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
