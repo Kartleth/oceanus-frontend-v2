@@ -33,7 +33,6 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { v4 as uuidv4 } from "uuid";
@@ -179,10 +178,48 @@ export const columns: ColumnDef<EmployeInformation>[] = [
   },
 ];
 
+const Persona = z.object({
+  id: z.string(),
+  nombre: z.string(),
+  fechanacimiento: z.string(),
+  curp: z.string(),
+  rfc: z.string(),
+  estado: z.string(),
+});
+
+async function fetchTrabajadores() {
+  const res = await fetch("http://localhost:3001/personas", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const resData = await res.json();
+
+  if (!res.ok) {
+    console.error(resData);
+    throw new Error(resData.message);
+  }
+
+  // Validamos los datos con Zod
+  const personaParse = z.array(Persona).safeParse(resData);
+
+  if (!personaParse.success) {
+    console.error(personaParse.error);
+    throw new Error("Error en la validación de datos");
+  }
+
+  return personaParse.data;
+}
+
+
 export function DataTableDemo() {
-  const [data, setData] = React.useState<EmployeInformation[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["trabajadores"],
+    queryFn: fetchTrabajadores,
+    // Se puede agregar un `retry` o un `staleTime` si es necesario
+    retry: 2, // Intentar de nuevo si falla
+    staleTime: 60000, // 1 minuto antes de marcar los datos como obsoletos
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -190,24 +227,6 @@ export function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
-  const queryClient = useQueryClient();
-
-  const fetchPersonas = useMutation(async () => {
-    const res = await axios.get("http://localhost:3001/personas");
-    return res.data; // Devolvemos los datos directamente
-  }, {
-    onSuccess: (data) => {
-      setData(data);  // Actualizamos el estado con los datos recibidos
-      setLoading(false); // Desactivamos el estado de carga
-    },
-    onError: (error) => {
-      setError("Error al cargar los datos");
-      setLoading(false); // Desactivamos el estado de carga
-      console.error(error);
-    },
-  });
-
 
   const table = useReactTable({
     data,
@@ -282,11 +301,11 @@ export function DataTableDemo() {
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   }
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="w-full space-y-2">
-        {[...Array(5)].map(() => (
-          <div key={uuidv4()} className="rounded-md border p-4">
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="rounded-md border p-4">
             <div className="flex space-x-4">
               <Skeleton className="h-6 w-1/4" />
               <Skeleton className="h-6 w-1/3" />
@@ -299,8 +318,9 @@ export function DataTableDemo() {
     );
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  // Si ocurre un error, lo mostramos
+  if (error instanceof Error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
