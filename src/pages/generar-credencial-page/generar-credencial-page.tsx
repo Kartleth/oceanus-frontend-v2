@@ -13,8 +13,10 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { CirclePlus, Upload, UserRound } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import QRCode from "react-qr-code"; // Importa el componente QRCode
+import { useQueryClient } from "react-query";
 
 export function PageGenerarCredencial() {
+  const queryClient = useQueryClient();
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b p-4 bg-gray-50">
