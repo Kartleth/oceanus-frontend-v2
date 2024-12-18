@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -35,6 +33,7 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { v4 as uuidv4 } from "uuid";
@@ -189,19 +188,23 @@ export function DataTableDemo() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  React.useEffect(() => {
-    axios
-      .get("http://localhost:3001/personas")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Error al cargar los datos");
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  const queryClient = useQueryClient();
+
+  const fetchPersonas = useMutation(async () => {
+    const res = await axios.get("http://localhost:3001/personas");
+    return res.data; // Devolvemos los datos directamente
+  }, {
+    onSuccess: (data) => {
+      setData(data);  // Actualizamos el estado con los datos recibidos
+      setLoading(false); // Desactivamos el estado de carga
+    },
+    onError: (error) => {
+      setError("Error al cargar los datos");
+      setLoading(false); // Desactivamos el estado de carga
+      console.error(error);
+    },
+  });
+
 
   const table = useReactTable({
     data,
