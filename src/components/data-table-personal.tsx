@@ -33,9 +33,7 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
-import { v4 as uuidv4 } from "uuid";
 import * as XLSX from "xlsx";
 
 import { useQuery } from "@tanstack/react-query";
@@ -181,34 +179,39 @@ export const columns: ColumnDef<EmployeInformation>[] = [
 const Persona = z.object({
   id: z.string(),
   nombre: z.string(),
-  fechanacimiento: z.string(),
+  fechanacimiento: z.date(),
   curp: z.string(),
   rfc: z.string(),
   estado: z.string(),
 });
 
 async function fetchTrabajadores() {
-  const res = await fetch("http://localhost:3001/personas", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const resData = await res.json();
+  try {
+    const res = await fetch("http://localhost:3001/personas", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (!res.ok) {
-    console.error(resData);
-    throw new Error(resData.message);
+    if (!res.ok) {
+      throw new Error("Error en la carga de los datos");
+    }
+
+    const resData = await res.json();
+
+    // Validamos los datos con Zod
+    const personaParse = z.array(Persona).safeParse(resData);
+
+    if (!personaParse.success) {
+      console.error(personaParse.error);
+      throw new Error("Error en la validación de datos");
+    }
+
+    return personaParse.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-
-  // Validamos los datos con Zod
-  const personaParse = z.array(Persona).safeParse(resData);
-
-  if (!personaParse.success) {
-    console.error(personaParse.error);
-    throw new Error("Error en la validación de datos");
-  }
-
-  return personaParse.data;
 }
 
 
