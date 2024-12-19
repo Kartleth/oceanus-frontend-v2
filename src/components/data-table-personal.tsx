@@ -216,13 +216,29 @@ async function fetchTrabajadores() {
 
 
 export function DataTableDemo() {
-  const { data, error, isLoading } = useQuery({
+  const trabajadoresQuery = useQuery({
     queryKey: ["trabajadores"],
-    queryFn: fetchTrabajadores,
-    // Se puede agregar un `retry` o un `staleTime` si es necesario
-    retry: 2, // Intentar de nuevo si falla
-    staleTime: 60000, // 1 minuto antes de marcar los datos como obsoletos
+    queryFn: async () => { //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
+      const res = await fetch("http://localhost:3001/personas", { //El await es para esperar a que se resulevan las promesas antes de seguir con el código
+        headers: {
+          "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+        },
+      });
+      const resData = await res.json(); //después de recibir la info de la API se convierte en formato json y se guarda en resData
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const personaParse = Persona.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente
+      if (!personaParse.success) {
+        console.error(personaParse.error);
+        throw new Error(personaParse.error.toString());
+      }
+      return personaParse.data;
+    },
   });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
