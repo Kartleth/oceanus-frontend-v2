@@ -39,7 +39,6 @@ import * as XLSX from "xlsx";
 import { useQuery } from "@tanstack/react-query";
 import { Persona } from "@/modelos/personal";
 
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
   {
@@ -132,7 +131,7 @@ export const columns: ColumnDef<Persona>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const EmployeInformation = row.original;
+      const Persona = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -145,10 +144,10 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(Persona.id)
+                navigator.clipboard.writeText(Persona.id.toString())
               }
             >
-              <Link to={`/detalles-trabajador/${EmployeInformation.id}`}>
+              <Link to={`/detalles-trabajador/${Persona.id}`}>
                 Ver detalles
               </Link>
             </DropdownMenuItem>
@@ -167,13 +166,13 @@ export const columns: ColumnDef<Persona>[] = [
   },
 ];
 
-
-
 export function DataTableDemo() {
   const trabajadoresQuery = useQuery({
     queryKey: ["trabajadores"],
-    queryFn: async () => { //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
-      const res = await fetch("http://localhost:3001/personas", { //El await es para esperar a que se resulevan las promesas antes de seguir con el código
+    queryFn: async () => {
+      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
+      const res = await fetch("http://localhost:3001/personas", {
+        //El await es para esperar a que se resulevan las promesas antes de seguir con el código
         headers: {
           "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
         },
@@ -316,7 +315,9 @@ export function DataTableDemo() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => exportToExcel(trabajadoresQuery.data || [])}>
+            <DropdownMenuItem
+              onClick={() => exportToExcel(trabajadoresQuery.data || [])}
+            >
               Exportar a Excel
             </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
