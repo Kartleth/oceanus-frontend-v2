@@ -39,65 +39,6 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Persona } from "@/modelos/personal";
 
-const data: EmployeInformation[] = [
-  {
-    id: "id1",
-    employe_name: "Carlos López",
-    birthDate: "1990-05-14",
-    curp: "LOPC900514HDFRPL01",
-    rfc: "LOPC900514123",
-    status: "Activo",
-  },
-  {
-    id: "id2",
-    employe_name: "María García",
-    birthDate: "1985-12-22",
-    curp: "GARM851222MDFCRR02",
-    rfc: "GARM851222456",
-    status: "Activo",
-  },
-  {
-    id: "id3",
-    employe_name: "Juan Pérez",
-    birthDate: "1992-07-09",
-    curp: "PERJ920709HDFRPN03",
-    rfc: "PERJ920709789",
-    status: "Inactivo",
-  },
-  {
-    id: "id4",
-    employe_name: "Ana Ramírez",
-    birthDate: "1998-11-03",
-    curp: "RAMA981103MDFSRN04",
-    rfc: "RAMA981103321",
-    status: "Activo",
-  },
-  {
-    id: "id5",
-    employe_name: "Luis Torres",
-    birthDate: "1978-03-15",
-    curp: "TORL780315HDFTRL05",
-    rfc: "TORL780315654",
-    status: "Inactivo",
-  },
-  {
-    id: "id6",
-    employe_name: "Sofía Martínez",
-    birthDate: "2000-08-25",
-    curp: "MARS000825MDFTSF06",
-    rfc: "MARS000825987",
-    status: "Activo",
-  },
-  {
-    id: "id7",
-    employe_name: "Pedro Hernández",
-    birthDate: "1995-01-30",
-    curp: "HERP950130HDFNRP07",
-    rfc: "HERP950130654",
-    status: "Inactivo",
-  },
-];
-
 export type EmployeInformation = {
   id: string;
   employe_name: string;

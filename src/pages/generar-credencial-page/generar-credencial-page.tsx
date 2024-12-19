@@ -9,14 +9,48 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Persona } from "@/modelos/personal";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { id } from "date-fns/locale";
 import { CirclePlus, Upload, UserRound } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import QRCode from "react-qr-code"; // Importa el componente QRCode
-import { useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 export function PageGenerarCredencial() {
-  const queryClient = useQueryClient();
+  const id = 20;
+  const query = useQuery({
+    queryKey: ["trabajador", id],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:3001/personas/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const personaParse = Persona.safeParse(resData);
+      if (!personaParse.success) {
+        console.error(personaParse.error);
+        throw new Error(personaParse.error.toString());
+      }
+      return personaParse.data;
+    },
+  });
+  console.log(query.data);
+  // const queryClient = useQueryClient();
+  // const trabajador = queryClient.getQueryData(["trabajador", id]);
+  // if (!trabajador) {
+  //   return <p>Datos no disponibles en cache.Por favor, recarga la pagina.</p>;
+  // }
+
+  // const { datosPersonales, datosMedicos, datosAcademicos, datosContratacion } =
+  //   trabajador;
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b p-4 bg-gray-50">
