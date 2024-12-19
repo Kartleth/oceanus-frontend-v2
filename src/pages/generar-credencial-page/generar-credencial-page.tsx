@@ -16,9 +16,13 @@ import { CirclePlus, Upload, UserRound } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import QRCode from "react-qr-code"; // Importa el componente QRCode
 import { useQuery, useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
+import oceanuslogo from "@/assets/oceanus-logo.svg";
+import oceanusadmi from "@/assets/admin-logo.png";
 
 export function PageGenerarCredencial() {
-  const id = 20;
+  const params = useParams();
+  const id = params.id;
   const query = useQuery({
     queryKey: ["trabajador", id],
     queryFn: async () => {
@@ -42,14 +46,6 @@ export function PageGenerarCredencial() {
     },
   });
   console.log(query.data);
-  // const queryClient = useQueryClient();
-  // const trabajador = queryClient.getQueryData(["trabajador", id]);
-  // if (!trabajador) {
-  //   return <p>Datos no disponibles en cache.Por favor, recarga la pagina.</p>;
-  // }
-
-  // const { datosPersonales, datosMedicos, datosAcademicos, datosContratacion } =
-  //   trabajador;
 
   return (
     <Layout>
@@ -80,7 +76,7 @@ export function PageGenerarCredencial() {
             <CardHeader>
               <CardTitle className="text-xl flex items-center justify-center gap-1">
                 <img
-                  src="src/assets/oceanus-logo.svg"
+                  src={oceanuslogo}
                   alt="Logo Oceanus"
                   className="w-8 h-8"
                 />
@@ -118,7 +114,7 @@ export function PageGenerarCredencial() {
                   }}
                 >
                   <img
-                    src="src/assets/admin-logo.png"
+                    src={oceanusadmi}
                     alt="Descripción de la imagen"
                     className="w-32 h-32 rounded-full object-cover"
                   />
@@ -185,7 +181,7 @@ export function PageGenerarCredencial() {
             <CardHeader>
               <CardTitle className="text-xl flex items-center justify-center gap-2">
                 <img
-                  src="src/assets/oceanus-logo.svg"
+                  src={oceanuslogo}
                   alt="Logo Oceanus"
                   className="w-8 h-8"
                 />

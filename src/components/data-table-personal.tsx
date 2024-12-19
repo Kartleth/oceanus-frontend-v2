@@ -181,7 +181,9 @@ export const columns: ColumnDef<Persona>[] = [
               <Link to="/reporte-de-empleado">Generar reporte</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/generar-credencial">Generar credencial </Link>
+              <Link to={`/generar-credencial/${Persona.id}`}>
+                Generar credencial{" "}
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>

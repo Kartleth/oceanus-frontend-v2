@@ -33,7 +33,7 @@ function App() {
             element={<PageAgregarTrabajador />}
           />
           <Route
-            path="/generar-credencial"
+            path="/generar-credencial/:id"
             element={<PageGenerarCredencial />}
           />
           <Route
