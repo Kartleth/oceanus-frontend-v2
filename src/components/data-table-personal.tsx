@@ -37,19 +37,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import * as XLSX from "xlsx";
 
 import { useQuery } from "@tanstack/react-query";
-import * as z from "zod";
+import { Persona } from "@/modelos/personal";
 
-export type EmployeInformation = {
-  id: string;
-  nombre: string;
-  fechanacimiento: Date;
-  curp: string;
-  rfc: string;
-  estado: string;
-};
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const columns: ColumnDef<EmployeInformation>[] = [
+export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -141,7 +133,6 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const EmployeInformation = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -154,7 +145,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(EmployeInformation.id)
+                navigator.clipboard.writeText(Persona.id)
               }
             >
               <Link to={`/detalles-trabajador/${EmployeInformation.id}`}>
@@ -176,43 +167,6 @@ export const columns: ColumnDef<EmployeInformation>[] = [
   },
 ];
 
-const Persona = z.object({
-  id: z.string(),
-  nombre: z.string(),
-  fechanacimiento: z.date(),
-  curp: z.string(),
-  rfc: z.string(),
-  estado: z.string(),
-});
-
-async function fetchTrabajadores() {
-  try {
-    const res = await fetch("http://localhost:3001/personas", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Error en la carga de los datos");
-    }
-
-    const resData = await res.json();
-
-    // Validamos los datos con Zod
-    const personaParse = z.array(Persona).safeParse(resData);
-
-    if (!personaParse.success) {
-      console.error(personaParse.error);
-      throw new Error("Error en la validación de datos");
-    }
-
-    return personaParse.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
 
 
 export function DataTableDemo() {
@@ -248,7 +202,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: trabajadoresQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -320,7 +274,7 @@ export function DataTableDemo() {
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   }
-  if (isLoading) {
+  if (trabajadoresQuery.isLoading) {
     return (
       <div className="w-full space-y-2">
         {[...Array(5)].map((_, index) => (
@@ -338,8 +292,8 @@ export function DataTableDemo() {
   }
 
   // Si ocurre un error, lo mostramos
-  if (error instanceof Error) {
-    return <div>Error: {error.message}</div>;
+  if (trabajadoresQuery.error instanceof Error) {
+    return <div>Error: {trabajadoresQuery.error.message}</div>;
   }
 
   return (
@@ -362,7 +316,7 @@ export function DataTableDemo() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => exportToExcel(data)}>
+            <DropdownMenuItem onClick={() => exportToExcel(trabajadoresQuery.data || [])}>
               Exportar a Excel
             </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
