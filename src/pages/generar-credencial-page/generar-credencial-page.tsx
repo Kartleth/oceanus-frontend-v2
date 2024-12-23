@@ -11,14 +11,14 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Persona } from "@/modelos/personal";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { id } from "date-fns/locale";
-import { CirclePlus, Upload, UserRound } from "lucide-react";
-import { QRCodeCanvas } from "qrcode.react";
+import { Upload } from "lucide-react";
 import QRCode from "react-qr-code"; // Importa el componente QRCode
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import oceanuslogo from "@/assets/oceanus-logo.svg";
 import oceanusadmi from "@/assets/admin-logo.png";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 export function PageGenerarCredencial() {
   const params = useParams();
@@ -45,7 +45,36 @@ export function PageGenerarCredencial() {
       return personaParse.data;
     },
   });
-  console.log(query.status, query.data);
+  const handleDownload = async () => {
+    const targetDiv = document.querySelector(
+      ".p-6.flex.justify-center.items-stretch.gap-20"
+    );
+
+    if (!query.data || !targetDiv) {
+      alert(
+        "No se encontraron datos para generar la credencial o no se encontró el elemento."
+      );
+      return;
+    }
+
+    try {
+      const canvas = await html2canvas(targetDiv as HTMLElement, { scale: 2 }); // Aumenta la escala para mayor calidad
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF("portrait", "mm", "a4");
+
+      const imgWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+      pdf.save(`Credencial_${query.data.nombre}.pdf`);
+      console.log("PDF descargado correctamente.");
+    } catch (error) {
+      console.error("Error al generar el PDF:", error);
+      alert("Ocurrió un error al intentar descargar la credencial.");
+    }
+  };
 
   return (
     <Layout>
@@ -64,7 +93,10 @@ export function PageGenerarCredencial() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button className="bg-deepSea hover:bg-deepLightSea">
+        <Button
+          className="bg-deepSea hover:bg-deepLightSea"
+          onClick={handleDownload}
+        >
           <Upload /> Descargar
         </Button>
       </div>
