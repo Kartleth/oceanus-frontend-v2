@@ -1,3 +1,6 @@
+"use client";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import * as React from "react";
 import {
   ColumnDef,
@@ -35,11 +38,20 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as XLSX from "xlsx";
-
-import { useQuery } from "@tanstack/react-query";
 import { Persona } from "@/modelos/personal";
 
 // eslint-disable-next-line react-refresh/only-export-components
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
+export type EmployeInformation = {
+  id: string;
+  employe_name: string;
+  birthDate: string;
+  curp: string;
+  rfc: string;
+  status: "Activo" | "Inactivo";
+};
+
 export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "id",
@@ -103,7 +115,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("curp")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("curp")}</div>,
   },
   {
     accessorKey: "rfc",
@@ -118,7 +130,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("rfc")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("rfc")}</div>,
   },
   {
     accessorKey: "estado",
@@ -132,6 +144,25 @@ export const columns: ColumnDef<Persona>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const Persona = row.original;
+      const queryClient = useQueryClient();
+      const detelePersona = useMutation(async () => {
+        const res = await fetch(
+          `http://localhost:3001/personas/${Persona.id}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const resData = await res.json();
+        if (!res.ok) {
+          console.error(resData);
+        }
+        console.log(resData);
+        queryClient.invalidateQueries(["trabajadores"]);
+      });
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -154,11 +185,25 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
-            <DropdownMenuItem>Generar reporte</DropdownMenuItem>
-            <DropdownMenuItem>Generar credencial</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="/reporte-de-empleado">Generar reporte</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={`/generar-credencial/${Persona.id}`}>
+                Generar credencial{" "}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
             <DropdownMenuItem>Borrar</DropdownMenuItem>
+
+            <DropdownMenuItem
+              onClick={() => {
+                detelePersona.mutate();
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -177,13 +222,13 @@ export function DataTableDemo() {
           "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
         },
       });
-      const resData = await res.json(); //después de recibir la info de la API se convierte en formato json y se guarda en resData
+      const resData = await res.json();
       if (!res.ok) {
         console.error(resData);
         throw new Error(resData.message);
       }
       console.log(resData);
-      const personaParse = Persona.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente
+      const personaParse = Persona.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente.
       if (!personaParse.success) {
         console.error(personaParse.error);
         throw new Error(personaParse.error.toString());

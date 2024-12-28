@@ -38,6 +38,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 type AccordionValue =
   | "datos-personales"
@@ -85,20 +86,27 @@ const datosPersonalesSchema = z.object({
     .string({
       required_error: "Numero de INE incorrecto.",
     })
-    .regex(/\d{10}/g, { message: "Numero de INE incorrecto." }),
+    .regex(/^\d{12,13}$/g, { message: "Numero de INE incorrecto." }),
   estadoCivil: z.string({ required_error: "Estado civil obligatorio." }),
   numeroCasa: z.string().optional(),
   numeroCelular: z
     .string({ required_error: "Numero celular obligatorio." })
-    .regex(/\d{10}/g, { message: "Numero de celular incorrecto." }),
+    .regex(/^\d{10}$/g, { message: "Numero de celular incorrecto." }),
   correoElectronico: z
     .string({ required_error: "El correo es obligatorio." })
+    .max(50, { message: "Correo incorrecto." })
     .email({ message: "Correo electronico incorrecto." }),
   direccion: z
     .string({ required_error: "Direccion obligatoria" })
     .min(10, { message: "Direccion minima de 10 caracteres." }),
-  numeroLicencia: z.string().optional(),
-  numeroPasaporte: z.string().optional(),
+  numeroLicencia: z
+    .string()
+    .max(15, { message: "Numero de Licencia Incorrecto." })
+    .optional(),
+  numeroPasaporte: z
+    .string()
+    .max(9, { message: "Numero de pasaporte incorrecto, son maximo 9 numeros" })
+    .optional(),
   fechaIngreso: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
@@ -124,6 +132,9 @@ const datosMedicosSchema = z.object({
   }),
   tipoSangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
   genero: z.string({ required_error: "Genero obligatorio." }),
+  nombreemergencia: z.string({
+    required_error: "Nombre de persona emergencia obligatorio.",
+  }),
 });
 
 const datosAcademicosSchema = z.object({
@@ -164,34 +175,65 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(async (data: any) => {
+    console.log(data);
+    const res = await fetch("http://localhost:3001/personas", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const resData = await res.json();
+    if (!res.ok) {
+      console.error(resData);
+    }
+    console.log(resData);
+    queryClient.invalidateQueries(["trabajadores"]);
+  });
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacionForm>({
     resolver: zodResolver(datosContratacionSchema),
   });
   function onSubmitCon(values: DatosContratacionForm) {
     console.log(values);
+    guardarTrabajador();
   }
   const datosAcademicosForm = useForm<DatosAcademicosForm>({
     resolver: zodResolver(datosAcademicosSchema),
   });
   function onSubmitAcd(values: DatosAcademicosForm) {
     console.log(values);
-    setValue("datos-contratacion")
+    setValue("datos-contratacion");
   }
   const datosMedicosForm = useForm<DatosMedicosForm>({
     resolver: zodResolver(datosMedicosSchema),
   });
   function onSubmitMed(values: DatosMedicosForm) {
     console.log(values);
-    setValue("datos-academicos")
+    setValue("datos-academicos");
   }
 
   const datosPersonalesForm = useForm<DatosPersonalesForm>({
     resolver: zodResolver(datosPersonalesSchema),
   });
-  function onSubmit(values: DatosPersonalesForm){
+  function onSubmit(values: DatosPersonalesForm) {
     console.log(values);
-    setValue("datos-medicos")
+    setValue("datos-medicos");
+  }
+  function guardarTrabajador() {
+    const datosPersonales = datosPersonalesForm.getValues();
+    const datosMedicos = datosMedicosForm.getValues();
+    const datosAcademicos = datosAcademicosForm.getValues();
+    const datosContratacion = datosContratacionForm.getValues();
+    const trabajador = {
+      datosMedicos: datosMedicos,
+      datosAcademicos: datosAcademicos,
+      datosPersonales: { ...datosPersonales, ...datosContratacion },
+    };
+    console.log(trabajador);
+    mutation.mutate(trabajador);
   }
   return (
     <Layout>
@@ -406,7 +448,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
@@ -520,6 +563,19 @@ export function PageAgregarTrabajador() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de emergencia</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={datosMedicosForm.control}
+                      name="nombreemergencia"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre de emergencia</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -681,11 +737,11 @@ export function PageAgregarTrabajador() {
                               defaultValue={field.value}
                               placeholder="Selecciona tipo de contrato"
                             >
-                              <SelectItem value="soltero">
+                              <SelectItem value="indefinido">
                                 Indefinido
                               </SelectItem>
-                              <SelectItem value="casado">Temporal</SelectItem>
-                              <SelectItem value="casado">Por Obra</SelectItem>
+                              <SelectItem value="temporal">Temporal</SelectItem>
+                              <SelectItem value="porObra">Por Obra</SelectItem>
                             </FormSelect>
                           </FormControl>
                           <FormMessage />
@@ -704,8 +760,8 @@ export function PageAgregarTrabajador() {
                               defaultValue={field.value}
                               placeholder="Selecciona estado empleado"
                             >
-                              <SelectItem value="soltero">Activo</SelectItem>
-                              <SelectItem value="casado">Inactivo</SelectItem>
+                              <SelectItem value="activo">Activo</SelectItem>
+                              <SelectItem value="inactivo">Inactivo</SelectItem>
                             </FormSelect>
                           </FormControl>
                           <FormMessage />
@@ -722,7 +778,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
@@ -739,7 +796,8 @@ export function PageAgregarTrabajador() {
                             <DatePicker
                               date={field.value}
                               onChange={field.onChange}
-                              minDate={undefined}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
                             />
                           </FormControl>
                           <FormMessage />
