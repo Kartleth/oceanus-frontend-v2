@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -14,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,76 +33,14 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
+import * as XLSX from "xlsx";
 
-const data: EmployeInformation[] = [
-  {
-    id: "id1",
-    employe_name: "Carlos López",
-    birthDate: "1990-05-14",
-    curp: "LOPC900514HDFRPL01",
-    rfc: "LOPC900514123",
-    status: "Activo",
-  },
-  {
-    id: "id2",
-    employe_name: "María García",
-    birthDate: "1985-12-22",
-    curp: "GARM851222MDFCRR02",
-    rfc: "GARM851222456",
-    status: "Activo",
-  },
-  {
-    id: "id3",
-    employe_name: "Juan Pérez",
-    birthDate: "1992-07-09",
-    curp: "PERJ920709HDFRPN03",
-    rfc: "PERJ920709789",
-    status: "Inactivo",
-  },
-  {
-    id: "id4",
-    employe_name: "Ana Ramírez",
-    birthDate: "1998-11-03",
-    curp: "RAMA981103MDFSRN04",
-    rfc: "RAMA981103321",
-    status: "Activo",
-  },
-  {
-    id: "id5",
-    employe_name: "Luis Torres",
-    birthDate: "1978-03-15",
-    curp: "TORL780315HDFTRL05",
-    rfc: "TORL780315654",
-    status: "Inactivo",
-  },
-  {
-    id: "id6",
-    employe_name: "Sofía Martínez",
-    birthDate: "2000-08-25",
-    curp: "MARS000825MDFTSF06",
-    rfc: "MARS000825987",
-    status: "Activo",
-  },
-  {
-    id: "id7",
-    employe_name: "Pedro Hernández",
-    birthDate: "1995-01-30",
-    curp: "HERP950130HDFNRP07",
-    rfc: "HERP950130654",
-    status: "Inactivo",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { Persona } from "@/modelos/personal";
 
-export type EmployeInformation = {
-  id: string;
-  employe_name: string;
-  birthDate: string;
-  curp: string;
-  rfc: string;
-  status: "Activo" | "Inactivo";
-};
-
-export const columns: ColumnDef<EmployeInformation>[] = [
+// eslint-disable-next-line react-refresh/only-export-components
+export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -122,7 +57,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "employe_name",
+    accessorKey: "nombre",
     header: ({ column }) => {
       return (
         <Button
@@ -135,11 +70,11 @@ export const columns: ColumnDef<EmployeInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("employe_name")}</div>
+      <div className="lowercase">{row.getValue("nombre")}</div>
     ),
   },
   {
-    accessorKey: "birthDate",
+    accessorKey: "fechanacimiento",
     header: ({ column }) => {
       return (
         <Button
@@ -152,7 +87,7 @@ export const columns: ColumnDef<EmployeInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("birthDate")}</div>
+      <div className="lowercase">{row.getValue("fechanacimiento")}</div>
     ),
   },
   {
@@ -186,18 +121,17 @@ export const columns: ColumnDef<EmployeInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("rfc")}</div>,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "estado",
+    header: "Estado",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("estado")}</div>
     ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const EmployeInformation = row.original;
-
+      const Persona = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -210,10 +144,12 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(EmployeInformation.id)
+                navigator.clipboard.writeText(Persona.id.toString())
               }
             >
-              <Link to="/detalles-trabajador">Ver detalles</Link>
+              <Link to={`/detalles-trabajador/${Persona.id}`}>
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
@@ -222,7 +158,6 @@ export const columns: ColumnDef<EmployeInformation>[] = [
             <DropdownMenuItem>Generar credencial</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
-
             <DropdownMenuItem>Borrar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -232,6 +167,31 @@ export const columns: ColumnDef<EmployeInformation>[] = [
 ];
 
 export function DataTableDemo() {
+  const trabajadoresQuery = useQuery({
+    queryKey: ["trabajadores"],
+    queryFn: async () => {
+      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
+      const res = await fetch("http://localhost:3001/personas", {
+        //El await es para esperar a que se resulevan las promesas antes de seguir con el código
+        headers: {
+          "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+        },
+      });
+      const resData = await res.json(); //después de recibir la info de la API se convierte en formato json y se guarda en resData
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const personaParse = Persona.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente
+      if (!personaParse.success) {
+        console.error(personaParse.error);
+        throw new Error(personaParse.error.toString());
+      }
+      return personaParse.data;
+    },
+  });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -241,7 +201,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: trabajadoresQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -258,6 +218,82 @@ export function DataTableDemo() {
       rowSelection,
     },
   });
+
+  /*AQUÍ VOY A PONER LA PARTE QUE ME PERMITE EXPORTAR DATOS PARA EXCEL*/
+
+  const exportToExcel = (personas: any[]) => {
+    if (!personas || personas.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+
+    const datos = personas.map((persona) => ({
+      ID: persona.id,
+      Nombre: persona.nombre,
+      "Fecha de Nacimiento": persona.fechanacimiento,
+      CURP: persona.curp,
+      RFC: persona.rfc,
+      "Número Fijo": persona.numerofijo,
+      "Número Celular": persona.numerocelular,
+      Dirección: persona.direccion,
+      "Número de Licencia": persona.numerolicencia,
+      "Número de Pasaporte": persona.numeropasaporte,
+      "Fecha de Ingreso": persona.fechaingreso,
+      Estado: persona.estado,
+      "Tipo de Contrato": persona.tipocontrato,
+      "Inicio del Contrato": persona.iniciocontrato,
+      "Fin del Contrato": persona.fincontrato,
+      Correo: persona.correo,
+      INE: persona.ine,
+      "Estado Civil": persona.estadocivil,
+      "Cédula Profesional": persona.formacademica?.cedula || "N/A",
+      Carrera: persona.formacademica?.carrera || "N/A",
+      "Experiencia Laboral": persona.formacademica?.explaboral || "N/A",
+      Certificaciones: persona.formacademica?.certificaciones || "N/A",
+      "Grado de Estudios": persona.formacademica?.gradoestudios || "N/A",
+      Alergias: persona.datosmedico?.alergias || "N/A",
+      "Enfermedades Crónicas": persona.datosmedico?.enfercronicas || "N/A",
+      Lesiones: persona.datosmedico?.lesiones || "N/A",
+      "Alergias a Medicamentos": persona.datosmedico?.alergiasmed || "N/A",
+      "Número de Emergencia": persona.datosmedico?.numemergencia || "N/A",
+      "Número de Seguro": persona.datosmedico?.numseguro || "N/A",
+      "Tipo de Sangre": persona.datosmedico?.tiposangre || "N/A",
+      "Contacto de Emergencia": persona.datosmedico?.nombremergencia || "N/A",
+      Género: persona.datosmedico?.genero || "N/A",
+      "Relación de Emergencia": persona.datosmedico?.relaemergencia || "N/A",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(datos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
+
+    XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
+  };
+
+  {
+    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
+  }
+  if (trabajadoresQuery.isLoading) {
+    return (
+      <div className="w-full space-y-2">
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="rounded-md border p-4">
+            <div className="flex space-x-4">
+              <Skeleton className="h-6 w-1/4" />
+              <Skeleton className="h-6 w-1/3" />
+              <Skeleton className="h-6 w-1/5" />
+              <Skeleton className="h-6 w-1/6" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Si ocurre un error, lo mostramos
+  if (trabajadoresQuery.error instanceof Error) {
+    return <div>Error: {trabajadoresQuery.error.message}</div>;
+  }
 
   return (
     <div className="w-full">
@@ -279,7 +315,11 @@ export function DataTableDemo() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => exportToExcel(trabajadoresQuery.data || [])}
+            >
+              Exportar a Excel
+            </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>
           </DropdownMenuContent>

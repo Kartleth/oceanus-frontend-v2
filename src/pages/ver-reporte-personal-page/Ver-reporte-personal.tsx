@@ -19,8 +19,42 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function VerReportePersonal() {
+  const { id } = useParams();
+  const [empleado, setEmpleado] = useState<Persona | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/personas/${id}`)
+      .then((response) => {
+        setEmpleado(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError("Error al cargar los datos del empleado");
+        console.error(err);
+        setLoading(false);
+      });
+  }, [id]);
+
+
+  {
+    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
+  }
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -35,14 +69,14 @@ export default function VerReportePersonal() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href="/detalles-trabajador">
+              <BreadcrumbLink href={`/detalles-trabajador/${id}`}>
                 Detalles
               </BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/reporte-de-empleado">
+              <BreadcrumbLink href={`/reporte-de-empleado/${id}`}>
                 Reporte de empleado
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -59,9 +93,13 @@ export default function VerReportePersonal() {
           />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <h1 className="font-medium text-2xl w-1/2">Nombre de trabajador</h1>
+        <h1 className="font-medium text-2xl w-1/2">
+          {empleado?.nombre || "No disponible"}
+        </h1>
         <div className="px-6 w-full flex justify-end">
-          <Button className="bg-deepSea hover:bg-deepLightSea">
+          <Button
+            className="bg-deepSea hover:bg-deepLightSea"
+          >
             <Printer />
             Imprimir reporte
           </Button>
@@ -84,15 +122,41 @@ export default function VerReportePersonal() {
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label>Edad</Label>
-                <Label>Fecha de nacimiento</Label>
-                <Label>Género</Label>
-                <Label>Teléfono</Label>
-                <Label>Dirección</Label>
-                <Label>Licencia</Label>
-                <Label>Pasaporte</Label>
-                <Label>CURP</Label>
-                <Label>RFC</Label>
+                <Label>
+                  <b>Edad: </b>No disponible
+                </Label>
+                <Label>
+                  <b>Fecha de nacimiento: </b>
+                  {empleado?.fechanacimiento || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Género: </b>
+                  {empleado?.datosmedico?.genero || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Teléfono: </b>
+                  {empleado?.numerocelular || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Dirección: </b>
+                  {empleado?.direccion || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Licencia: </b>
+                  {empleado?.numerolicencia || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Pasaporte: </b>
+                  {empleado?.numeropasaporte || "No disponible"}
+                </Label>
+                <Label>
+                  <b>CURP: </b>
+                  {empleado?.curp || "No disponible"}
+                </Label>
+                <Label>
+                  <b>RFC: </b>
+                  {empleado?.rfc || "No disponible"}
+                </Label>
               </div>
             </div>
           </CardContent>
@@ -108,14 +172,38 @@ export default function VerReportePersonal() {
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label>Alergias</Label>
-                <Label>Enfermedades</Label>
-                <Label>Lesiones</Label>
-                <Label>NSS</Label>
-                <Label>Contacto de emergencia</Label>
-                <Label>Relación</Label>
-                <Label>Número de emergencia</Label>
-                <Label>Tipo de sangre</Label>
+                <Label>
+                  <b>Alergias: </b>
+                  {empleado?.datosmedico?.alergias || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Enfermedades: </b>
+                  {empleado?.datosmedico?.enfercronicas || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Lesiones: </b>
+                  {empleado?.datosmedico?.lesiones || "No disponible"}
+                </Label>
+                <Label>
+                  <b>NSS: </b>
+                  {empleado?.datosmedico?.numseguro || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Contacto de emergencia: </b>
+                  {empleado?.datosmedico?.nombremergencia || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Relación: </b>
+                  {empleado?.datosmedico?.relaemergencia || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Número de emergencia: </b>
+                  {empleado?.datosmedico?.numemergencia || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Tipo de sangre: </b>
+                  {empleado?.datosmedico?.tiposangre || "No disponible"}
+                </Label>
               </div>
             </div>
           </CardContent>
@@ -132,11 +220,26 @@ export default function VerReportePersonal() {
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label>Carrera</Label>
-                <Label>Cédula</Label>
-                <Label>Experiencia laboral</Label>
-                <Label>Certificaciones</Label>
-                <Label>Grado de estudios</Label>
+                <Label>
+                  <b>Carrera: </b>
+                  {empleado?.formacademica?.carrera || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Cédula: </b>
+                  {empleado?.formacademica?.cedula || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Experiencia laboral: </b>
+                  {empleado?.formacademica?.explaboral || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Certificaciones: </b>
+                  {empleado?.formacademica?.certificaciones || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Grado de estudios: </b>
+                  {empleado?.formacademica?.gradoestudios || "No disponible"}
+                </Label>
               </div>
             </div>
           </CardContent>
@@ -153,10 +256,22 @@ export default function VerReportePersonal() {
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label>Estado</Label>
-                <Label>Tipo de contrato</Label>
-                <Label>Inicio de contrato</Label>
-                <Label>Fin de contrato</Label>
+                <Label>
+                  <b>Estado: </b>
+                  {empleado?.estado || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Tipo de contrato: </b>
+                  {empleado?.tipocontrato || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Inicio de contrato: </b>
+                  {empleado?.iniciocontrato || "No disponible"}
+                </Label>
+                <Label>
+                  <b>Fin de contrato: </b>
+                  {empleado?.fincontrato || "No disponible"}
+                </Label>
               </div>
             </div>
           </CardContent>
