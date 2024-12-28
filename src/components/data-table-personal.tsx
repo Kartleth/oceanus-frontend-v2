@@ -1,5 +1,6 @@
 "use client";
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import * as React from "react";
 import {
   ColumnDef,
@@ -156,7 +157,7 @@ export const columns: ColumnDef<Persona>[] = [
         console.log(resData);
         queryClient.invalidateQueries(["trabajadores"]);
       });
-
+   
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
