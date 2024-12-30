@@ -48,7 +48,7 @@ type AccordionValue =
   | string;
 
 const datosPersonalesSchema = z.object({
-  name: z
+  nombre: z
     .string({
       required_error: "Nombre completo obligatorio.",
     })
@@ -56,7 +56,7 @@ const datosPersonalesSchema = z.object({
       message: "El nombre no puede excederse de mas de 150 caracteres.",
     })
     .min(1, { message: "El nombre es obligatorio." }),
-  fechaNacimiento: z
+  fechanacimiento: z
     .date({
       required_error: "Fecha de nacimiento obligatoria.",
     })
@@ -82,32 +82,32 @@ const datosPersonalesSchema = z.object({
       /^([A-Z,Ñ,&]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/gm,
       { message: "RFC incorrecto." }
     ),
-  clave: z
+  ine: z
     .string({
       required_error: "Numero de INE incorrecto.",
     })
     .regex(/^\d{12,13}$/g, { message: "Numero de INE incorrecto." }),
-  estadoCivil: z.string({ required_error: "Estado civil obligatorio." }),
-  numeroCasa: z.string().optional(),
-  numeroCelular: z
+  estadocivil: z.string({ required_error: "Estado civil obligatorio." }),
+  numerofijo: z.string().optional(),
+  numerocelular: z
     .string({ required_error: "Numero celular obligatorio." })
     .regex(/^\d{10}$/g, { message: "Numero de celular incorrecto." }),
-  correoElectronico: z
+  correo: z
     .string({ required_error: "El correo es obligatorio." })
     .max(50, { message: "Correo incorrecto." })
     .email({ message: "Correo electronico incorrecto." }),
   direccion: z
     .string({ required_error: "Direccion obligatoria" })
     .min(10, { message: "Direccion minima de 10 caracteres." }),
-  numeroLicencia: z
+  numerolicencia: z
     .string()
     .max(15, { message: "Numero de Licencia Incorrecto." })
     .optional(),
-  numeroPasaporte: z
+  numeropasaporte: z
     .string()
     .max(9, { message: "Numero de pasaporte incorrecto, son maximo 9 numeros" })
     .optional(),
-  fechaIngreso: z
+  fechaingreso: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
     })
@@ -117,50 +117,50 @@ const datosPersonalesSchema = z.object({
 });
 
 const datosMedicosSchema = z.object({
-  alegias: z.string({ message: "Introduce el tipo de alergias." }).optional(),
-  enfermedadCronica: z
+  alergias: z.string({ message: "Introduce el tipo de alergias." }).optional(),
+  enfercronicas: z
     .string({ message: "Introduce si padeces de una enfermedad cronica." })
     .optional(),
   lesiones: z.string({ message: "Introduce lesiones." }).optional(),
-  alergiasMedicamentos: z.string({ message: "" }),
-  numeroSeguro: z.string({ required_error: "Numero seguro obligatorio." }),
-  relacionPersona: z.string({
+  alergiasmed: z.string({ message: "" }),
+  numseguro: z.string({ required_error: "Numero seguro obligatorio." }),
+  relaemergencia: z.string({
     required_error: "Relacion con trabajador obligaoria.",
   }),
-  numeroEmergencia: z.string({
+  numemergencia: z.string({
     required_error: "Numero de emergencia obligatorio.",
   }),
-  tipoSangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
+  tiposangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
   genero: z.string({ required_error: "Genero obligatorio." }),
-  nombreemergencia: z.string({
+  nombremergencia: z.string({
     required_error: "Nombre de persona emergencia obligatorio.",
   }),
 });
 
 const datosAcademicosSchema = z.object({
-  cadulaProfesional: z
+  cedula: z
     .string({ required_error: "Ingresa cedula profesional." })
     .optional(),
   carrera: z.string({ required_error: "Carrera obligatorio." }),
-  experienciaLaboral: z
+  explaboral: z
     .string({ required_error: "Ingresa experiencia laboral." })
     .optional(),
   certificaciones: z
     .string({ required_error: "Introduce certificaciones." })
     .optional(),
-  gradosEstudios: z.string({ required_error: "Nivel de estudios obligatorio" }),
+  gradoestudio: z.string({ required_error: "Nivel de estudios obligatorio" }),
 });
 const datosContratacionSchema = z.object({
-  tipoContrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
-  estadoEmpleado: z.string({ required_error: "Campo obligatorio." }),
-  fechaInicioContrato: z
+  tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
+  estado: z.string({ required_error: "Campo obligatorio." }),
+  iniciocontrato: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
     })
     .min(new Date(1914, 0, 1), {
       message: "Fecha de ingreso no puede ser antes de 1914.",
     }),
-  fechaFinContrato: z
+  fincontrato: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
     })
@@ -270,7 +270,7 @@ export function PageAgregarTrabajador() {
                   >
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="name"
+                      name="nombre"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Nombre</FormLabel>
@@ -283,7 +283,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="fechaNacimiento"
+                      name="fechanacimiento"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Fecha de Nacimiento</FormLabel>
@@ -327,7 +327,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="clave"
+                      name="ine"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de INE</FormLabel>
@@ -340,7 +340,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="estadoCivil"
+                      name="estadocivil"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Estado Civil</FormLabel>
@@ -362,7 +362,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="numeroCasa"
+                      name="numerofijo"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de Casa</FormLabel>
@@ -375,7 +375,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="numeroCelular"
+                      name="numerocelular"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de Celular</FormLabel>
@@ -388,7 +388,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="correoElectronico"
+                      name="correo"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Correo Electronico </FormLabel>
@@ -414,7 +414,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="numeroLicencia"
+                      name="numerolicencia"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero licencia </FormLabel>
@@ -427,7 +427,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="numeroPasaporte"
+                      name="numeropasaporte"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de Pasaporte </FormLabel>
@@ -440,7 +440,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosPersonalesForm.control}
-                      name="fechaIngreso"
+                      name="fechaingreso"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Fecha de ingreso </FormLabel>
@@ -477,7 +477,7 @@ export function PageAgregarTrabajador() {
                   >
                     <FormField
                       control={datosMedicosForm.control}
-                      name="alegias"
+                      name="alergias"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Alergias</FormLabel>
@@ -490,7 +490,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="alergiasMedicamentos"
+                      name="alergiasmed"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Alergias a Medicamentos</FormLabel>
@@ -503,7 +503,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="enfermedadCronica"
+                      name="enfercronicas"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Enfermedad Cronica</FormLabel>
@@ -559,7 +559,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="numeroEmergencia"
+                      name="numemergencia"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de emergencia</FormLabel>
@@ -572,7 +572,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="nombreemergencia"
+                      name="nombremergencia"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Nombre de emergencia</FormLabel>
@@ -585,7 +585,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="numeroSeguro"
+                      name="numseguro"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Numero de seguro</FormLabel>
@@ -598,7 +598,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="relacionPersona"
+                      name="relaemergencia"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Relacion con la persona</FormLabel>
@@ -611,7 +611,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosMedicosForm.control}
-                      name="tipoSangre"
+                      name="tiposangre"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tipo de sangre</FormLabel>
@@ -643,7 +643,7 @@ export function PageAgregarTrabajador() {
                   >
                     <FormField
                       control={datosAcademicosForm.control}
-                      name="cadulaProfesional"
+                      name="cedula"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Cedula Profesional</FormLabel>
@@ -682,7 +682,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosAcademicosForm.control}
-                      name="experienciaLaboral"
+                      name="explaboral"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Experiencia Laboral</FormLabel>
@@ -695,7 +695,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosAcademicosForm.control}
-                      name="gradosEstudios"
+                      name="gradoestudio"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Grados de Estudios</FormLabel>
@@ -727,7 +727,7 @@ export function PageAgregarTrabajador() {
                   >
                     <FormField
                       control={datosContratacionForm.control}
-                      name="tipoContrato"
+                      name="tipocontrato"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tipo de contrato</FormLabel>
@@ -750,7 +750,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosContratacionForm.control}
-                      name="estadoEmpleado"
+                      name="estado"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Estado del Empleado</FormLabel>
@@ -770,7 +770,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosContratacionForm.control}
-                      name="fechaInicioContrato"
+                      name="iniciocontrato"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Fecha de Ingreso del Contrato</FormLabel>
@@ -788,7 +788,7 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosContratacionForm.control}
-                      name="fechaFinContrato"
+                      name="fincontrato"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Fecha final del Contrato</FormLabel>

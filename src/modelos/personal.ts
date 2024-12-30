@@ -5,20 +5,17 @@ import { DatosMedicos } from "./datosMedicos";
 export const Persona = z.object({
   id: z.number(),
   nombre: z.string(),
-  fechanacimiento: z.string().date(),
+  fechanacimiento: z.string().datetime(),
   curp: z.string(),
   rfc: z.string(),
   estado: z.string(),
-});
-
-export type Persona = z.infer<typeof Persona>;
   correo: z.string(),
   direccion: z.string(),
   estadocivil: z.string(),
   fechaingreso: z.string(),
   fincontrato: z.string(),
   ine: z.string(),
-  iniciocontrato: z.string().date(),
+  iniciocontrato: z.string().datetime(),
   numerocelular: z.string(),
   numerofijo: z.string(),
   numerolicencia: z.string(),
@@ -28,4 +25,5 @@ export type Persona = z.infer<typeof Persona>;
   datosAcademicos: DatosAcademicos,
 });
 
+// Exportamos el tipo basado en el esquema
 export type Persona = z.infer<typeof Persona>;
