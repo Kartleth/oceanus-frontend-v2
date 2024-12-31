@@ -67,13 +67,13 @@ export function VerDetallesPersonal() {
         </Breadcrumb>
       </header>
 
-      <div className="flex flex-col items-start p-4">
+      <div className="flex flex-col w-full items-start p-4">
         {loading ? (
           <div className="flex items-center space-x-4 w-full p-6">
             <div className="w-full h-20 bg-gray-200 animate-pulse rounded-md"></div>
           </div>
         ) : (
-          <>
+          <div className="flex w-full items-center">
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
@@ -82,7 +82,7 @@ export function VerDetallesPersonal() {
               />
             </Avatar>
 
-            <h1 className="font-medium text-2xl w-1/2">
+            <h1 className="font-medium flex-grow text-2xl w-1/2">
               {empleado?.nombre || "No disponible"}
             </h1>
 
@@ -99,10 +99,9 @@ export function VerDetallesPersonal() {
                 <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
               </Button>
             </div>
-          </>
+          </div>
         )}
-
-        <div className="grid grid-cols-2  gap-4">
+        <div className="grid grid-cols-2 w-full gap-4">
           <div className="flex flex-1 flex-col gap-4 rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <UserRound className="w-6 h-6" />
