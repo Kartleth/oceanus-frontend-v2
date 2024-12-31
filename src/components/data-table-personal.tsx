@@ -113,7 +113,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("curp")}</div>,
+    cell: ({ row }) => <div className="uppercase font-mono">{row.getValue("curp")}</div>,
   },
   {
     accessorKey: "rfc",
@@ -128,7 +128,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("rfc")}</div>,
+    cell: ({ row }) => <div className="uppercase font-mono">{row.getValue("rfc")}</div>,
   },
   {
     accessorKey: "estado",

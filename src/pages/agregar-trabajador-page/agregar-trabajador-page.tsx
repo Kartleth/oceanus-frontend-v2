@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 type AccordionValue =
   | "datos-personales"
@@ -148,7 +149,7 @@ const datosAcademicosSchema = z.object({
   certificaciones: z
     .string({ required_error: "Introduce certificaciones." })
     .optional(),
-  gradoestudio: z.string({ required_error: "Nivel de estudios obligatorio" }),
+  gradoestudios: z.string({ required_error: "Nivel de estudios obligatorio" }),
 });
 const datosContratacionSchema = z.object({
   tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
@@ -175,6 +176,7 @@ type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
 type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarTrabajador() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
@@ -191,6 +193,7 @@ export function PageAgregarTrabajador() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["trabajadores"]);
+    navigate("/personal");
   });
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacionForm>({
@@ -695,10 +698,10 @@ export function PageAgregarTrabajador() {
                     />
                     <FormField
                       control={datosAcademicosForm.control}
-                      name="gradoestudio"
+                      name="gradoestudios"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Grados de Estudios</FormLabel>
+                          <FormLabel>Grado de Estudios</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
