@@ -33,14 +33,6 @@ function App() {
             element={<PageAgregarTrabajador />}
           />
           <Route
-            path="/detalles-trabajador/:id"
-            element={<VerDetallesPersonal />}
-          />
-          <Route
-            path="/reporte-de-empleado/:id"
-            element={<VerReportePersonal />}
-          />
-          <Route
             path="/agregar-trabajador"
             element={<PageAgregarTrabajador />}
           />
@@ -49,10 +41,13 @@ function App() {
             element={<PageGenerarCredencial />}
           />
           <Route
-            path="/detalles-trabajador"
+            path="/detalles-trabajador/:id"
             element={<VerDetallesPersonal />}
           />
-          <Route path="/reporte-de-empleado" element={<VerReportePersonal />} />
+          <Route
+            path="/reporte-de-empleado/:id"
+            element={<VerReportePersonal />}
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
