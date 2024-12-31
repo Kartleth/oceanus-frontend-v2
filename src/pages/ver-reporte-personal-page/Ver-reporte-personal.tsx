@@ -19,40 +19,34 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Persona } from "@/modelos/personal";
+import { useQuery } from "react-query";
 
 export default function VerReportePersonal() {
   const { id } = useParams();
-  const [empleado, setEmpleado] = useState<Persona | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const fetchEmpleado = async (): Promise<Persona> => {
+    const response = await axios.get(`http://localhost:3001/personas/${id}`);
+    return response.data;
+  };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/personas/${id}`)
-      .then((response) => {
-        setEmpleado(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Error al cargar los datos del empleado");
-        console.error(err);
-        setLoading(false);
-      });
-  }, [id]);
+  const {
+      data: empleado,
+      isLoading,
+      isError,
+      error,//lo dejare para cuando pongamos página de error
+    } = useQuery<Persona>(["empleado", id], fetchEmpleado);
 
   {
-    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
+  /* AGREGAR DISEÑO AL APARTADO DE CARGANDO Y DE ERROR*/
   }
-  if (loading) {
+  if (isLoading) {
     return <div>Cargando...</div>;
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  if (isError) {
+    return <div>Error</div>;
   }
 
   return (
@@ -94,7 +88,7 @@ export default function VerReportePersonal() {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <h1 className="font-medium text-2xl w-1/2">
-          {empleado?.nombre || "No disponible"}
+          {empleado?.nombre ?? "No disponible"}
         </h1>
         <div className="px-6 w-full flex justify-end">
           <Button className="bg-deepSea hover:bg-deepLightSea">
@@ -125,35 +119,35 @@ export default function VerReportePersonal() {
                 </Label>
                 <Label>
                   <b>Fecha de nacimiento: </b>
-                  {empleado?.fechanacimiento || "No disponible"}
+                  {empleado?.fechanacimiento ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Género: </b>
-                  {empleado?.datosMedicos?.genero || "No disponible"}
+                  {empleado?.datosMedicos?.genero ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Teléfono: </b>
-                  {empleado?.numerocelular || "No disponible"}
+                  {empleado?.numerocelular ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Dirección: </b>
-                  {empleado?.direccion || "No disponible"}
+                  {empleado?.direccion ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Licencia: </b>
-                  {empleado?.numerolicencia || "No disponible"}
+                  {empleado?.numerolicencia ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Pasaporte: </b>
-                  {empleado?.numeropasaporte || "No disponible"}
+                  {empleado?.numeropasaporte ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>CURP: </b>
-                  {empleado?.curp || "No disponible"}
+                  {empleado?.curp ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>RFC: </b>
-                  {empleado?.rfc || "No disponible"}
+                  {empleado?.rfc ?? "No disponible"}
                 </Label>
               </div>
             </div>
@@ -172,35 +166,35 @@ export default function VerReportePersonal() {
               <div className="grid gap-2">
                 <Label>
                   <b>Alergias: </b>
-                  {empleado?.datosMedicos?.alergias || "No disponible"}
+                  {empleado?.datosMedicos?.alergias ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Enfermedades: </b>
-                  {empleado?.datosMedicos?.enfercronicas || "No disponible"}
+                  {empleado?.datosMedicos?.enfercronicas ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Lesiones: </b>
-                  {empleado?.datosMedicos?.lesiones || "No disponible"}
+                  {empleado?.datosMedicos?.lesiones ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>NSS: </b>
-                  {empleado?.datosMedicos?.numseguro || "No disponible"}
+                  {empleado?.datosMedicos?.numseguro ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Contacto de emergencia: </b>
-                  {empleado?.datosMedicos?.nombremergencia || "No disponible"}
+                  {empleado?.datosMedicos?.nombremergencia ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Relación: </b>
-                  {empleado?.datosMedicos?.relaemergencia || "No disponible"}
+                  {empleado?.datosMedicos?.relaemergencia ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Número de emergencia: </b>
-                  {empleado?.datosMedicos?.numemergencia || "No disponible"}
+                  {empleado?.datosMedicos?.numemergencia ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Tipo de sangre: </b>
-                  {empleado?.datosMedicos?.tiposangre || "No disponible"}
+                  {empleado?.datosMedicos?.tiposangre ?? "No disponible"}
                 </Label>
               </div>
             </div>
@@ -220,24 +214,24 @@ export default function VerReportePersonal() {
               <div className="grid gap-2">
                 <Label>
                   <b>Carrera: </b>
-                  {empleado?.datosAcademicos?.carrera || "No disponible"}
+                  {empleado?.datosAcademicos?.carrera ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Cédula: </b>
-                  {empleado?.datosAcademicos?.cedula || "No disponible"}
+                  {empleado?.datosAcademicos?.cedula ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Experiencia laboral: </b>
-                  {empleado?.datosAcademicos?.explaboral || "No disponible"}
+                  {empleado?.datosAcademicos?.explaboral ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Certificaciones: </b>
-                  {empleado?.datosAcademicos?.certificaciones ||
+                  {empleado?.datosAcademicos?.certificaciones ??
                     "No disponible"}
                 </Label>
                 <Label>
                   <b>Grado de estudios: </b>
-                  {empleado?.datosAcademicos?.gradoestudios || "No disponible"}
+                  {empleado?.datosAcademicos?.gradoestudios ?? "No disponible"}
                 </Label>
               </div>
             </div>
@@ -257,19 +251,19 @@ export default function VerReportePersonal() {
               <div className="grid gap-2">
                 <Label>
                   <b>Estado: </b>
-                  {empleado?.estado || "No disponible"}
+                  {empleado?.estado ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Tipo de contrato: </b>
-                  {empleado?.tipocontrato || "No disponible"}
+                  {empleado?.tipocontrato ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Inicio de contrato: </b>
-                  {empleado?.iniciocontrato || "No disponible"}
+                  {empleado?.iniciocontrato ?? "No disponible"}
                 </Label>
                 <Label>
                   <b>Fin de contrato: </b>
-                  {empleado?.fincontrato || "No disponible"}
+                  {empleado?.fincontrato ?? "No disponible"}
                 </Label>
               </div>
             </div>

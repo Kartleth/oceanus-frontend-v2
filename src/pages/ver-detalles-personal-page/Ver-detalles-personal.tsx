@@ -75,7 +75,7 @@ export function VerDetallesPersonal() {
             </Avatar>
 
             <h1 className="font-medium text-2xl w-1/2">
-              {empleado?.nombre || "No disponible"}
+              {empleado?.nombre ?? "No disponible"}
             </h1>
 
             <div className="px-3 w-full flex justify-end gap-2">
