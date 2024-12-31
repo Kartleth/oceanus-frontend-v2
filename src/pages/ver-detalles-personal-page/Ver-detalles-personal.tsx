@@ -20,28 +20,22 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { useQuery } from 'react-query';
+import { Persona } from "@/modelos/personal";
 
 export function VerDetallesPersonal() {
   const { id } = useParams();
-  const [empleado, setEmpleado] = useState<Persona | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [setError] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/personas/${id}`)
-      .then((response) => {
-        setEmpleado(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Error al cargar los datos del empleado");
-        console.error(err);
-        setLoading(false);
-      });
-  }, [id]);
+  const fetchEmpleado = async (): Promise<Persona> => {
+    const response = await axios.get(`http://localhost:3001/personas/${id}`);
+    return response.data;
+  };
+  const {
+    data: empleado,
+    isLoading,
+    isError, //lo dejare para cuando pongamos página de error
+    error,
+  } = useQuery<Persona>(["empleado", id], fetchEmpleado);
 
   return (
     <Layout>
@@ -66,7 +60,7 @@ export function VerDetallesPersonal() {
       </header>
 
       <div className="flex items-center">
-        {loading ? (
+        {isLoading ? (
           <div className="flex items-center space-x-4 w-full p-6">
             <div className="w-full h-20 bg-gray-200 animate-pulse rounded-md"></div>
           </div>
@@ -154,7 +148,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="number"
-                    value={empleado?.numerocelular || "No disponible"}
+                    value={empleado.numerocelular || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -186,7 +180,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.formacademica?.carrera || "No disponible"}
+                    value={empleado?.datosAcademicos.carrera || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -203,7 +197,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.formacademica?.gradoestudios || "No disponible"
+                      empleado?.datosAcademicos?.gradoestudios || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -438,7 +432,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosmedico?.alergias || "No disponible"}
+                    value={empleado?.datosMedicos?.alergias || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -455,7 +449,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.datosmedico?.enfercronicas || "No disponible"
+                      empleado?.datosMedicos?.enfercronicas || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -472,7 +466,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosmedico?.lesiones || "No disponible"}
+                    value={empleado?.datosMedicos?.lesiones || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -489,7 +483,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.datosmedico?.alergiasmed || "No disponible"
+                      empleado?.datosMedicos?.alergiasmed || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -505,7 +499,7 @@ export function VerDetallesPersonal() {
                 ) : (
                   <Input
                     disabled
-                    value={empleado?.datosmedico?.numseguro || "No disponible"}
+                    value={empleado?.datosMedicos?.numseguro || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -521,7 +515,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     value={
-                      empleado?.datosmedico?.nombremergencia || "No disponible"
+                      empleado?.datosMedicos?.nombremergencia || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -539,7 +533,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.datosmedico?.relaemergencia || "No disponible"
+                      empleado?.datosMedicos?.relaemergencia || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -557,7 +551,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="number"
                     value={
-                      empleado?.datosmedico?.numemergencia || "No disponible"
+                      empleado?.datosMedicos?.numemergencia || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -574,7 +568,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosmedico?.tiposangre || "No disponible"}
+                    value={empleado?.datosMedicos?.tiposangre || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -590,7 +584,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosmedico?.genero || "No disponible"}
+                    value={empleado?.datosMedicos?.genero || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -618,7 +612,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.formacademica?.cedula || "No disponible"}
+                    value={empleado?.datosAcademicos?.cedula || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -634,7 +628,7 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.formacademica?.carrera || "No disponible"}
+                    value={empleado?.datosAcademicos?.carrera || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -651,7 +645,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.formacademica?.explaboral || "No disponible"
+                      empleado?.datosAcademicos?.explaboral || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -669,7 +663,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.formacademica?.certificaciones ||
+                      empleado?.datosAcademicos?.certificaciones ||
                       "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
@@ -688,7 +682,7 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.formacademica?.gradoestudios || "No disponible"
+                      empleado?.datosAcademicos?.gradoestudios || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
