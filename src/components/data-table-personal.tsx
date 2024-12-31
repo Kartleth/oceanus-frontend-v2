@@ -113,7 +113,9 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="uppercase font-mono">{row.getValue("curp")}</div>,
+    cell: ({ row }) => (
+      <div className="uppercase font-mono">{row.getValue("curp")}</div>
+    ),
   },
   {
     accessorKey: "rfc",
@@ -128,7 +130,9 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="uppercase font-mono">{row.getValue("rfc")}</div>,
+    cell: ({ row }) => (
+      <div className="uppercase font-mono">{row.getValue("rfc")}</div>
+    ),
   },
   {
     accessorKey: "estado",
@@ -184,7 +188,9 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to="/reporte-de-empleado">Generar reporte</Link>
+              <Link to={`/reporte-de-empleado/${Persona.id}`}>
+                Generar reporte
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link to={`/generar-credencial/${Persona.id}`}>
@@ -260,9 +266,9 @@ export function DataTableDemo() {
     },
   });
 
-  /*AQUÍ VOY A PONER LA PARTE QUE ME PERMITE EXPORTAR DATOS PARA EXCEL*/
+  /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL*/
 
-  const exportToExcel = (personas: any[]) => {
+  const exportToExcel = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
@@ -287,21 +293,21 @@ export function DataTableDemo() {
       Correo: persona.correo,
       INE: persona.ine,
       "Estado Civil": persona.estadocivil,
-      "Cédula Profesional": persona.formacademica?.cedula || "N/A",
-      Carrera: persona.formacademica?.carrera || "N/A",
-      "Experiencia Laboral": persona.formacademica?.explaboral || "N/A",
-      Certificaciones: persona.formacademica?.certificaciones || "N/A",
-      "Grado de Estudios": persona.formacademica?.gradoestudios || "N/A",
-      Alergias: persona.datosmedico?.alergias || "N/A",
-      "Enfermedades Crónicas": persona.datosmedico?.enfercronicas || "N/A",
-      Lesiones: persona.datosmedico?.lesiones || "N/A",
-      "Alergias a Medicamentos": persona.datosmedico?.alergiasmed || "N/A",
-      "Número de Emergencia": persona.datosmedico?.numemergencia || "N/A",
-      "Número de Seguro": persona.datosmedico?.numseguro || "N/A",
-      "Tipo de Sangre": persona.datosmedico?.tiposangre || "N/A",
-      "Contacto de Emergencia": persona.datosmedico?.nombremergencia || "N/A",
-      Género: persona.datosmedico?.genero || "N/A",
-      "Relación de Emergencia": persona.datosmedico?.relaemergencia || "N/A",
+      "Cédula Profesional": persona.datosAcademicos?.cedula || "N/A",
+      Carrera: persona.datosAcademicos?.carrera || "N/A",
+      "Experiencia Laboral": persona.datosAcademicos?.explaboral || "N/A",
+      Certificaciones: persona.datosAcademicos?.certificaciones || "N/A",
+      "Grado de Estudios": persona.datosAcademicos?.gradoestudios || "N/A",
+      Alergias: persona.datosMedicos?.alergias || "N/A",
+      "Enfermedades Crónicas": persona.datosMedicos?.enfercronicas || "N/A",
+      Lesiones: persona.datosMedicos?.lesiones || "N/A",
+      "Alergias a Medicamentos": persona.datosMedicos?.alergiasmed || "N/A",
+      "Número de Emergencia": persona.datosMedicos?.numemergencia || "N/A",
+      "Número de Seguro": persona.datosMedicos?.numseguro || "N/A",
+      "Tipo de Sangre": persona.datosMedicos?.tiposangre || "N/A",
+      "Contacto de Emergencia": persona.datosMedicos?.nombremergencia || "N/A",
+      Género: persona.datosMedicos?.genero || "N/A",
+      "Relación de Emergencia": persona.datosMedicos?.relaemergencia || "N/A",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(datos);
@@ -310,6 +316,8 @@ export function DataTableDemo() {
 
     XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
+
+  /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL*/
 
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
