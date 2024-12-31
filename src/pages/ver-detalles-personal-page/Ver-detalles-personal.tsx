@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 import { Persona } from "@/modelos/personal";
 
 export function VerDetallesPersonal() {
@@ -81,7 +81,9 @@ export function VerDetallesPersonal() {
             <div className="px-3 w-full flex justify-end gap-2">
               <Button className="bg-deepSea hover:bg-deepLightSea">
                 <IdCard />
-                Generar credencial
+                <Link to={`/generar-credencial/${id}`}>
+                  Generar credencial{" "}
+                </Link>
               </Button>
 
               <Button
@@ -197,7 +199,8 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.datosAcademicos?.gradoestudios || "No disponible"
+                      empleado?.datosAcademicos?.gradoestudios ||
+                      "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -568,7 +571,9 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosMedicos?.tiposangre || "No disponible"}
+                    value={
+                      empleado?.datosMedicos?.tiposangre || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -628,7 +633,9 @@ export function VerDetallesPersonal() {
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosAcademicos?.carrera || "No disponible"}
+                    value={
+                      empleado?.datosAcademicos?.carrera || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -682,7 +689,8 @@ export function VerDetallesPersonal() {
                     disabled
                     type="text"
                     value={
-                      empleado?.datosAcademicos?.gradoestudios || "No disponible"
+                      empleado?.datosAcademicos?.gradoestudios ||
+                      "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />

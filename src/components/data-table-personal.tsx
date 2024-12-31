@@ -1,5 +1,4 @@
 "use client";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as React from "react";
 import {
