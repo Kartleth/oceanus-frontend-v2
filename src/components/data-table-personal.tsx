@@ -81,9 +81,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("nombre")}</div>
-    ),
+    cell: ({ row }) => <div className="">{row.getValue("nombre")}</div>,
   },
   {
     accessorKey: "fechanacimiento",

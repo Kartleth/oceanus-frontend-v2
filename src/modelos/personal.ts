@@ -5,7 +5,7 @@ import { DatosMedicos } from "./datosMedicos";
 export const Persona = z.object({
   id: z.number(),
   nombre: z.string(),
-  fechanacimiento: z.string().datetime(),
+  fechanacimiento: z.string().date(),
   curp: z.string(),
   rfc: z.string(),
   estado: z.string(),
@@ -15,7 +15,7 @@ export const Persona = z.object({
   fechaingreso: z.string(),
   fincontrato: z.string(),
   ine: z.string(),
-  iniciocontrato: z.string().datetime(),
+  iniciocontrato: z.string().date(),
   numerocelular: z.string(),
   numerofijo: z.string(),
   numerolicencia: z.string(),

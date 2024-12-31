@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Persona } from "@/modelos/personal";
 
 export default function VerReportePersonal() {
   const { id } = useParams();
@@ -42,7 +43,6 @@ export default function VerReportePersonal() {
         setLoading(false);
       });
   }, [id]);
-
 
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
@@ -97,9 +97,7 @@ export default function VerReportePersonal() {
           {empleado?.nombre || "No disponible"}
         </h1>
         <div className="px-6 w-full flex justify-end">
-          <Button
-            className="bg-deepSea hover:bg-deepLightSea"
-          >
+          <Button className="bg-deepSea hover:bg-deepLightSea">
             <Printer />
             Imprimir reporte
           </Button>
@@ -131,7 +129,7 @@ export default function VerReportePersonal() {
                 </Label>
                 <Label>
                   <b>Género: </b>
-                  {empleado?.datosmedico?.genero || "No disponible"}
+                  {empleado?.datosMedicos?.genero || "No disponible"}
                 </Label>
                 <Label>
                   <b>Teléfono: </b>
@@ -174,35 +172,35 @@ export default function VerReportePersonal() {
               <div className="grid gap-2">
                 <Label>
                   <b>Alergias: </b>
-                  {empleado?.datosmedico?.alergias || "No disponible"}
+                  {empleado?.datosMedicos?.alergias || "No disponible"}
                 </Label>
                 <Label>
                   <b>Enfermedades: </b>
-                  {empleado?.datosmedico?.enfercronicas || "No disponible"}
+                  {empleado?.datosMedicos?.enfercronicas || "No disponible"}
                 </Label>
                 <Label>
                   <b>Lesiones: </b>
-                  {empleado?.datosmedico?.lesiones || "No disponible"}
+                  {empleado?.datosMedicos?.lesiones || "No disponible"}
                 </Label>
                 <Label>
                   <b>NSS: </b>
-                  {empleado?.datosmedico?.numseguro || "No disponible"}
+                  {empleado?.datosMedicos?.numseguro || "No disponible"}
                 </Label>
                 <Label>
                   <b>Contacto de emergencia: </b>
-                  {empleado?.datosmedico?.nombremergencia || "No disponible"}
+                  {empleado?.datosMedicos?.nombremergencia || "No disponible"}
                 </Label>
                 <Label>
                   <b>Relación: </b>
-                  {empleado?.datosmedico?.relaemergencia || "No disponible"}
+                  {empleado?.datosMedicos?.relaemergencia || "No disponible"}
                 </Label>
                 <Label>
                   <b>Número de emergencia: </b>
-                  {empleado?.datosmedico?.numemergencia || "No disponible"}
+                  {empleado?.datosMedicos?.numemergencia || "No disponible"}
                 </Label>
                 <Label>
                   <b>Tipo de sangre: </b>
-                  {empleado?.datosmedico?.tiposangre || "No disponible"}
+                  {empleado?.datosMedicos?.tiposangre || "No disponible"}
                 </Label>
               </div>
             </div>
@@ -222,23 +220,24 @@ export default function VerReportePersonal() {
               <div className="grid gap-2">
                 <Label>
                   <b>Carrera: </b>
-                  {empleado?.formacademica?.carrera || "No disponible"}
+                  {empleado?.datosAcademicos?.carrera || "No disponible"}
                 </Label>
                 <Label>
                   <b>Cédula: </b>
-                  {empleado?.formacademica?.cedula || "No disponible"}
+                  {empleado?.datosAcademicos?.cedula || "No disponible"}
                 </Label>
                 <Label>
                   <b>Experiencia laboral: </b>
-                  {empleado?.formacademica?.explaboral || "No disponible"}
+                  {empleado?.datosAcademicos?.explaboral || "No disponible"}
                 </Label>
                 <Label>
                   <b>Certificaciones: </b>
-                  {empleado?.formacademica?.certificaciones || "No disponible"}
+                  {empleado?.datosAcademicos?.certificaciones ||
+                    "No disponible"}
                 </Label>
                 <Label>
                   <b>Grado de estudios: </b>
-                  {empleado?.formacademica?.gradoestudios || "No disponible"}
+                  {empleado?.datosAcademicos?.gradoestudios || "No disponible"}
                 </Label>
               </div>
             </div>
