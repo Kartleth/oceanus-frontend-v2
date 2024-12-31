@@ -193,8 +193,6 @@ export const columns: ColumnDef<Persona>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
-
             <DropdownMenuItem
               onClick={() => {
                 detelePersona.mutate();
