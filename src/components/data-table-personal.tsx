@@ -113,7 +113,7 @@ export const columns: ColumnDef<Persona>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="uppercase font-mono">{row.getValue("curp")}</div>
+      <div className="uppercase">{row.getValue("curp")}</div>
     ),
   },
   {
@@ -130,7 +130,7 @@ export const columns: ColumnDef<Persona>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="uppercase font-mono">{row.getValue("rfc")}</div>
+      <div className="uppercase">{row.getValue("rfc")}</div>
     ),
   },
   {

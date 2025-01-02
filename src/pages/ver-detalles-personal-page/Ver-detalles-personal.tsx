@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   FileText,
+  FileUser,
   GraduationCap,
   IdCard,
   Stethoscope,
@@ -86,10 +87,8 @@ export function VerDetallesPersonal() {
                 </Link>
               </Button>
 
-              <Button
-                asChild={true}
-                className="bg-deepSea hover:bg-deepLightSea"
-              >
+              <Button className="bg-deepSea hover:bg-deepLightSea">
+                <FileUser />
                 <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
               </Button>
             </div>
