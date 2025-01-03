@@ -84,197 +84,203 @@ export default function VerReportePersonal() {
         </Breadcrumb>
       </header>
 
-      <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            src="https://github.com/shadcn.png"
-            alt="@shadcn"
-            className="w-60 rounded-full p-6"
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <h1 className="font-medium text-2xl w-1/2">
-          {empleado?.nombre ?? "No disponible"}
-        </h1>
-        <div className="px-6 w-full flex justify-end">
-          <Button className="bg-deepSea hover:bg-deepLightSea" onClick={() => reactToPrintFn()}>
-            <Printer />
-            Imprimir reporte
-          </Button>
+      <div ref={contentRef}>
+        <div className="flex items-center">
+          <Avatar>
+            <AvatarImage
+              src="https://github.com/shadcn.png"
+              alt="@shadcn"
+              className="w-60 rounded-full p-6"
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <h1 className="font-medium text-2xl w-1/2">
+            {empleado?.nombre ?? "No disponible"}
+          </h1>
+          <div className="px-6 w-full flex justify-end">
+            <Button
+              className="bg-deepSea hover:bg-deepLightSea print:hidden"
+              onClick={() => reactToPrintFn()}
+            >
+              <Printer />
+              Imprimir reporte
+            </Button>
+          </div>
         </div>
-      </div>
 
-      <div className="px-6">
-        <hr />
-      </div>
+        <div className="px-6">
+          <hr />
+        </div>
 
-      <div ref={contentRef} className="p-6 grid gap-6 md:grid-cols-2">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <UserRound className="w-6 h-6" />
-              Datos personales
-            </CardTitle>
-          </CardHeader>
-          <hr className="mb-4 border-softAqua" />
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label>
-                  <b>Edad: </b>No disponible
-                </Label>
-                <Label>
-                  <b>Fecha de nacimiento: </b>
-                  {empleado?.fechanacimiento ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Género: </b>
-                  {empleado?.datosMedicos?.genero ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Teléfono: </b>
-                  {empleado?.numerocelular ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Dirección: </b>
-                  {empleado?.direccion ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Licencia: </b>
-                  {empleado?.numerolicencia ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Pasaporte: </b>
-                  {empleado?.numeropasaporte ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>CURP: </b>
-                  {empleado?.curp ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>RFC: </b>
-                  {empleado?.rfc ?? "No disponible"}
-                </Label>
+        <div  className="p-6 grid gap-6 md:grid-cols-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                <UserRound className="w-6 h-6" />
+                Datos personales
+              </CardTitle>
+            </CardHeader>
+            <hr className="mb-4 border-softAqua" />
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label>
+                    <b>Edad: </b>No disponible
+                  </Label>
+                  <Label>
+                    <b>Fecha de nacimiento: </b>
+                    {empleado?.fechanacimiento ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Género: </b>
+                    {empleado?.datosMedicos?.genero ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Teléfono: </b>
+                    {empleado?.numerocelular ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Dirección: </b>
+                    {empleado?.direccion ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Licencia: </b>
+                    {empleado?.numerolicencia ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Pasaporte: </b>
+                    {empleado?.numeropasaporte ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>CURP: </b>
+                    {empleado?.curp ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>RFC: </b>
+                    {empleado?.rfc ?? "No disponible"}
+                  </Label>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <Stethoscope className="w-6 h-6" /> Datos médicos
-            </CardTitle>
-          </CardHeader>
-          <hr className="mb-4 border-softAqua" />
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label>
-                  <b>Alergias: </b>
-                  {empleado?.datosMedicos?.alergias ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Enfermedades: </b>
-                  {empleado?.datosMedicos?.enfercronicas ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Lesiones: </b>
-                  {empleado?.datosMedicos?.lesiones ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>NSS: </b>
-                  {empleado?.datosMedicos?.numseguro ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Contacto de emergencia: </b>
-                  {empleado?.datosMedicos?.nombremergencia ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Relación: </b>
-                  {empleado?.datosMedicos?.relaemergencia ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Número de emergencia: </b>
-                  {empleado?.datosMedicos?.numemergencia ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Tipo de sangre: </b>
-                  {empleado?.datosMedicos?.tiposangre ?? "No disponible"}
-                </Label>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                <Stethoscope className="w-6 h-6" /> Datos médicos
+              </CardTitle>
+            </CardHeader>
+            <hr className="mb-4 border-softAqua" />
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label>
+                    <b>Alergias: </b>
+                    {empleado?.datosMedicos?.alergias ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Enfermedades: </b>
+                    {empleado?.datosMedicos?.enfercronicas ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Lesiones: </b>
+                    {empleado?.datosMedicos?.lesiones ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>NSS: </b>
+                    {empleado?.datosMedicos?.numseguro ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Contacto de emergencia: </b>
+                    {empleado?.datosMedicos?.nombremergencia ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Relación: </b>
+                    {empleado?.datosMedicos?.relaemergencia ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Número de emergencia: </b>
+                    {empleado?.datosMedicos?.numemergencia ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Tipo de sangre: </b>
+                    {empleado?.datosMedicos?.tiposangre ?? "No disponible"}
+                  </Label>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <GraduationCap className="w-6 h-6" />
-              Datos académicos
-            </CardTitle>
-          </CardHeader>
-          <hr className="mb-4 border-softAqua" />
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label>
-                  <b>Carrera: </b>
-                  {empleado?.datosAcademicos?.carrera ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Cédula: </b>
-                  {empleado?.datosAcademicos?.cedula ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Experiencia laboral: </b>
-                  {empleado?.datosAcademicos?.explaboral ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Certificaciones: </b>
-                  {empleado?.datosAcademicos?.certificaciones ??
-                    "No disponible"}
-                </Label>
-                <Label>
-                  <b>Grado de estudios: </b>
-                  {empleado?.datosAcademicos?.gradoestudios ?? "No disponible"}
-                </Label>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                <GraduationCap className="w-6 h-6" />
+                Datos académicos
+              </CardTitle>
+            </CardHeader>
+            <hr className="mb-4 border-softAqua" />
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label>
+                    <b>Carrera: </b>
+                    {empleado?.datosAcademicos?.carrera ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Cédula: </b>
+                    {empleado?.datosAcademicos?.cedula ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Experiencia laboral: </b>
+                    {empleado?.datosAcademicos?.explaboral ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Certificaciones: </b>
+                    {empleado?.datosAcademicos?.certificaciones ??
+                      "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Grado de estudios: </b>
+                    {empleado?.datosAcademicos?.gradoestudios ??
+                      "No disponible"}
+                  </Label>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <BookUser />
-              Datos de contratación
-            </CardTitle>
-          </CardHeader>
-          <hr className="mb-4 border-softAqua" />
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label>
-                  <b>Estado: </b>
-                  {empleado?.estado ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Tipo de contrato: </b>
-                  {empleado?.tipocontrato ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Inicio de contrato: </b>
-                  {empleado?.iniciocontrato ?? "No disponible"}
-                </Label>
-                <Label>
-                  <b>Fin de contrato: </b>
-                  {empleado?.fincontrato ?? "No disponible"}
-                </Label>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                <BookUser />
+                Datos de contratación
+              </CardTitle>
+            </CardHeader>
+            <hr className="mb-4 border-softAqua" />
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label>
+                    <b>Estado: </b>
+                    {empleado?.estado ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Tipo de contrato: </b>
+                    {empleado?.tipocontrato ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Inicio de contrato: </b>
+                    {empleado?.iniciocontrato ?? "No disponible"}
+                  </Label>
+                  <Label>
+                    <b>Fin de contrato: </b>
+                    {empleado?.fincontrato ?? "No disponible"}
+                  </Label>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </Layout>
   );
