@@ -23,6 +23,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Persona } from "@/modelos/personal";
 import { useQuery } from "react-query";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
 
 export default function VerReportePersonal() {
   const { id } = useParams();
@@ -31,15 +33,19 @@ export default function VerReportePersonal() {
     return response.data;
   };
 
+  //Lógica para mandar a imprimir
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
+
   const {
-      data: empleado,
-      isLoading,
-      isError,
-      error,//lo dejare para cuando pongamos página de error
-    } = useQuery<Persona>(["empleado", id], fetchEmpleado);
+    data: empleado,
+    isLoading,
+    isError,
+    error, //lo dejare para cuando pongamos página de error
+  } = useQuery<Persona>(["empleado", id], fetchEmpleado);
 
   {
-  /* AGREGAR DISEÑO AL APARTADO DE CARGANDO Y DE ERROR*/
+    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO Y DE ERROR*/
   }
   if (isLoading) {
     return <div>Cargando...</div>;
@@ -91,7 +97,7 @@ export default function VerReportePersonal() {
           {empleado?.nombre ?? "No disponible"}
         </h1>
         <div className="px-6 w-full flex justify-end">
-          <Button className="bg-deepSea hover:bg-deepLightSea">
+          <Button className="bg-deepSea hover:bg-deepLightSea" onClick={() => reactToPrintFn()}>
             <Printer />
             Imprimir reporte
           </Button>
@@ -102,7 +108,7 @@ export default function VerReportePersonal() {
         <hr />
       </div>
 
-      <div className="p-6 grid gap-6 md:grid-cols-2">
+      <div ref={contentRef} className="p-6 grid gap-6 md:grid-cols-2">
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
