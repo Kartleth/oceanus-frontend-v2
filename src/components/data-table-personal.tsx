@@ -385,36 +385,36 @@ export function DataTableDemo() {
     // Función para generar la tabla de cada bloque
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])],
-        body: datos.map((persona) => Object.values(persona)),
-        startY,
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
         theme: "grid",
         headStyles: {
-          fillColor: [41, 128, 185],
-          textColor: [255, 255, 255],
-          fontSize: 9,
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
           fontStyle: "bold",
         },
         bodyStyles: {
-          fontSize: 8,
-          cellPadding: 4,
-          textColor: [51, 51, 51],
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
         },
         alternateRowStyles: {
-          fillColor: [241, 245, 249],
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
         },
         styles: {
           overflow: "linebreak",
-          cellWidth: "auto",
-          lineColor: [200, 200, 200],
-          lineWidth: 0.1,
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
         },
         columnStyles: {
-          0: { cellWidth: 15 },
-          1: { cellWidth: "auto" },
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
         },
         margin: { top: 25 },
-        pageBreak: "auto",
+        pageBreak: "auto", // El salto de página se maneja automáticamente
       });
     };
 
