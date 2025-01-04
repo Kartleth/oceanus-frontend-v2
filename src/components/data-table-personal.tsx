@@ -357,7 +357,6 @@ export function DataTableDemo() {
       return personas.map((persona) => {
         const bloque: any = {};
         campos.forEach(({ header, key }) => {
-          // Soporte para claves anidadas (e.g., datosAcademicos.cedula)
           const valor =
             key.split(".").reduce((acc, curr) => acc?.[curr], persona) || "N/A";
           bloque[header] = valor;
@@ -380,36 +379,36 @@ export function DataTableDemo() {
 
     // Título del documento
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12); // Cambiar el tamaño de la fuente para el título
+    doc.setFontSize(12);
     doc.text("Reporte Detallado de Personas", 14, 20);
 
     // Función para generar la tabla de cada bloque
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])], // Cabecera de la tabla
-        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
-        startY, // Comienza en la posición Y proporcionada
+        head: [Object.keys(datos[0])],
+        body: datos.map((persona) => Object.values(persona)),
+        startY,
         theme: "grid",
         headStyles: {
           fillColor: [22, 160, 133],
           textColor: [255, 255, 255],
-          fontSize: 7, // Tamaño de la fuente de la cabecera más pequeño
+          fontSize: 7,
         },
         bodyStyles: {
-          fontSize: 6, // Tamaño de la fuente de las celdas más pequeño
+          fontSize: 6,
           cellPadding: 1,
         },
         styles: {
           overflow: "linebreak",
-          fontSize: 6, // Tamaño de la fuente más pequeño para el cuerpo
-          cellWidth: "auto", // Ajustar automáticamente el ancho de las celdas
+          fontSize: 6,
+          cellWidth: "auto",
         },
         columnStyles: {
-          0: { cellWidth: 12 }, // Ajustar el ancho de la primera columna
-          1: { cellWidth: "auto" }, // Ancho automático para las otras columnas
+          0: { cellWidth: 12 },
+          1: { cellWidth: "auto" },
         },
         margin: { top: 25 },
-        pageBreak: "auto", // El salto de página se maneja automáticamente
+        pageBreak: "auto",
       });
     };
 
