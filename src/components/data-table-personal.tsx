@@ -385,36 +385,36 @@ export function DataTableDemo() {
     // Función para generar la tabla de cada bloque
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])], // Cabecera de la tabla
-        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
-        startY, // Comienza en la posición Y proporcionada
+        head: [Object.keys(datos[0])],
+        body: datos.map((persona) => Object.values(persona)),
+        startY,
         theme: "grid",
         headStyles: {
-          fillColor: [41, 128, 185], // Azul intenso para la cabecera
-          textColor: [255, 255, 255], // Texto blanco
-          fontSize: 9, // Tamaño de la fuente
+          fillColor: [41, 128, 185],
+          textColor: [255, 255, 255],
+          fontSize: 9,
           fontStyle: "bold",
         },
         bodyStyles: {
-          fontSize: 8, // Tamaño de la fuente
-          cellPadding: 4, // Espaciado dentro de las celdas
-          textColor: [51, 51, 51], // Color gris oscuro para el texto
+          fontSize: 8,
+          cellPadding: 4,
+          textColor: [51, 51, 51],
         },
         alternateRowStyles: {
-          fillColor: [241, 245, 249], // Azul claro para filas alternas
+          fillColor: [241, 245, 249],
         },
         styles: {
           overflow: "linebreak",
-          cellWidth: "auto", // Ajuste automático del ancho de las celdas
-          lineColor: [200, 200, 200], // Bordes grises claros
-          lineWidth: 0.1, // Grosor de los bordes
+          cellWidth: "auto",
+          lineColor: [200, 200, 200],
+          lineWidth: 0.1,
         },
         columnStyles: {
-          0: { cellWidth: 15 }, // Ancho específico para la primera columna
-          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
+          0: { cellWidth: 15 },
+          1: { cellWidth: "auto" },
         },
         margin: { top: 25 },
-        pageBreak: "auto", // El salto de página se maneja automáticamente
+        pageBreak: "auto",
       });
     };
 
