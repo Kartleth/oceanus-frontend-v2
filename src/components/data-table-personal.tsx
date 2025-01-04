@@ -41,7 +41,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
   {
@@ -310,60 +309,69 @@ export function DataTableDemo() {
       return;
     }
 
-    // Definir los campos de los tres bloques
+    // Definir los campos de los tres bloques con sus mapeos exactos
     const camposBloque1 = [
-      "ID",
-      "Nombre",
-      "Fecha de Nacimiento",
-      "CURP",
-      "RFC",
-      "Número Fijo",
-      "Número Celular",
-      "Dirección",
-      "Número de Licencia",
-      "Número de Pasaporte",
+      { header: "ID", key: "id" },
+      { header: "Nombre", key: "nombre" },
+      { header: "Fecha de Nacimiento", key: "fechanacimiento" },
+      { header: "CURP", key: "curp" },
+      { header: "RFC", key: "rfc" },
+      { header: "Número Fijo", key: "numerofijo" },
+      { header: "Número Celular", key: "numerocelular" },
+      { header: "Dirección", key: "direccion" },
+      { header: "Número de Licencia", key: "numerolicencia" },
+      { header: "Número de Pasaporte", key: "numeropasaporte" },
     ];
+
     const camposBloque2 = [
-      "Fecha de Ingreso",
-      "Estado",
-      "Tipo de Contrato",
-      "Inicio del Contrato",
-      "Fin del Contrato",
-      "Correo",
-      "INE",
-      "Estado Civil",
-      "Cédula Profesional",
-      "Carrera",
+      { header: "Fecha de Ingreso", key: "fechaingreso" },
+      { header: "Estado", key: "estado" },
+      { header: "Tipo de Contrato", key: "tipocontrato" },
+      { header: "Inicio del Contrato", key: "iniciocontrato" },
+      { header: "Fin del Contrato", key: "fincontrato" },
+      { header: "Correo", key: "correo" },
+      { header: "INE", key: "ine" },
+      { header: "Estado Civil", key: "estadocivil" },
+      { header: "Cédula Profesional", key: "datosAcademicos.cedula" },
+      { header: "Carrera", key: "datosAcademicos.carrera" },
     ];
+
     const camposBloque3 = [
-      "Experiencia Laboral",
-      "Certificaciones",
-      "Grado de Estudios",
-      "Alergias",
-      "Enfermedades Crónicas",
-      "Lesiones",
-      "Alergias a Medicamentos",
-      "Número de Emergencia",
-      "Número de Seguro",
-      "Tipo de Sangre",
+      { header: "Experiencia Laboral", key: "datosAcademicos.explaboral" },
+      { header: "Certificaciones", key: "datosAcademicos.certificaciones" },
+      { header: "Grado de Estudios", key: "datosAcademicos.gradoestudios" },
+      { header: "Alergias", key: "datosMedicos.alergias" },
+      { header: "Enfermedades Crónicas", key: "datosMedicos.enfercronicas" },
+      { header: "Lesiones", key: "datosMedicos.lesiones" },
+      { header: "Alergias a Medicamentos", key: "datosMedicos.alergiasmed" },
+      { header: "Número de Emergencia", key: "datosMedicos.numemergencia" },
+      { header: "Número de Seguro", key: "datosMedicos.numseguro" },
+      { header: "Tipo de Sangre", key: "datosMedicos.tiposangre" },
     ];
 
     // Función para mapear los datos a cada bloque
-    const generarDatosBloque = (personas: any[], campos: string[]) => {
+    const generarDatosBloque = (
+      personas: any[],
+      campos: { header: string; key: string }[]
+    ) => {
       return personas.map((persona) => {
         const bloque: any = {};
-        campos.forEach((campo) => {
-          const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] = persona[campoLower] || "N/A";
+        campos.forEach(({ header, key }) => {
+          // Soporte para claves anidadas (e.g., datosAcademicos.cedula)
+          const valor =
+            key.split(".").reduce((acc, curr) => acc?.[curr], persona) || "N/A";
+          bloque[header] = valor;
         });
         return bloque;
       });
     };
 
+    // Generar los datos para cada bloque
     const datosBloque1 = generarDatosBloque(personas, camposBloque1);
     const datosBloque2 = generarDatosBloque(personas, camposBloque2);
     const datosBloque3 = generarDatosBloque(personas, camposBloque3);
 
+    // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "mm",
@@ -372,44 +380,43 @@ export function DataTableDemo() {
 
     // Título del documento
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
+    doc.setFontSize(12); // Cambiar el tamaño de la fuente para el título
     doc.text("Reporte Detallado de Personas", 14, 20);
 
     // Función para generar la tabla de cada bloque
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])],
-        body: datos.map((persona) => Object.values(persona)),
-        startY,
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
         theme: "grid",
         headStyles: {
           fillColor: [22, 160, 133],
           textColor: [255, 255, 255],
-          fontSize: 7,
+          fontSize: 7, // Tamaño de la fuente de la cabecera más pequeño
         },
         bodyStyles: {
-          fontSize: 6,
+          fontSize: 6, // Tamaño de la fuente de las celdas más pequeño
           cellPadding: 1,
         },
         styles: {
           overflow: "linebreak",
-          fontSize: 6,
-          cellWidth: "auto",
+          fontSize: 6, // Tamaño de la fuente más pequeño para el cuerpo
+          cellWidth: "auto", // Ajustar automáticamente el ancho de las celdas
         },
         columnStyles: {
-          0: { cellWidth: 12 },
-          1: { cellWidth: "auto" },
+          0: { cellWidth: 12 }, // Ajustar el ancho de la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para las otras columnas
         },
         margin: { top: 25 },
-        pageBreak: "auto",
+        pageBreak: "auto", // El salto de página se maneja automáticamente
       });
     };
 
+    // Imprimir los bloques en páginas separadas
     generarTabla(datosBloque1, 30);
-
     doc.addPage();
     generarTabla(datosBloque2, 30);
-
     doc.addPage();
     generarTabla(datosBloque3, 30);
 
