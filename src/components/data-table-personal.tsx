@@ -41,6 +41,8 @@ import { Persona } from "@/modelos/personal";
 
 // eslint-disable-next-line react-refresh/only-export-components
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export type EmployeInformation = {
   id: string;
@@ -112,9 +114,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue("curp")}</div>
-    ),
+    cell: ({ row }) => <div className="uppercase">{row.getValue("curp")}</div>,
   },
   {
     accessorKey: "rfc",
@@ -129,9 +129,7 @@ export const columns: ColumnDef<Persona>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="uppercase">{row.getValue("rfc")}</div>
-    ),
+    cell: ({ row }) => <div className="uppercase">{row.getValue("rfc")}</div>,
   },
   {
     accessorKey: "estado",
@@ -265,8 +263,7 @@ export function DataTableDemo() {
     },
   });
 
-  /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL*/
-
+  /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
   const exportToExcel = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para exportar.");
@@ -309,14 +306,127 @@ export function DataTableDemo() {
       "Relación de Emergencia": persona.datosMedicos?.relaemergencia || "N/A",
     }));
 
+    // Exportar a Excel
     const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
-
     XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
+  //Exportar pdf
+  const exportToPDF = (personas: any[]) => {
+    if (!personas || personas.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
 
-  /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL*/
+    // Definir los campos de los tres bloques
+    const camposBloque1 = [
+      "ID",
+      "Nombre",
+      "Fecha de Nacimiento",
+      "CURP",
+      "RFC",
+      "Número Fijo",
+      "Número Celular",
+      "Dirección",
+      "Número de Licencia",
+      "Número de Pasaporte",
+    ];
+    const camposBloque2 = [
+      "Fecha de Ingreso",
+      "Estado",
+      "Tipo de Contrato",
+      "Inicio del Contrato",
+      "Fin del Contrato",
+      "Correo",
+      "INE",
+      "Estado Civil",
+      "Cédula Profesional",
+      "Carrera",
+    ];
+    const camposBloque3 = [
+      "Experiencia Laboral",
+      "Certificaciones",
+      "Grado de Estudios",
+      "Alergias",
+      "Enfermedades Crónicas",
+      "Lesiones",
+      "Alergias a Medicamentos",
+      "Número de Emergencia",
+      "Número de Seguro",
+      "Tipo de Sangre",
+    ];
+
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (personas: any[], campos: string[]) => {
+      return personas.map((persona) => {
+        const bloque: any = {};
+        campos.forEach((campo) => {
+          const campoLower = campo.toLowerCase().replace(/\s/g, "");
+          bloque[campo] = persona[campoLower] || "N/A";
+        });
+        return bloque;
+      });
+    };
+
+    const datosBloque1 = generarDatosBloque(personas, camposBloque1);
+    const datosBloque2 = generarDatosBloque(personas, camposBloque2);
+    const datosBloque3 = generarDatosBloque(personas, camposBloque3);
+
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
+
+    // Título del documento
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Reporte Detallado de Personas", 14, 20);
+
+    // Función para generar la tabla de cada bloque
+    const generarTabla = (datos: any[], startY: number) => {
+      autoTable(doc, {
+        head: [Object.keys(datos[0])],
+        body: datos.map((persona) => Object.values(persona)),
+        startY,
+        theme: "grid",
+        headStyles: {
+          fillColor: [22, 160, 133],
+          textColor: [255, 255, 255],
+          fontSize: 7,
+        },
+        bodyStyles: {
+          fontSize: 6,
+          cellPadding: 1,
+        },
+        styles: {
+          overflow: "linebreak",
+          fontSize: 6,
+          cellWidth: "auto",
+        },
+        columnStyles: {
+          0: { cellWidth: 12 },
+          1: { cellWidth: "auto" },
+        },
+        margin: { top: 25 },
+        pageBreak: "auto",
+      });
+    };
+
+    generarTabla(datosBloque1, 30);
+
+    doc.addPage();
+    generarTabla(datosBloque2, 30);
+
+    doc.addPage();
+    generarTabla(datosBloque3, 30);
+
+    // Guardar el archivo PDF
+    doc.save("Reporte_Personas.pdf");
+  };
+
+  /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
 
   {
     /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
@@ -362,13 +472,16 @@ export function DataTableDemo() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem>Copiar datos</DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => exportToExcel(trabajadoresQuery.data || [])}
             >
               Exportar a Excel
             </DropdownMenuItem>
-            <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => exportToPDF(trabajadoresQuery.data || [])}
+            >
+              Exportar a PDF
+            </DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
