@@ -44,14 +44,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-export type EmployeInformation = {
-  id: string;
-  employe_name: string;
-  birthDate: string;
-  curp: string;
-  rfc: string;
-  status: "Activo" | "Inactivo";
-};
 
 export const columns: ColumnDef<Persona>[] = [
   {
@@ -312,6 +304,7 @@ export function DataTableDemo() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
     XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
+
   //Exportar pdf
   const exportToPDF = (personas: any[]) => {
     if (!personas || personas.length === 0) {
@@ -428,9 +421,7 @@ export function DataTableDemo() {
 
   /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
 
-  {
-    /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
-  }
+  /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
   if (trabajadoresQuery.isLoading) {
     return (
       <div className="w-full space-y-2">
