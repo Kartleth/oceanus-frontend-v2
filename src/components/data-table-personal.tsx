@@ -1,5 +1,4 @@
 "use client";
-import "jspdf-autotable";
 import * as React from "react";
 import {
   ColumnDef,
@@ -38,13 +37,12 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as XLSX from "xlsx";
 import { Persona } from "@/modelos/personal";
-
-// eslint-disable-next-line react-refresh/only-export-components
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "id",
