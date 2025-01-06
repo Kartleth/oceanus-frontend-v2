@@ -13,7 +13,6 @@ import { useQuery } from "react-query";
 import { Persona } from "@/modelos/personal";
 import axios from "axios";
 import { DataTableArchivos } from "@/components/data-table-archivos";
-import { FileCheck2 } from "lucide-react";
 
 export default function SubirArchivos() {
   const { id } = useParams();
