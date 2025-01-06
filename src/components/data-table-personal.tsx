@@ -420,6 +420,27 @@ export function DataTableDemo() {
     doc.save("Reporte_Personas.pdf");
   };
 
+  const handlePrint = (personas: Persona[]) => {
+    if (!personas || personas.length === 0) {
+      alert("No hay datos disponibles para imprimir.");
+      return;
+    }
+
+    setTimeout(() => {
+      const pdfUrl = "imprmir_personal_oceanos"; // Asigna una URL temporal para el PDF generado
+
+      // Abrir el PDF en una nueva ventana
+      const printWindow = window.open(pdfUrl, "_blank");
+
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.print(); // Iniciar la impresión
+        };
+      } else {
+        alert("No se pudo abrir la ventana para imprimir.");
+      }
+    }, 500);
+  };
   /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
 
   /* AGREGAR DISEÑO AL APARTADO DE CARGANDO*/
@@ -481,7 +502,11 @@ export function DataTableDemo() {
             >
               Exportar a PDF
             </DropdownMenuItem>
-            <DropdownMenuItem>Imprimir</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handlePrint(trabajadoresQuery.data || [])}
+            >
+              Imprimir
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
