@@ -49,12 +49,12 @@ export default function SubirArchivos() {
         </Breadcrumb>
       </header>
 
-      <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 px-6 -mb-4">
+      <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 px-6 sm:-mb-2">
         <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
           Archivos
         </h1>
         <p className="max-w-2xl text-lg font-light text-foreground">
-          {empleado?.nombre}
+          ID: {empleado?.id}, {empleado?.nombre}
         </p>
       </div>
 
