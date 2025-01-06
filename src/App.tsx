@@ -12,7 +12,7 @@ import { VerDetallesPersonal } from "./pages/ver-detalles-personal-page/Ver-deta
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
-import ProtectedRoute from "./components/ProtectedRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +25,7 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
 
           {/* Rutas protegidas */}
-          <Route element={<ProtectedRoute />}>
+          <Route element={<PrivateRoute />}>
             <Route path="/" element={<Page_personal />} />
             <Route path="/personal" element={<Page_personal />} />
             <Route path="/contratos" element={<Contratos />} />

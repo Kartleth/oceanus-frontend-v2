@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,21 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CircleAlert} from "lucide-react";
+import { CircleAlert } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 
 export function LoginForm() {
-  const [usuario, setUsuario] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/personal");
+    }
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -27,12 +34,13 @@ export function LoginForm() {
       const response = await axios.post(
         "http://localhost:3001/usuarios/login",
         {
-          usuario,
+          username,
           password,
         }
       );
 
       // Si la respuesta es exitosa
+      localStorage.setItem("token", response.data.access_token);
       console.log("Login exitoso:", response.data);
       navigate("/personal");
     } catch (err) {
@@ -71,8 +79,8 @@ export function LoginForm() {
                 id="usuario"
                 type="text"
                 placeholder="Ingrese su usuario"
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
