@@ -12,6 +12,7 @@ import { VerDetallesPersonal } from "./pages/ver-detalles-personal-page/Ver-deta
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
+import { SubirArchivos } from "./pages/subir-archivos-page/subir-archivos";
 import PrivateRoute from "./components/PrivateRoute";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ function App() {
               path="/reporte-de-empleado/:id"
               element={<VerReportePersonal />}
             />
+            <Route path="/subir-archivos/:id" element={<SubirArchivos />} />
           </Route>
         </Routes>
       </BrowserRouter>

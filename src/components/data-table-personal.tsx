@@ -172,7 +172,9 @@ export const columns: ColumnDef<Persona>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Subir archivo</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={`/subir-archivos/${Persona.id}`}>Subir archivos</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
             <DropdownMenuItem>
               <Link to={`/reporte-de-empleado/${Persona.id}`}>
