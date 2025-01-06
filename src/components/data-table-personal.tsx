@@ -306,14 +306,13 @@ export function DataTableDemo() {
     XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
 
-  //Exportar pdf
-  const exportToPDF = (personas: any[]) => {
+  // Exportar a PDF
+  const exportToPDF = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
 
-    // Definir los campos de los tres bloques
     const camposBloque1 = [
       "ID",
       "Nombre",
@@ -351,8 +350,7 @@ export function DataTableDemo() {
       "Tipo de Sangre",
     ];
 
-    // Función para mapear los datos a cada bloque
-    const generarDatosBloque = (personas: any[], campos: string[]) => {
+    const generarDatosBloque = (personas: Persona[], campos: string[]) => {
       return personas.map((persona) => {
         const bloque: any = {};
         campos.forEach((campo) => {
@@ -373,12 +371,10 @@ export function DataTableDemo() {
       format: "a4",
     });
 
-    // Título del documento
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.text("Reporte Detallado de Personas", 14, 20);
 
-    // Función para generar la tabla de cada bloque
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
         head: [Object.keys(datos[0])],
@@ -416,30 +412,131 @@ export function DataTableDemo() {
     doc.addPage();
     generarTabla(datosBloque3, 30);
 
-    // Guardar el archivo PDF
     doc.save("Reporte_Personas.pdf");
   };
 
+  // Imprimir datos
   const handlePrint = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para imprimir.");
       return;
     }
 
-    setTimeout(() => {
-      const pdfUrl = "imprmir_personal_oceanos"; // Asigna una URL temporal para el PDF generado
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
 
-      // Abrir el PDF en una nueva ventana
-      const printWindow = window.open(pdfUrl, "_blank");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("Reporte Detallado de Personas", 14, 20);
 
-      if (printWindow) {
-        printWindow.onload = () => {
-          printWindow.print(); // Iniciar la impresión
-        };
-      } else {
-        alert("No se pudo abrir la ventana para imprimir.");
-      }
-    }, 500);
+    const generarTabla = (datos: any[], startY: number) => {
+      autoTable(doc, {
+        head: [Object.keys(datos[0])],
+        body: datos.map((persona) => Object.values(persona)),
+        startY,
+        theme: "grid",
+        headStyles: {
+          fillColor: [22, 160, 133],
+          textColor: [255, 255, 255],
+          fontSize: 7,
+        },
+        bodyStyles: {
+          fontSize: 6,
+          cellPadding: 1,
+        },
+        styles: {
+          overflow: "linebreak",
+          fontSize: 6,
+          cellWidth: "auto",
+        },
+        columnStyles: {
+          0: { cellWidth: 12 },
+          1: { cellWidth: "auto" },
+        },
+        margin: { top: 25 },
+        pageBreak: "auto",
+      });
+    };
+
+    const camposBloque1 = [
+      "ID",
+      "Nombre",
+      "Fecha de Nacimiento",
+      "CURP",
+      "RFC",
+      "Número Fijo",
+      "Número Celular",
+      "Dirección",
+      "Número de Licencia",
+      "Número de Pasaporte",
+    ];
+    const camposBloque2 = [
+      "Fecha de Ingreso",
+      "Estado",
+      "Tipo de Contrato",
+      "Inicio del Contrato",
+      "Fin del Contrato",
+      "Correo",
+      "INE",
+      "Estado Civil",
+      "Cédula Profesional",
+      "Carrera",
+    ];
+    const camposBloque3 = [
+      "Experiencia Laboral",
+      "Certificaciones",
+      "Grado de Estudios",
+      "Alergias",
+      "Enfermedades Crónicas",
+      "Lesiones",
+      "Alergias a Medicamentos",
+      "Número de Emergencia",
+      "Número de Seguro",
+      "Tipo de Sangre",
+    ];
+
+    const generarDatosBloque = (personas: Persona[], campos: string[]) => {
+      return personas.map((persona) => {
+        const bloque: any = {};
+        campos.forEach((campo) => {
+          const campoLower = campo.toLowerCase().replace(/\s/g, "");
+          bloque[campo] = persona[campoLower] || "N/A";
+        });
+        return bloque;
+      });
+    };
+
+    const datosBloque1 = generarDatosBloque(personas, camposBloque1);
+    const datosBloque2 = generarDatosBloque(personas, camposBloque2);
+    const datosBloque3 = generarDatosBloque(personas, camposBloque3);
+
+    generarTabla(datosBloque1, 30);
+
+    doc.addPage();
+    generarTabla(datosBloque2, 30);
+
+    doc.addPage();
+    generarTabla(datosBloque3, 30);
+
+    // Convertir el PDF a un blob
+    const pdfBlob = doc.output("blob");
+
+    // Crear una URL temporal para el Blob
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // Abrir el PDF en una nueva ventana para imprimir
+    const printWindow = window.open(pdfUrl, "_blank");
+
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    } else {
+      alert("No se pudo abrir la ventana para imprimir.");
+    }
   };
   /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
 
