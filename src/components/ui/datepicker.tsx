@@ -21,6 +21,12 @@ interface Props {
 
 export function DatePicker(props: Props) {
   //const [date, setDate] = React.useState<Date>(); // variables estado  "useState" actualizan.
+  const maxDate =
+    props.maxDate ??
+    new Date(new Date().getTime() + 60 * 60 * 24 * 365 * 1000 * 100);
+  const minDate =
+    props.minDate ??
+    new Date(new Date().getTime() - 60 * 60 * 24 * 365 * 1000 * 100);
 
   return (
     <Popover>
@@ -47,8 +53,8 @@ export function DatePicker(props: Props) {
           onSelect={props.onChange}
           initialFocus
           locale={es}
-          fromDate={props.minDate}
-          toDate={props.maxDate}
+          fromDate={minDate}
+          toDate={maxDate}
         />
       </PopoverContent>
     </Popover>
