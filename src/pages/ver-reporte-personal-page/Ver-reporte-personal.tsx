@@ -25,6 +25,7 @@ import { Persona } from "@/modelos/personal";
 import { useQuery } from "react-query";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
+import '../../assets/styles/print.css';
 
 export default function VerReportePersonal() {
   const { id } = useParams();
@@ -113,7 +114,7 @@ export default function VerReportePersonal() {
         </div>
 
         <div  className="p-6 grid gap-6 md:grid-cols-2">
-          <Card className="w-full">
+          <Card className="w-full print-card">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <UserRound className="w-6 h-6" />
@@ -164,7 +165,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <Stethoscope className="w-6 h-6" /> Datos médicos
@@ -211,7 +212,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <GraduationCap className="w-6 h-6" />
@@ -249,7 +250,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <BookUser />
