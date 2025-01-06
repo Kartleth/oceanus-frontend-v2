@@ -67,17 +67,22 @@ export function VerDetallesPersonal() {
           </div>
         ) : (
           <>
-            <Avatar>
+            <Avatar className="p-4">
               <AvatarImage
                 src="https://github.com/shadcn.png"
                 alt="@shadcn"
-                className="w-60 rounded-full p-6"
+                className="w-64 rounded-full p-2"
               />
             </Avatar>
 
-            <h1 className="font-medium text-2xl w-1/2">
-              {empleado?.nombre ?? "No disponible"}
-            </h1>
+            <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
+              <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+                Detalles
+              </h1>
+              <p className="max-w-2xl text-lg font-light text-foreground">
+                ID: {empleado?.id}, {empleado?.nombre}
+              </p>
+            </div>
 
             <div className="px-3 w-full flex justify-end gap-2">
               <Button className="bg-deepSea hover:bg-deepLightSea">
@@ -96,12 +101,12 @@ export function VerDetallesPersonal() {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
               <UserRound className="w-6 h-6" />
-              <h2 className="font-medium text-xl">Datos del usuario</h2>
+              <h2 className="font-medium text-xl tracking-tighter">Datos del usuario</h2>
             </div>
 
             <hr className="pb-6" />
@@ -241,12 +246,12 @@ export function VerDetallesPersonal() {
           </div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-6 h-6" />
-              <h2 className="font-medium text-xl">Datos personales</h2>
+              <h2 className="font-medium text-xl tracking-tighter">Datos personales</h2>
             </div>
 
             <hr className="pb-6" />
@@ -415,12 +420,12 @@ export function VerDetallesPersonal() {
           </div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <Stethoscope className="w-6 h-6" />
-              <h2 className="font-medium text-xl">Datos medicos</h2>
+              <h2 className="font-medium text-xl tracking-tighter">Datos medicos</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
@@ -597,12 +602,12 @@ export function VerDetallesPersonal() {
           </div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <GraduationCap className="w-6 h-6" />
-              <h2 className="font-medium text-xl">Datos academicos</h2>
+              <h2 className="font-medium text-xl tracking-tighter">Datos academicos</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
