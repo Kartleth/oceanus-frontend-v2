@@ -35,9 +35,9 @@ export function NavUser({
 
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Elimina cualquier dato de sesión
-    localStorage.removeItem("authToken"); // Elimina el token de autenticación
-    // Redirigir al usuario al login
+    // Elimina el token de autenticación
+    localStorage.removeItem("token");
+    // Redirige al usuario al login
     navigate("/login");
   };
 

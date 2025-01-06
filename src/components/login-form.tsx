@@ -22,7 +22,8 @@ export function LoginForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    const token = localStorage.getItem("token");
+    if (token) {
       navigate("/personal");
     }
   }, [navigate]);
