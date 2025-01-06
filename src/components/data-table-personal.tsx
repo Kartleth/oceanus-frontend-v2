@@ -40,7 +40,7 @@ import { Persona } from "@/modelos/personal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
+import ErrorComponent from "./error-component";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
@@ -439,7 +439,12 @@ export function DataTableDemo() {
 
   // Si ocurre un error, lo mostramos
   if (trabajadoresQuery.error instanceof Error) {
-    return <div>Error: {trabajadoresQuery.error.message}</div>;
+    return (
+      <div className="w-full h-1/2 text-center">
+        <ErrorComponent></ErrorComponent>
+        <div className="mt-4 text-2xl">Error: {trabajadoresQuery.error.message}</div>
+      </div>
+    );
   }
 
   return (
