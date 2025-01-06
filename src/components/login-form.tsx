@@ -23,6 +23,7 @@ export function LoginForm() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("Token leído desde localStorage:", token);
     if (token) {
       navigate("/personal");
     }
@@ -32,21 +33,27 @@ export function LoginForm() {
     e.preventDefault();
     try {
       // Enviar una solicitud POST al backend
-      const response = await axios.post(
-        "http://localhost:3001/usuarios/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/auth/login", {
+        username,
+        password,
+      });
+
+      const token = response.data.access_token;
+      if (!token) {
+        console.error("No se recibió un token en la respuesta.");
+        return;
+      }
 
       // Si la respuesta es exitosa
-      localStorage.setItem("token", response.data.access_token);
-      console.log("Login exitoso:", response.data);
+      localStorage.setItem("token", token);
+      console.log("Token guardado correctamente:", token);
       navigate("/personal");
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
-      console.error("Error de login:", err);
+      console.error(
+        "Error en el inicio de sesión:",
+        err.response?.data || err.message
+      );
     }
   };
 

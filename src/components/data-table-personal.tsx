@@ -204,11 +204,14 @@ export function DataTableDemo() {
   const trabajadoresQuery = useQuery({
     queryKey: ["trabajadores"],
     queryFn: async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
       //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
       const res = await fetch("http://localhost:3001/personas", {
         //El await es para esperar a que se resulevan las promesas antes de seguir con el código
         headers: {
           "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+          Authorization: `Bearer ${token}`,
         },
       });
       const resData = await res.json();
@@ -442,7 +445,9 @@ export function DataTableDemo() {
     return (
       <div className="w-full h-1/2 text-center">
         <ErrorComponent></ErrorComponent>
-        <div className="mt-4 text-2xl">Error: {trabajadoresQuery.error.message}</div>
+        <div className="mt-8 text-2xl">
+          Error: {trabajadoresQuery.error.message}
+        </div>
       </div>
     );
   }
