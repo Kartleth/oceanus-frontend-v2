@@ -149,38 +149,6 @@ export const columns: ColumnDef<Persona>[] = [
         }
         console.log(resData);
         queryClient.invalidateQueries(["trabajadores"]);
-
-        // Lógica para editar
-        const editPersona = useMutation(
-          async (updatedData) => {
-            const res = await fetch(
-              `http://localhost:3001/personas/${Persona.id}`,
-              {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedData),
-              }
-            );
-            const resData = await res.json();
-            if (!res.ok) {
-              throw new Error(
-                resData.message || "Error al actualizar la persona"
-              );
-            }
-            return resData;
-          },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries(["trabajadores"]);
-            },
-            onError: (error) => {
-              console.error("Error actualizando la persona:", error);
-            },
-          }
-        );
-
       });
 
       return (
