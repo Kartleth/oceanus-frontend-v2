@@ -184,10 +184,8 @@ export const columns: ColumnDef<Persona>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => `/agregar-trabajador/${Persona.id}`}
-            >
-              Editar
+            <DropdownMenuItem>
+              <Link to={`/editar-trabajador/${Persona.id}`}>Editar {""}</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
