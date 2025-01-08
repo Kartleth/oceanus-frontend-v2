@@ -90,6 +90,39 @@ export function PageEditarTrabajador() {
         },
         { keepValues: true }
       );
+      datosAcademicosForm.reset(
+        {
+          cedula: data.datosAcademicos.cedula,
+          carrera: data.datosAcademicos.carrera,
+          certificaciones: data.datosAcademicos.certificaciones,
+          explaboral: data.datosAcademicos.explaboral,
+          gradoestudios: data.datosAcademicos.gradoestudios,
+        },
+        { keepValues: true }
+      );
+      datosMedicosForm.reset(
+        {
+          alergias: data.datosMedicos.alergias,
+          alergiasmed: data.datosMedicos.alergiasmed,
+          enfercronicas: data.datosMedicos.enfercronicas,
+          genero: data.datosMedicos.genero,
+          lesiones: data.datosMedicos.lesiones,
+          numemergencia: data.datosMedicos.numemergencia,
+          nombremergencia: data.datosMedicos.nombremergencia,
+          relaemergencia: data.datosMedicos.relaemergencia,
+          tiposangre: data.datosMedicos.tiposangre,
+        },
+        { keepValues: true }
+      );
+      datosContratacionForm.reset(
+        {
+          tipocontrato: data.tipocontrato,
+          estado: data.estado,
+          iniciocontrato: new Date(data.iniciocontrato),
+          fincontrato: new Date(data.fincontrato),
+        },
+        { keepValues: true }
+      );
     },
     refetchInterval: 5000,
   });
