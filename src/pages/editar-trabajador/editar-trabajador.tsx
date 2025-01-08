@@ -16,8 +16,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 import {
   DatosPersonales,
   DatosPersonalesForm,
@@ -38,6 +38,7 @@ import {
   DatosContratacionForm,
   datosContratacionSchema,
 } from "@/components/forms/datos-contratacion-form";
+import { Persona } from "@/modelos/personal";
 
 type AccordionValue =
   | "datos-personales"
@@ -47,33 +48,32 @@ type AccordionValue =
   | string;
 
 export function PageAgregarTrabajador() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  // Lógica para editar
-  const editPersona = useMutation(
-    async (updatedData) => {
-      const res = await fetch(`http://localhost:3001/personas/${Persona.id}`, {
-        method: "PATCH",
+  const params = useParams();
+  const id = params.id;
+  const query = useQuery({
+    querykey: ["trabajador", id],
+    queryFn: async () => {
+      const res = await fetch(`https://localhost:3001/personas/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedData),
       });
       const resData = await res.json();
       if (!res.ok) {
-        throw new Error(resData.message || "Error al actualizar la persona");
+        console.error(resData);
+        throw new Error(resData.message);
       }
-      return resData;
+      console.log(resData);
+      const personaParse = Persona.safeParse(resData);
+      if (!personaParse.success) {
+        console.error(personaParse.error);
+        throw new Error(personaParse.error.toString());
+      }
+      return personaParse.data;
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["trabajadores"]);
-      },
-      onError: (error) => {
-        console.error("Error actualizando la persona:", error);
-      },
-    }
-  );
+  
+  });
+
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
   const datosContratacionForm = useForm<DatosContratacion>({
     resolver: zodResolver(datosContratacionSchema),
@@ -115,7 +115,6 @@ export function PageAgregarTrabajador() {
       datosPersonales: { ...datosPersonales, ...datosContratacion },
     };
     console.log(trabajador);
-    editPersona.mutate(trabajador);
   }
   return (
     <Layout>
