@@ -111,6 +111,7 @@ export function PageEditarTrabajador() {
           nombremergencia: data.datosMedicos.nombremergencia,
           relaemergencia: data.datosMedicos.relaemergencia,
           tiposangre: data.datosMedicos.tiposangre,
+          numseguro: data.datosMedicos.numseguro,
         },
         { keepValues: true }
       );
