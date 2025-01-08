@@ -14,6 +14,7 @@ import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-pe
 const queryClient = new QueryClient();
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
+import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
 
 function App() {
   return (
@@ -33,8 +34,8 @@ function App() {
             element={<PageAgregarTrabajador />}
           />
           <Route
-            path="/agregar-trabajador"
-            element={<PageAgregarTrabajador />}
+            path="/editar-trabajador/:id"
+            element={<PageEditarTrabajador />}
           />
           <Route
             path="/generar-credencial/:id"

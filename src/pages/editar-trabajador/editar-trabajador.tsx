@@ -47,13 +47,13 @@ type AccordionValue =
   | "datos-contratacion"
   | string;
 
-export function PageAgregarTrabajador() {
+export function PageEditarTrabajador() {
   const params = useParams();
   const id = params.id;
   const query = useQuery({
-    querykey: ["trabajador", id],
+    queryKey: ["trabajador", id],
     queryFn: async () => {
-      const res = await fetch(`https://localhost:3001/personas/${id}`, {
+      const res = await fetch(`http://localhost:3001/personas/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -71,7 +71,27 @@ export function PageAgregarTrabajador() {
       }
       return personaParse.data;
     },
-  
+    onSuccess: (data) => {
+      datosPersonalesForm.reset(
+        {
+          nombre: data.nombre,
+          fechanacimiento: new Date(data.fechanacimiento),
+          curp: data.curp,
+          rfc: data.rfc,
+          ine: data.ine,
+          estadocivil: data.estadocivil,
+          numerofijo: data.numerofijo,
+          numerocelular: data.numerocelular,
+          correo: data.correo,
+          direccion: data.direccion,
+          numerolicencia: data.numerolicencia,
+          numeropasaporte: data.numeropasaporte,
+          fechaingreso: new Date(data.fechaingreso),
+        },
+        { keepValues: true }
+      );
+    },
+    refetchInterval: 5000,
   });
 
   const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
@@ -125,7 +145,7 @@ export function PageAgregarTrabajador() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbPage className="line-clamp-1 text-xl">
-                Agregar Trabajador
+                Editar Trabajador
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
