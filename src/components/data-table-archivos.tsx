@@ -34,52 +34,75 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Separator } from "@radix-ui/react-separator";
-import axios from "axios";
 
-const fetchDocuments = async () => {
-  const { data } = await axios.get("http://localhost:3001/documentacion/id");
+const documentacionMap = {
+  credencial: "Credencial",
+  licencia: "Licencia de Conducir",
+  pasaporte: "Pasaporte",
+  cv: "Currículum Vitae",
+  curp: "CURP",
+  inss: "INSS",
+  constanciasat: "Constancia SAT",
+  foto: "Foto",
+  actnacimiento: "Acta de Nacimiento",
+  estcuenta: "Estado de Cuenta",
+  altasegsocial: "Alta en Seguridad Social",
+  cedulaprofe: "Cédula Profesional",
+  copiacontrato: "Copia del Contrato",
+  comprodomicilio: "Comprobante de Domicilio",
+};
+
+async function fetchDocumentacion(personaId: number) {
+  const response = await fetch(`http://localhost:3001/documentacion/${personaId}`
+  );
+  const data = await response.json();
   return data;
-};
+}
 
-const uploadDocument = async ({ id, file }) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  await axios.post(`http://localhost:3001/documentacion/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+async function prepareTableData(personaId: number) {
+  const documentacion = await fetchDocumentacion(personaId);
+
+  const tableData = Object.keys(documentacionMap).map((key) => {
+    const nombreDocumentoEsperado = documentacionMap[key];
+    const nombreDocumentoSubido = documentacion[key] || "No subido";
+    const estatus = documentacion[key] ? "Subido" : "No subido";
+
+    return {
+      nombreDocumentoEsperado,
+      nombreDocumentoSubido,
+      estatus,
+    };
   });
-};
 
-export type Archivos = {
-  nombre_documento_esperado: string;
-  nombre_documento_subido: string;
+  return tableData;
+}
+
+interface Documento {
+  nombreDocumentoEsperado: string;
+  nombreDocumentoSubido: string;
   estatus: string;
-};
+}
 
-export const columns: ColumnDef<Archivos>[] = [
+export const columns: ColumnDef<Documento>[] = [
   {
-    accessorKey: "nombre_documento_esperado",
+    accessorKey: "nombreDocumentoEsperado",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Documento esperado
+          Nombre Documento Esperado
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">
-        {row.getValue("nombre_documento_esperado")}
-      </div>
+      <div className="lowercase">{row.getValue("nombreDocumentoEsperado")}</div>
     ),
   },
   {
-    accessorKey: "nombre_documento_subido",
+    accessorKey: "nombreDocumentoSubido",
     header: ({ column }) => {
       return (
         <Button
@@ -92,7 +115,7 @@ export const columns: ColumnDef<Archivos>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("nombre_documento_subido")}</div>
+      <div className="lowercase">{row.getValue("nombreDocumentoSubido")}</div>
     ),
   },
   {
@@ -145,7 +168,8 @@ export const columns: ColumnDef<Archivos>[] = [
   },
 ];
 
-export function DataTableArchivos() {
+export function DataTableArchivos({ personaId }) {
+  const [data, setData] = React.useState<Documento[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -153,6 +177,19 @@ export function DataTableArchivos() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  React.useEffect(() => {
+    async function loadData() {
+      try {
+        const tableData = await prepareTableData(personaId);
+        setData(tableData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+
+    loadData();
+  }, [personaId]);
 
   const table = useReactTable({
     data,

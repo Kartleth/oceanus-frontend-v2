@@ -62,7 +62,7 @@ export default function SubirArchivos() {
       </div>
 
       <div className="px-6">
-        <DataTableArchivos></DataTableArchivos>
+        <DataTableArchivos personaId={empleado?.id}></DataTableArchivos>
       </div>
     </Layout>
   );
