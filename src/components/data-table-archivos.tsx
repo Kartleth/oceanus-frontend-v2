@@ -35,114 +35,64 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import axios from "axios";
 
-export const data: Archivos[] = [
-  {
-    id_documento: "1",
-    nombre_archivo: "Credencial de usuario",
-    estatus: "Pendiente",
-  },
-  {
-    id_documento: "2",
-    nombre_archivo: "Licencia de conducir",
-    estatus: "Pendiente",
-  },
-  {
-    id_documento: "3",
-    nombre_archivo: "Pasaporte",
-    estatus: "Pendiente",
-  },
-  {
-    id_documento: "4",
-    nombre_archivo: "Curiculum Vitae",
-    estatus: "Pendiente",
-  },
-  {
-    id_documento: "5",
-    nombre_archivo: "CURP",
-    estatus: "Subido",
-  },
-  {
-    id_documento: "6",
-    nombre_archivo: "INSS",
-    estatus: "Activo",
-  },
-  {
-    id_documento: "7",
-    nombre_archivo: "Constancia SAT",
-    estatus: "Activo",
-  },
-  {
-    id_documento: "8",
-    nombre_archivo: "Foto de usuario",
-    estatus: "Pendiente",
-  },
-  {
-    id_documento: "9",
-    nombre_archivo: "Acta de naciemiento",
-    estatus: "Pendiente",
-  },{
-    id_documento: "10",
-    nombre_archivo: "Estatus de cuenta",
-    estatus: "Pendiente",
-  },{
-    id_documento: "11",
-    nombre_archivo: "Alta de seguro social",
-    estatus: "Pendiente",
-  },{
-    id_documento: "12",
-    nombre_archivo: "Cedula profesional",
-    estatus: "Pendiente",
-  },{
-    id_documento: "13",
-    nombre_archivo: "Copia de contrato",
-    estatus: "Pendiente",
-  },{
-    id_documento: "14",
-    nombre_archivo: "Comprobante de domicilio",
-    estatus: "Pendiente",
-  }
-];
+const fetchDocuments = async () => {
+  const { data } = await axios.get("http://localhost:3001/documentacion/id");
+  return data;
+};
+
+const uploadDocument = async ({ id, file }) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  await axios.post(`http://localhost:3001/documentacion/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 export type Archivos = {
-  id_documento: string;
-  nombre_archivo: string;
+  nombre_documento_esperado: string;
+  nombre_documento_subido: string;
   estatus: string;
 };
 
 export const columns: ColumnDef<Archivos>[] = [
   {
-    accessorKey: "id_documento",
+    accessorKey: "nombre_documento_esperado",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID
+          Documento esperado
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("id_documento")}</div>
+      <div className="lowercase">
+        {row.getValue("nombre_documento_esperado")}
+      </div>
     ),
   },
   {
-    accessorKey: "nombre_archivo",
+    accessorKey: "nombre_documento_subido",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nombre de archivo
+          Documento subido
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("nombre_archivo")}</div>
+      <div className="lowercase">{row.getValue("nombre_documento_subido")}</div>
     ),
   },
   {
