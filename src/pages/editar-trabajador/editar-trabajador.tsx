@@ -16,8 +16,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DatosPersonales,
   DatosPersonalesForm,
@@ -48,6 +48,8 @@ type AccordionValue =
   | string;
 
 export function PageEditarTrabajador() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
 
@@ -71,6 +73,36 @@ export function PageEditarTrabajador() {
     },
   });
 
+  const mutation = useMutation(async (data: any) => {
+    console.log(data);
+    const res = await fetch(`http://localhost:3001/personas/${id}`, {
+      method: "put",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const resData = await res.json();
+    if (!res.ok) {
+      console.error(resData);
+    }
+    console.log(resData);
+    queryClient.invalidateQueries(["trabajadores"]);
+    navigate("/personal");
+  });
+  function guardarTrabajador() {
+    const datosPersonales = datosPersonalesForm.getValues();
+    const datosMedicos = datosMedicosForm.getValues();
+    const datosAcademicos = datosAcademicosForm.getValues();
+    const datosContratacion = datosContratacionForm.getValues();
+    const trabajador = {
+      datosMedico: datosMedicos,
+      datosAcademicos: datosAcademicos,
+      ...{ ...datosPersonales, ...datosContratacion },
+    };
+    console.log(trabajador);
+    mutation.mutate(trabajador);
+  }
   const datosPersonalesForm = useForm<DatosPersonales>({
     resolver: zodResolver(datosPersonalesSchema),
   });
@@ -87,7 +119,7 @@ export function PageEditarTrabajador() {
     resolver: zodResolver(datosContratacionSchema),
   });
 
-  const [value, setValue] = useState<AccordionValue>("datos-personales");
+  const [value, setValue] = useState<AccordionValue | undefined>();
 
   // Sincroniza los datos obtenidos con los formularios
   useEffect(() => {
@@ -116,7 +148,9 @@ export function PageEditarTrabajador() {
         iniciocontrato: new Date(data.iniciocontrato),
         fincontrato: new Date(data.fincontrato),
       });
+      setValue("datos-personales");
     }
+    console.log(data);
   }, [data]);
 
   if (isLoading) {
@@ -188,7 +222,7 @@ export function PageEditarTrabajador() {
             <AccordionContent className="p-4">
               <DatosContratacionForm
                 form={datosContratacionForm}
-                onSubmitCon={() => console.log("Guardar datos")}
+                onSubmitCon={() => guardarTrabajador()}
               />
             </AccordionContent>
           </AccordionItem>
