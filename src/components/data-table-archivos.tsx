@@ -53,7 +53,8 @@ const documentacionMap = {
 };
 
 async function fetchDocumentacion(personaId: number) {
-  const response = await fetch(`http://localhost:3001/documentacion/${personaId}`
+  const response = await fetch(
+    `http://localhost:3001/documentacion/${personaId}`
   );
   const data = await response.json();
   return data;
@@ -179,6 +180,8 @@ export function DataTableArchivos({ personaId }) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   React.useEffect(() => {
+    if (!personaId) return; // No hacer nada si el personaId es undefined o null
+
     async function loadData() {
       try {
         const tableData = await prepareTableData(personaId);
