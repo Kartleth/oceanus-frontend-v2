@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -53,11 +53,35 @@ const documentacionMap = {
 };
 
 async function fetchDocumentacion(personaId: number) {
+  try {
+    const response = await fetch(
+      `http://localhost:3001/documentacion/${personaId}`
+    );
+    if (!response.ok) {
+      throw new Error("Error fetching documentacion");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching documentacion:", error);
+    throw error;
+  }
+}
+
+async function editDocumento(personaId: number, documento: Documento) {
   const response = await fetch(
-    `http://localhost:3001/documentacion/${personaId}`
+    `http://localhost:3001/documentacion/${personaId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(documento),
+    }
   );
-  const data = await response.json();
-  return data;
+  if (!response.ok) {
+    throw new Error("Error al editar el documento");
+  }
+  return response.json();
 }
 
 async function prepareTableData(personaId: number) {
@@ -140,7 +164,7 @@ export const columns: ColumnDef<Documento>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const ContractsInformation = row.original;
+      const documentos = row.original;
 
       return (
         <DropdownMenu>
@@ -152,12 +176,8 @@ export const columns: ColumnDef<Documento>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(ContractsInformation.id)
-              }
-            >
-              Ver archivo
+            <DropdownMenuItem onClick={() => handleEdit(documentos)}>
+              Editar
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
@@ -180,7 +200,7 @@ export function DataTableArchivos({ personaId }) {
   const [rowSelection, setRowSelection] = React.useState({});
 
   React.useEffect(() => {
-    if (!personaId) return; // No hacer nada si el personaId es undefined o null
+    if (!personaId) return;
 
     async function loadData() {
       try {
@@ -193,6 +213,46 @@ export function DataTableArchivos({ personaId }) {
 
     loadData();
   }, [personaId]);
+  const mutation = useMutation(editDocumento);
+
+  const handleEdit = (documento: Documento) => {
+    const nuevoDocumentoSubido = prompt(
+      `Editar el documento subido para: ${documento.nombreDocumentoEsperado}`,
+      documento.nombreDocumentoSubido
+    );
+
+    // Validación para asegurarse de que no esté vacío
+    if (nuevoDocumentoSubido === null || nuevoDocumentoSubido.trim() === "") {
+      alert("El campo no puede estar vacío.");
+      return;
+    }
+
+    const updatedDocumento = {
+      ...documento,
+      nombreDocumentoSubido: nuevoDocumentoSubido,
+      estatus: nuevoDocumentoSubido ? "Subido" : "No subido",
+    };
+
+    mutation.mutate(
+      { personaId, documento: updatedDocumento },
+      {
+        onSuccess: (data) => {
+          console.log("Documento editado con éxito:", data);
+          setData((oldData) =>
+            oldData.map((item) =>
+              item.nombreDocumentoEsperado === documento.nombreDocumentoEsperado
+                ? { ...item, ...updatedDocumento }
+                : item
+            )
+          );
+        },
+        onError: (error) => {
+          console.error("Error al editar el documento:", error);
+          alert("Hubo un error al editar el documento.");
+        },
+      }
+    );
+  };
 
   const table = useReactTable({
     data,
