@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -83,29 +83,9 @@ async function fetchDocumentacion(personaId: number) {
   }
 }
 
-async function editDocumento(personaId: number, documento: Documento) {
-  const response = await fetch(
-    `http://localhost:3001/documentacion/${personaId}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(documento),
-    }
-  );
-  if (!response.ok) {
-    throw new Error("Error al editar el documento");
-  }
-  return response.json();
-}
-
 async function prepareTableData(personaId: number) {
   try {
-    // Intenta obtener los documentos subidos
     const documentacion = await fetchDocumentacion(personaId);
-
-    // Genera la lista completa con documentos esperados
     const tableData = Object.keys(documentacionMap).map((key) => {
       const documentKey = key as DocumentacionKey;
       const nombreDocumentoEsperado = documentacionMap[documentKey];
@@ -116,18 +96,20 @@ async function prepareTableData(personaId: number) {
         nombreDocumentoEsperado,
         nombreDocumentoSubido,
         estatus,
+        documentKey,
+        idUsuario: personaId,
       };
     });
 
     return tableData;
   } catch (error) {
     console.error("Error preparing table data:", error);
-
-    // En caso de error, devuelve la estructura base con todos los documentos esperados
     return Object.keys(documentacionMap).map((key) => ({
       nombreDocumentoEsperado: documentacionMap[key as DocumentacionKey],
       nombreDocumentoSubido: "-",
       estatus: "No subido",
+      documentKey: key,
+      idUsuario: personaId,
     }));
   }
 }
@@ -155,7 +137,78 @@ interface Documento {
   nombreDocumentoEsperado: string;
   nombreDocumentoSubido: string;
   estatus: string;
+  documentKey: string;
+  idUsuario: number;
 }
+
+interface ActionCellProps {
+  row: { original: Documento };
+}
+
+const ActionCell: React.FC<ActionCellProps> = ({ row }) => {
+  const documentos = row.original;
+  const queryClient = useQueryClient();
+  const deleteDocMutation = useMutation(
+    () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
+    {
+      onSuccess: () => {
+        // Invalidar la consulta para recargar los datos
+        queryClient.invalidateQueries({
+          queryKey: ["documentacion", documentos.idUsuario],
+        });
+
+        // Actualizar los datos directamente en el caché de la consulta
+        queryClient.setQueryData(
+          ["documentacion", documentos.idUsuario],
+          (oldData: Documento[] | undefined) => {
+            return (oldData ?? []).map((item) =>
+              item.documentKey === documentos.documentKey
+                ? {
+                    ...item,
+                    nombreDocumentoSubido: "-", // Se coloca "-" en la columna Documento subido
+                    estatus: "No subido", // Cambiar estatus a "No subido"
+                  }
+                : item
+            );
+          }
+        );
+
+        console.log(
+          `Documento con clave '${documentos.documentKey}' y usuario ID ${documentos.idUsuario} eliminado exitosamente.`
+        );
+      },
+      onError: (error) => {
+        console.error("Error al eliminar el documento:", error);
+      },
+    }
+  );
+
+  const tieneDocumentoSubido = documentos.nombreDocumentoSubido !== "-";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
+        {tieneDocumentoSubido && (
+          <DropdownMenuItem>Ver documento</DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => deleteDocMutation.mutate()}>
+          Eliminar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const columns: ColumnDef<Documento>[] = [
   {
@@ -212,71 +265,7 @@ export const columns: ColumnDef<Documento>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const documentos = row.original;
-      const idUsuario = 19;
-      const tieneDocumentoSubido =
-        documentos.nombreDocumentoSubido?.trim().length > 1;
-
-      //--------------------------------------------------------------------------
-      // Logica de boton de eliminar documento
-      const keyDocumento = Object.keys(documentacionMap).find(
-        (key) => documentacionMap[key as DocumentacionKey] === documentos.nombreDocumentoEsperado
-      );
-
-      if (!keyDocumento) {
-        console.error("Documento no encontrado en el mapa");
-        return null;
-      }
-
-      const deleteDocMutation = useMutation(
-        () => deleteDocumento(idUsuario, keyDocumento),
-        {
-          onSuccess: () => {
-            console.log("Documento eliminado con éxito");
-          },
-          onError: (error: unknown) => {
-            console.error("Error al eliminar documento:", error);
-          },
-        }
-      );
-      //--------------------------------------------------------------------------
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
-            <DropdownMenuItem>Ver archivo</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                if (tieneDocumentoSubido) {
-                  // Lógica para editar el documento
-                  console.log("Editar documento");
-                } else {
-                  // Lógica para agregar un nuevo documento
-                  console.log("Agregar documento");
-                }
-              }}
-            >
-              {tieneDocumentoSubido ? "Editar" : "Agregar"}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                deleteDocMutation.mutate(); // Llamada al DELETE
-              }}
-            >
-              Borrar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: (props) => <ActionCell row={props.row} />,
   },
 ];
 
