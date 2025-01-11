@@ -85,21 +85,34 @@ async function editDocumento(personaId: number, documento: Documento) {
 }
 
 async function prepareTableData(personaId: number) {
-  const documentacion = await fetchDocumentacion(personaId);
+  try {
+    // Intenta obtener los documentos subidos
+    const documentacion = await fetchDocumentacion(personaId);
 
-  const tableData = Object.keys(documentacionMap).map((key) => {
-    const nombreDocumentoEsperado = documentacionMap[key];
-    const nombreDocumentoSubido = documentacion[key] || "No subido";
-    const estatus = documentacion[key] ? "Subido" : "No subido";
+    // Genera la lista completa con documentos esperados
+    const tableData = Object.keys(documentacionMap).map((key) => {
+      const nombreDocumentoEsperado = documentacionMap[key];
+      const nombreDocumentoSubido = documentacion?.[key] || "-";
+      const estatus = documentacion?.[key] ? "Subido" : "No subido";
 
-    return {
-      nombreDocumentoEsperado,
-      nombreDocumentoSubido,
-      estatus,
-    };
-  });
+      return {
+        nombreDocumentoEsperado,
+        nombreDocumentoSubido,
+        estatus,
+      };
+    });
 
-  return tableData;
+    return tableData;
+  } catch (error) {
+    console.error("Error preparing table data:", error);
+
+    // En caso de error, devuelve la estructura base con todos los documentos esperados
+    return Object.keys(documentacionMap).map((key) => ({
+      nombreDocumentoEsperado: documentacionMap[key],
+      nombreDocumentoSubido: "-",
+      estatus: "No subido",
+    }));
+  }
 }
 
 interface Documento {
