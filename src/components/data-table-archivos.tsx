@@ -35,7 +35,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const documentacionMap = {
+type DocumentacionKey =
+  | "credencial"
+  | "licencia"
+  | "pasaporte"
+  | "cv"
+  | "curp"
+  | "inss"
+  | "constanciasat"
+  | "foto"
+  | "actnacimiento"
+  | "estcuenta"
+  | "altasegsocial"
+  | "cedulaprofe"
+  | "copiacontrato"
+  | "comprodomicilio";
+
+const documentacionMap: { [key in DocumentacionKey]: string } = {
   credencial: "Credencial",
   licencia: "Licencia de Conducir",
   pasaporte: "Pasaporte",
@@ -91,9 +107,10 @@ async function prepareTableData(personaId: number) {
 
     // Genera la lista completa con documentos esperados
     const tableData = Object.keys(documentacionMap).map((key) => {
-      const nombreDocumentoEsperado = documentacionMap[key];
-      const nombreDocumentoSubido = documentacion?.[key] || "-";
-      const estatus = documentacion?.[key] ? "Subido" : "No subido";
+      const documentKey = key as DocumentacionKey;
+      const nombreDocumentoEsperado = documentacionMap[documentKey];
+      const nombreDocumentoSubido = documentacion?.[documentKey] || "-";
+      const estatus = documentacion?.[documentKey] ? "Subido" : "No subido";
 
       return {
         nombreDocumentoEsperado,
@@ -108,12 +125,31 @@ async function prepareTableData(personaId: number) {
 
     // En caso de error, devuelve la estructura base con todos los documentos esperados
     return Object.keys(documentacionMap).map((key) => ({
-      nombreDocumentoEsperado: documentacionMap[key],
+      nombreDocumentoEsperado: documentacionMap[key as DocumentacionKey],
       nombreDocumentoSubido: "-",
       estatus: "No subido",
     }));
   }
 }
+
+//--------------------------------------------------------------------------
+// DELETE DOCUMENTO
+async function deleteDocumento(idUsuario: number, keyDocumento: string) {
+  const response = await fetch(
+    `http://localhost:3001/documentacion/${idUsuario}/deleteDoc/${keyDocumento}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Error al eliminar el documento");
+  }
+  return response.json();
+}
+//--------------------------------------------------------------------------
 
 interface Documento {
   nombreDocumentoEsperado: string;
@@ -178,9 +214,33 @@ export const columns: ColumnDef<Documento>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const documentos = row.original;
+      const idUsuario = 19;
       const tieneDocumentoSubido =
         documentos.nombreDocumentoSubido?.trim().length > 1;
 
+      //--------------------------------------------------------------------------
+      // Logica de boton de eliminar documento
+      const keyDocumento = Object.keys(documentacionMap).find(
+        (key) => documentacionMap[key as DocumentacionKey] === documentos.nombreDocumentoEsperado
+      );
+
+      if (!keyDocumento) {
+        console.error("Documento no encontrado en el mapa");
+        return null;
+      }
+
+      const deleteDocMutation = useMutation(
+        () => deleteDocumento(idUsuario, keyDocumento),
+        {
+          onSuccess: () => {
+            console.log("Documento eliminado con éxito");
+          },
+          onError: (error: unknown) => {
+            console.error("Error al eliminar documento:", error);
+          },
+        }
+      );
+      //--------------------------------------------------------------------------
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -206,7 +266,13 @@ export const columns: ColumnDef<Documento>[] = [
             >
               {tieneDocumentoSubido ? "Editar" : "Agregar"}
             </DropdownMenuItem>
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                deleteDocMutation.mutate(); // Llamada al DELETE
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
