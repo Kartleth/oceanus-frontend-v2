@@ -165,6 +165,8 @@ export const columns: ColumnDef<Documento>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const documentos = row.original;
+      const tieneDocumentoSubido =
+        documentos.nombreDocumentoSubido?.trim().length > 0;
 
       return (
         <DropdownMenu>
@@ -178,7 +180,19 @@ export const columns: ColumnDef<Documento>[] = [
             <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
             <DropdownMenuItem>Ver archivo</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                if (tieneDocumentoSubido) {
+                  // Lógica para editar el documento
+                  console.log("Editar documento");
+                } else {
+                  // Lógica para agregar un nuevo documento
+                  console.log("Agregar documento");
+                }
+              }}
+            >
+              {tieneDocumentoSubido ? "Editar" : "Agregar"}
+            </DropdownMenuItem>
             <DropdownMenuItem>Borrar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
