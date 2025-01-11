@@ -179,7 +179,7 @@ export const columns: ColumnDef<Documento>[] = [
     cell: ({ row }) => {
       const documentos = row.original;
       const tieneDocumentoSubido =
-        documentos.nombreDocumentoSubido?.trim().length > 0;
+        documentos.nombreDocumentoSubido?.trim().length > 1;
 
       return (
         <DropdownMenu>
