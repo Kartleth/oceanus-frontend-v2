@@ -40,6 +40,8 @@ import {
 } from "@/components/forms/datos-contratacion-form";
 import { Persona } from "@/modelos/personal";
 
+
+
 type AccordionValue =
   | "datos-personales"
   | "datos-medicos"

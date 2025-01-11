@@ -40,6 +40,7 @@ import { Persona } from "@/modelos/personal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import oceanuslogo from "./path/to/oceanuslogo.png";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
