@@ -176,9 +176,7 @@ export const columns: ColumnDef<Documento>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleEdit(documentos)}>
-              Editar
-            </DropdownMenuItem>
+            <DropdownMenuItem>Ver archivo</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
             <DropdownMenuItem>Borrar</DropdownMenuItem>
@@ -213,46 +211,6 @@ export function DataTableArchivos({ personaId }) {
 
     loadData();
   }, [personaId]);
-  const mutation = useMutation(editDocumento);
-
-  const handleEdit = (documento: Documento) => {
-    const nuevoDocumentoSubido = prompt(
-      `Editar el documento subido para: ${documento.nombreDocumentoEsperado}`,
-      documento.nombreDocumentoSubido
-    );
-
-    // Validación para asegurarse de que no esté vacío
-    if (nuevoDocumentoSubido === null || nuevoDocumentoSubido.trim() === "") {
-      alert("El campo no puede estar vacío.");
-      return;
-    }
-
-    const updatedDocumento = {
-      ...documento,
-      nombreDocumentoSubido: nuevoDocumentoSubido,
-      estatus: nuevoDocumentoSubido ? "Subido" : "No subido",
-    };
-
-    mutation.mutate(
-      { personaId, documento: updatedDocumento },
-      {
-        onSuccess: (data) => {
-          console.log("Documento editado con éxito:", data);
-          setData((oldData) =>
-            oldData.map((item) =>
-              item.nombreDocumentoEsperado === documento.nombreDocumentoEsperado
-                ? { ...item, ...updatedDocumento }
-                : item
-            )
-          );
-        },
-        onError: (error) => {
-          console.error("Error al editar el documento:", error);
-          alert("Hubo un error al editar el documento.");
-        },
-      }
-    );
-  };
 
   const table = useReactTable({
     data,
