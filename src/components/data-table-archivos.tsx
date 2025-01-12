@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -132,7 +133,32 @@ async function deleteDocumento(idUsuario: number, keyDocumento: string) {
   return response.json();
 }
 //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// AGREGAR/EDITAR DOCUMENTO
+async function uploadDocumento(
+  idUsuario: number,
+  documentKey: string,
+  file: File
+) {
+  const formData = new FormData();
+  formData.append("documento", file);
 
+  const response = await fetch(
+    `http://localhost:3001/documentacion/${idUsuario}/uploadDoc/${documentKey}`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error al subir el documento");
+  }
+
+  return response.json();
+}
+
+//--------------------------------------------------------------------------
 interface Documento {
   nombreDocumentoEsperado: string;
   nombreDocumentoSubido: string;
@@ -144,30 +170,52 @@ interface Documento {
 interface ActionCellProps {
   row: { original: Documento };
   onDelete: (documentKey: string) => void;
+  onUpload: (documentKey: string, file: File) => void;
 }
 
-const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
+const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const deleteDocMutation = useMutation(
     () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
     {
       onSuccess: () => {
-        // Invalidar la consulta para recargar los datos
-        queryClient.invalidateQueries(["documentacion", documentos.idUsuario]);
+        queryClient.invalidateQueries({
+          queryKey: ["documentacion", documentos.idUsuario],
+        });
 
-        // Llamar a la función onDelete para actualizar el estado local
         onDelete(documentos.documentKey);
 
         console.log(
           `Documento con clave '${documentos.documentKey}' y usuario ID ${documentos.idUsuario} eliminado exitosamente.`
         );
       },
-      onError: (error: unknown) => {
+      onError: (error) => {
         console.error("Error al eliminar el documento:", error);
       },
     }
   );
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsLoading(true);
+
+    try {
+      await onUpload(documentos.documentKey, file);
+      console.log("Documento subido exitosamente");
+    } catch (error) {
+      console.error("Error al subir el documento:", error);
+    } finally {
+      setIsLoading(false);
+      event.target.value = ""; // Limpiar el input para permitir cargar el mismo archivo nuevamente si es necesario
+    }
+  };
 
   const tieneDocumentoSubido = documentos.nombreDocumentoSubido !== "-";
 
@@ -185,7 +233,14 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
           <DropdownMenuItem>Ver documento</DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+            document
+              .getElementById(`file-input-${documentos.documentKey}`)
+              ?.click();
+          }}
+        >
           {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
         </DropdownMenuItem>
         {tieneDocumentoSubido && (
@@ -194,6 +249,13 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
+      {/* Input oculto para subir archivos */}
+      <input
+        id={`file-input-${documentos.documentKey}`}
+        type="file"
+        className="hidden"
+        onChange={handleFileChange}
+      />
     </DropdownMenu>
   );
 };
@@ -202,6 +264,7 @@ export function DataTableArchivos({
   personaId,
 }: Readonly<{ personaId: number }>) {
   const [data, setData] = React.useState<Documento[]>([]);
+  const queryClient = useQueryClient();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -231,12 +294,31 @@ export function DataTableArchivos({
         item.documentKey === documentKey
           ? {
               ...item,
-              nombreDocumentoSubido: "-", // Se coloca "-" en la columna Documento subido
-              estatus: "No subido", // Cambiar estatus a "No subido"
+              nombreDocumentoSubido: "-",
+              estatus: "No subido",
             }
           : item
       )
     );
+  };
+
+  const handleUpload = async (documentKey: string, file: File) => {
+    try {
+      await uploadDocumento(personaId, documentKey, file);
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.documentKey === documentKey
+            ? {
+                ...item,
+                nombreDocumentoSubido: file.name, // Actualizar el nombre del documento subido
+                estatus: "Subido", // Cambiar estatus a "Subido"
+              }
+            : item
+        )
+      );
+    } catch (error) {
+      console.error("Error al subir el documento:", error);
+    }
   };
 
   const columns: ColumnDef<Documento>[] = [
@@ -248,7 +330,7 @@ export function DataTableArchivos({
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nombre Documento Esperado
+            Nombre documento esperado
             <ArrowUpDown />
           </Button>
         );
@@ -296,7 +378,13 @@ export function DataTableArchivos({
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => <ActionCell row={row} onDelete={handleDelete} />,
+      cell: ({ row }) => (
+        <ActionCell
+          row={row}
+          onDelete={handleDelete}
+          onUpload={handleUpload}
+        />
+      ),
     },
   ];
 
