@@ -188,9 +188,11 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
         <DropdownMenuItem>
           {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => deleteDocMutation.mutate()}>
-          Eliminar
-        </DropdownMenuItem>
+        {tieneDocumentoSubido && (
+          <DropdownMenuItem onClick={() => deleteDocMutation.mutate()}>
+            Eliminar
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
