@@ -210,7 +210,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     setIsLoading(true);
 
     try {
-      await onUpload(documentos.documentKey, file);
+      onUpload(documentos.documentKey, file);
       console.log("Documento subido exitosamente");
     } catch (error) {
       console.error("Error al subir el documento:", error);
@@ -224,7 +224,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
 
   const handleDownload = () => {
     const downloadUrl = `http://localhost:3001/documentacion/${documentos.idUsuario}/getDoc/${documentos.documentKey}`;
-    window.open(downloadUrl, '_blank');
+    window.open(downloadUrl, "_blank");
   };
 
   return (
@@ -238,7 +238,9 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Acciones de archivos</DropdownMenuLabel>
         {tieneDocumentoSubido && (
-          <DropdownMenuItem onClick={handleDownload}>Descargar documento</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleDownload}>
+            Descargar documento
+          </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -272,7 +274,9 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   );
 };
 
-export function DataTableArchivos({ personaId }) {
+export function DataTableArchivos({
+  personaId,
+}: Readonly<{ personaId: number }>) {
   const [data, setData] = React.useState<Documento[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
