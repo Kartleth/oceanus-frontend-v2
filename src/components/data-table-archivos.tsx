@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -97,7 +97,7 @@ async function prepareTableData(personaId: number) {
         nombreDocumentoSubido,
         estatus,
         documentKey,
-        idUsuario: personaId,
+        idUsuario: personaId, // Agregar el idUsuario
       };
     });
 
@@ -109,7 +109,7 @@ async function prepareTableData(personaId: number) {
       nombreDocumentoSubido: "-",
       estatus: "No subido",
       documentKey: key,
-      idUsuario: personaId,
+      idUsuario: personaId, // Agregar el idUsuario también aquí
     }));
   }
 }
@@ -143,9 +143,10 @@ interface Documento {
 
 interface ActionCellProps {
   row: { original: Documento };
+  onDelete: (documentKey: string) => void;
 }
 
-const ActionCell: React.FC<ActionCellProps> = ({ row }) => {
+const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
   const deleteDocMutation = useMutation(
@@ -153,31 +154,16 @@ const ActionCell: React.FC<ActionCellProps> = ({ row }) => {
     {
       onSuccess: () => {
         // Invalidar la consulta para recargar los datos
-        queryClient.invalidateQueries({
-          queryKey: ["documentacion", documentos.idUsuario],
-        });
+        queryClient.invalidateQueries(["documentacion", documentos.idUsuario]);
 
-        // Actualizar los datos directamente en el caché de la consulta
-        queryClient.setQueryData(
-          ["documentacion", documentos.idUsuario],
-          (oldData: Documento[] | undefined) => {
-            return (oldData ?? []).map((item) =>
-              item.documentKey === documentos.documentKey
-                ? {
-                    ...item,
-                    nombreDocumentoSubido: "-", // Se coloca "-" en la columna Documento subido
-                    estatus: "No subido", // Cambiar estatus a "No subido"
-                  }
-                : item
-            );
-          }
-        );
+        // Llamar a la función onDelete para actualizar el estado local
+        onDelete(documentos.documentKey);
 
         console.log(
           `Documento con clave '${documentos.documentKey}' y usuario ID ${documentos.idUsuario} eliminado exitosamente.`
         );
       },
-      onError: (error) => {
+      onError: (error: unknown) => {
         console.error("Error al eliminar el documento:", error);
       },
     }
@@ -210,66 +196,9 @@ const ActionCell: React.FC<ActionCellProps> = ({ row }) => {
   );
 };
 
-export const columns: ColumnDef<Documento>[] = [
-  {
-    accessorKey: "nombreDocumentoEsperado",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nombre Documento Esperado
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("nombreDocumentoEsperado")}</div>
-    ),
-  },
-  {
-    accessorKey: "nombreDocumentoSubido",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Documento subido
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("nombreDocumentoSubido")}</div>
-    ),
-  },
-  {
-    accessorKey: "estatus",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Estatus de subida
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("estatus")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: (props) => <ActionCell row={props.row} />,
-  },
-];
-
-export function DataTableArchivos({ personaId }) {
+export function DataTableArchivos({
+  personaId,
+}: Readonly<{ personaId: number }>) {
   const [data, setData] = React.useState<Documento[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -293,6 +222,81 @@ export function DataTableArchivos({ personaId }) {
 
     loadData();
   }, [personaId]);
+
+  const handleDelete = (documentKey: string) => {
+    setData((prevData) =>
+      prevData.map((item) =>
+        item.documentKey === documentKey
+          ? {
+              ...item,
+              nombreDocumentoSubido: "-", // Se coloca "-" en la columna Documento subido
+              estatus: "No subido", // Cambiar estatus a "No subido"
+            }
+          : item
+      )
+    );
+  };
+
+  const columns: ColumnDef<Documento>[] = [
+    {
+      accessorKey: "nombreDocumentoEsperado",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Nombre Documento Esperado
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">
+          {row.getValue("nombreDocumentoEsperado")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "nombreDocumentoSubido",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Documento subido
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("nombreDocumentoSubido")}</div>
+      ),
+    },
+    {
+      accessorKey: "estatus",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Estatus de subida
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("estatus")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => <ActionCell row={row} onDelete={handleDelete} />,
+    },
+  ];
 
   const table = useReactTable({
     data,
