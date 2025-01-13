@@ -24,12 +24,11 @@ export const datosContratacionSchema = z.object({
       message: "Fecha de ingreso no puede ser antes de 1914.",
     }),
   fincontrato: z
-    .date({
-      required_error: "Fecha de ingreso obligatoria.",
-    })
+    .date()
     .min(new Date(1914, 0, 1), {
       message: "Fecha de ingreso no puede ser antes de 1914.",
-    }),
+    })
+    .optional(),
 });
 
 export type DatosContratacion = z.infer<typeof datosContratacionSchema>;
@@ -43,6 +42,9 @@ export const DatosContratacionForm: FC<DatosContratacionProps> = ({
   onSubmitCon,
   form,
 }) => {
+  const tipoContrato = form.watch("tipocontrato");
+  const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
+
   return (
     <Form {...form}>
       <form
@@ -111,6 +113,7 @@ export const DatosContratacionForm: FC<DatosContratacionProps> = ({
         <FormField
           control={form.control}
           name="fincontrato"
+          disabled={disableContractEnd}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fecha final del Contrato</FormLabel>
@@ -118,6 +121,7 @@ export const DatosContratacionForm: FC<DatosContratacionProps> = ({
                 <DatePicker
                   date={field.value}
                   onChange={field.onChange}
+                  disabled={field.disabled}
                   minDate={new Date(1900, 1, 1)}
                 />
               </FormControl>

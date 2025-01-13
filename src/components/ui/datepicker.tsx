@@ -13,10 +13,11 @@ import {
 import { SelectSingleEventHandler } from "react-day-picker";
 
 interface Props {
-  date: Date;
+  date: Date | undefined;
   onChange: SelectSingleEventHandler;
   minDate: Date | undefined;
   maxDate?: Date;
+  disabled?: boolean;
 }
 
 export function DatePicker(props: Props) {
@@ -37,6 +38,7 @@ export function DatePicker(props: Props) {
             "w-full justify-start text-left font-normal",
             !props.date && "text-muted-foreground"
           )}
+          disabled={props.disabled}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {props.date ? (
