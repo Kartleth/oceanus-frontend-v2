@@ -40,8 +40,6 @@ import {
 } from "@/components/forms/datos-contratacion-form";
 import { Persona } from "@/modelos/personal";
 
-
-
 type AccordionValue =
   | "datos-personales"
   | "datos-medicos"
@@ -92,7 +90,37 @@ export function PageEditarTrabajador() {
     queryClient.invalidateQueries(["trabajadores"]);
     navigate("/personal");
   });
-  function guardarTrabajador() {
+
+  async function formulariosSonValidos() {
+    if (!(await datosPersonalesForm.trigger())) {
+      setValue("datos-personales");
+
+      return false;
+    }
+    if (!(await datosMedicosForm.trigger())) {
+      setValue("datos-medicos");
+
+      return false;
+    }
+    if (!(await datosAcademicosForm.trigger())) {
+      setValue("datos-academicos");
+
+      return false;
+    }
+    if (!(await datosContratacionForm.trigger())) {
+      setValue("datos-contratacion");
+
+      return false;
+    }
+
+    return true;
+  }
+
+  async function guardarTrabajador() {
+    const validos = await formulariosSonValidos();
+
+    if (!validos) return;
+
     const datosPersonales = datosPersonalesForm.getValues();
     const datosMedicos = datosMedicosForm.getValues();
     const datosAcademicos = datosAcademicosForm.getValues();
