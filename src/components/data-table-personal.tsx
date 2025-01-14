@@ -164,6 +164,7 @@ export const columns: ColumnDef<Persona>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
+              asChild
               onClick={() =>
                 navigator.clipboard.writeText(Persona.id.toString())
               }
@@ -175,21 +176,22 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Subir archivo</DropdownMenuItem>
             <DropdownMenuItem>Descargar archivo</DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to={`/reporte-de-empleado/${Persona.id}`}>
                 Generar reporte
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to={`/generar-credencial/${Persona.id}`}>
-                Generar credencial{" "}
+                Generar credencial
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to={`/editar-trabajador/${Persona.id}`}>Editar {""}</Link>
+            <DropdownMenuItem asChild>
+              <Link to={`/editar-trabajador/${Persona.id}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
+              asChild
               onClick={() => {
                 detelePersona.mutate();
               }}
