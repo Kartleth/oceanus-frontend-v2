@@ -315,10 +315,6 @@ export function DataTableDemo() {
     }
 
     // Función para convertir el SVG a Base64 usando Canvg
-    // Importación correcta
-
-    // Importación correcta
-
     const convertSvgToBase64 = async (svg: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         const canvas = document.createElement("canvas");
@@ -427,12 +423,12 @@ export function DataTableDemo() {
         });
 
         // Agregar el logo al lado izquierdo
-        doc.addImage(logoBase64, "PNG", 10, 10, 30, 30); // Aquí se agrega el logo, ajusta la posición y el tamaño según sea necesario
+        doc.addImage(logoBase64, "PNG", 10, 10, 30, 30); // Ajusta la posición del logo según sea necesario
 
-        // Título del documento
+        // Agregar texto al lado derecho del logo
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
-        doc.text("Reporte Detallado de Personas", 50, 20); // Ajusta la posición del título después del logo
+        doc.text("OCEANUS SUPERVISION Y PROYECTOS", 50, 25); // Ajusta la posición del texto
 
         // Función para generar la tabla de cada bloque
         const generarTabla = (datos: any[], startY: number) => {
