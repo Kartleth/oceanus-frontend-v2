@@ -149,6 +149,21 @@ export function PageAgregarTrabajador() {
     console.log(trabajador);
     mutation.mutate(trabajador);
   }
+
+  const erroresPersonales = Object.keys(
+    datosPersonalesForm.formState.errors
+  ).length;
+
+  const erroresMedicos = Object.keys(datosMedicosForm.formState.errors).length;
+
+  const erroresAcademicos = Object.keys(
+    datosAcademicosForm.formState.errors
+  ).length;
+
+  const erroresContratacion = Object.keys(
+    datosContratacionForm.formState.errors
+  ).length;
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -172,8 +187,13 @@ export function PageAgregarTrabajador() {
           onValueChange={setValue}
         >
           <AccordionItem value="datos-personales">
-            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos Personales
+            <AccordionTrigger
+              data-hasErrors={erroresPersonales > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos Personales ${
+                erroresPersonales > 0 ? `(${erroresPersonales} errores)` : ""
+              }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosPersonalesForm
@@ -183,8 +203,13 @@ export function PageAgregarTrabajador() {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-medicos">
-            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos Médicos
+            <AccordionTrigger
+              data-hasErrors={erroresMedicos > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos Médicos ${
+                erroresMedicos > 0 ? `(${erroresMedicos} errores)` : ""
+              }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosMedicosForm
@@ -194,8 +219,13 @@ export function PageAgregarTrabajador() {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-academicos">
-            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos Académicos
+            <AccordionTrigger
+              data-hasErrors={erroresAcademicos > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos Académicos ${
+                erroresAcademicos > 0 ? `(${erroresAcademicos} errores)` : ""
+              }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosAcademicosForm
@@ -205,8 +235,15 @@ export function PageAgregarTrabajador() {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-contratacion">
-            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos de Contratación
+            <AccordionTrigger
+              data-hasErrors={erroresContratacion > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos de Contratación ${
+                erroresContratacion > 0
+                  ? `(${erroresContratacion} errores)`
+                  : ""
+              }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosContratacionForm
