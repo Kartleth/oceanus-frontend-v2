@@ -133,31 +133,7 @@ async function deleteDocumento(idUsuario: number, keyDocumento: string) {
 }
 
 //--------------------------------------------------------------------------
-// UPLOAD DOCUMENTO
-async function uploadDocumento(
-  idUsuario: number,
-  documentKey: string,
-  file: File
-) {
-  const formData = new FormData();
-  formData.append("documento", file);
 
-  console.log("Uploading document:", documentKey, file);
-
-  const response = await fetch(
-    `http://localhost:3001/documentacion/${idUsuario}/updateDoc/${documentKey}`,
-    {
-      method: "PATCH",
-      body: formData,
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Error al subir el documento");
-  }
-
-  return response.json();
-}
 //--------------------------------------------------------------------------
 
 interface Documento {
@@ -171,13 +147,11 @@ interface Documento {
 interface ActionCellProps {
   row: { original: Documento };
   onDelete: (documentKey: string) => void;
-  onUpload: (documentKey: string, file: File) => void;
 }
 
-const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
+const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = React.useState(false);
 
   const deleteDocMutation = useMutation(
     () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
@@ -198,27 +172,6 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
       },
     }
   );
-
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    console.log("File selected:", file);
-
-    setIsLoading(true);
-
-    try {
-      onUpload(documentos.documentKey, file);
-      console.log("Documento subido exitosamente");
-    } catch (error) {
-      console.error("Error al subir el documento:", error);
-    } finally {
-      setIsLoading(false);
-      event.target.value = ""; // Limpiar el input para permitir cargar el mismo archivo nuevamente si es necesario
-    }
-  };
 
   const tieneDocumentoSubido = documentos.nombreDocumentoSubido !== "-";
 
@@ -247,9 +200,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
           onSelect={(event) => {
             event.preventDefault();
             console.log("Agregar/Editar Documento clicked");
-            document
-              .getElementById(`file-input-${documentos.documentKey}`)
-              ?.click();
+            console.log("documentos.documentKey:", documentos.documentKey);
           }}
         >
           {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
@@ -260,16 +211,6 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
-      {/* Input oculto para subir archivos */}
-      <input
-        id={`file-input-${documentos.documentKey}`}
-        type="file"
-        className="hidden"
-        onChange={(event) => {
-          console.log("File input changed");
-          handleFileChange(event);
-        }}
-      />
     </DropdownMenu>
   );
 };
@@ -285,7 +226,7 @@ export function DataTableArchivos({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
+  const queryClient = useQueryClient();
   React.useEffect(() => {
     if (!personaId) return;
 
@@ -317,27 +258,6 @@ export function DataTableArchivos({
     );
   };
 
-  const handleUpload = async (documentKey: string, file: File) => {
-    console.log("Uploading document:", documentKey, file);
-    try {
-      await uploadDocumento(personaId, documentKey, file);
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.documentKey === documentKey
-            ? {
-                ...item,
-                nombreDocumentoSubido: file.name, // Actualizar el nombre del documento subido
-                estatus: "Subido", // Cambiar estatus a "Subido"
-              }
-            : item
-        )
-      );
-      console.log("Document uploaded and state updated");
-    } catch (error) {
-      console.error("Error al subir el documento:", error);
-    }
-  };
-
   const columns: ColumnDef<Documento>[] = [
     {
       accessorKey: "nombreDocumentoEsperado",
@@ -347,7 +267,7 @@ export function DataTableArchivos({
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nombre Documento Esperado
+            Nombre documento esperado
             <ArrowUpDown />
           </Button>
         );
@@ -395,9 +315,7 @@ export function DataTableArchivos({
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => (
-        <ActionCell row={row} onDelete={handleDelete} onUpload={handleUpload} />
-      ),
+      cell: ({ row }) => <ActionCell row={row} onDelete={handleDelete} />,
     },
   ];
 
