@@ -420,7 +420,6 @@ export function DataTableDemo() {
           orientation: "landscape",
           unit: "mm",
           format: "a4",
-
         });
 
         // Agregar el logo al lado izquierdo
