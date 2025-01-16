@@ -420,15 +420,44 @@ export function DataTableDemo() {
           orientation: "landscape",
           unit: "mm",
           format: "a4",
+
         });
 
         // Agregar el logo al lado izquierdo
-        doc.addImage(logoBase64, "PNG", 10, 10, 30, 30); // Ajusta la posición del logo según sea necesario
+        doc.addImage(logoBase64, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
 
-        // Agregar texto al lado derecho del logo
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.text("OCEANUS SUPERVISION Y PROYECTOS", 50, 25); // Ajusta la posición del texto
+        doc.setFontSize(11);
+
+        // Medidas de la página A4 en horizontal
+        const pageWidth = doc.internal.pageSize.width; // 297 mm
+        const pageHeight = doc.internal.pageSize.height; // 210 mm
+
+        // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+        const text1 = "DATOS DE PERSONALES GENERALES";
+        const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+        const textWidth1 =
+          (doc.getStringUnitWidth(text1) * fontSize1) /
+          doc.internal.scaleFactor;
+        const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+        const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+
+        // Dibujar el primer título centrado en la página
+        doc.text(text1, xPosition1, yPosition1);
+
+        // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
+        const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
+        const fontSize2 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+        const textWidth2 =
+          (doc.getStringUnitWidth(text2) * fontSize2) /
+          doc.internal.scaleFactor;
+        const xPosition2 = pageWidth - textWidth2 - 10; // Alineación a la derecha con margen
+        const yPosition2 = 15; // Ubicación en el encabezado, un poco hacia abajo
+
+        // Dibujar el segundo título alineado a la derecha en el encabezado
+        doc.text(text2, xPosition2, yPosition2);
+
+        // Ajusta la posición del texto
 
         // Función para generar la tabla de cada bloque
         const generarTabla = (datos: any[], startY: number) => {
