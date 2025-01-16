@@ -40,8 +40,6 @@ import { Persona } from "@/modelos/personal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Canvg } from "canvg";
-import oceanuslogo from "@/assets/oceanus-logo.svg"; // Usando el alias de Vite para la carpeta src
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
@@ -307,206 +305,167 @@ export function DataTableDemo() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
     XLSX.writeFile(workbook, "Personal_oceanus.xlsx");
   };
-
-  const exportToPDF = (personas: any[]) => {
+  const exportToPDF = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
 
-    // Función para convertir el SVG a Base64 usando Canvg
-    const convertSvgToBase64 = async (svg: string): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+    // Ruta de la imagen
+    const logoPath = "src/assets/oceanus-logo-3.png";
 
-        if (!ctx) {
-          reject("Error al crear el contexto del canvas.");
-          return;
-        }
+    const camposBloque1 = [
+      { header: "ID", key: "id" },
+      { header: "Nombre", key: "nombre" },
+      { header: "Fecha de Nacimiento", key: "fechanacimiento" },
+      { header: "CURP", key: "curp" },
+      { header: "RFC", key: "rfc" },
+      { header: "Número Fijo", key: "numerofijo" },
+      { header: "Número Celular", key: "numerocelular" },
+      { header: "Dirección", key: "direccion" },
+      { header: "Número de Licencia", key: "numerolicencia" },
+      { header: "Número de Pasaporte", key: "numeropasaporte" },
+    ];
 
-        // Crear una nueva instancia de Canvg
-        Canvg.from(ctx, svg)
-          .then((v) => {
-            // Una vez que tenemos la instancia de Canvg, renderizamos el SVG
-            v.render()
-              .then(() => {
-                const base64Image = canvas.toDataURL("image/png"); // Convierte el canvas a Base64 en formato PNG
-                resolve(base64Image);
-              })
-              .catch((error) => {
-                reject("Error al renderizar el SVG: " + error);
-              });
-          })
-          .catch((error) => {
-            reject("Error al crear la instancia de Canvg: " + error);
-          });
+    const camposBloque2 = [
+      { header: "Fecha de Ingreso", key: "fechaingreso" },
+      { header: "Estado", key: "estado" },
+      { header: "Tipo de Contrato", key: "tipocontrato" },
+      { header: "Inicio del Contrato", key: "iniciocontrato" },
+      { header: "Fin del Contrato", key: "fincontrato" },
+      { header: "Correo", key: "correo" },
+      { header: "INE", key: "ine" },
+      { header: "Estado Civil", key: "estadocivil" },
+      { header: "Cédula Profesional", key: "datosAcademicos.cedula" },
+      { header: "Carrera", key: "datosAcademicos.carrera" },
+    ];
+
+    const camposBloque3 = [
+      { header: "Experiencia Laboral", key: "datosAcademicos.explaboral" },
+      { header: "Certificaciones", key: "datosAcademicos.certificaciones" },
+      { header: "Grado de Estudios", key: "datosAcademicos.gradoestudios" },
+      { header: "Alergias", key: "datosMedicos.alergias" },
+      {
+        header: "Enfermedades Crónicas",
+        key: "datosMedicos.enfercronicas",
+      },
+      { header: "Lesiones", key: "datosMedicos.lesiones" },
+      {
+        header: "Alergias a Medicamentos",
+        key: "datosMedicos.alergiasmed",
+      },
+      { header: "Número de Emergencia", key: "datosMedicos.numemergencia" },
+      { header: "Número de Seguro", key: "datosMedicos.numseguro" },
+      { header: "Tipo de Sangre", key: "datosMedicos.tiposangre" },
+    ];
+
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (
+      personas: Persona[],
+      campos: { header: string; key: string }[]
+    ) => {
+      return personas.map((persona) => {
+        const bloque: Record<string, string> = {};
+        campos.forEach(({ header, key }) => {
+          const valor =
+            key.split(".").reduce((acc, curr) => acc?.[curr], persona as any) ||
+            "N/A";
+          bloque[header] = valor;
+        });
+        return bloque;
       });
     };
 
-    // Convertir el logo SVG a Base64
-    convertSvgToBase64(oceanuslogo)
-      .then((logoBase64) => {
-        // Definir los campos de los tres bloques con sus mapeos exactos
-        const camposBloque1 = [
-          { header: "ID", key: "id" },
-          { header: "Nombre", key: "nombre" },
-          { header: "Fecha de Nacimiento", key: "fechanacimiento" },
-          { header: "CURP", key: "curp" },
-          { header: "RFC", key: "rfc" },
-          { header: "Número Fijo", key: "numerofijo" },
-          { header: "Número Celular", key: "numerocelular" },
-          { header: "Dirección", key: "direccion" },
-          { header: "Número de Licencia", key: "numerolicencia" },
-          { header: "Número de Pasaporte", key: "numeropasaporte" },
-        ];
+    // Generar los datos para cada bloque
+    const datosBloque1 = generarDatosBloque(personas, camposBloque1);
+    const datosBloque2 = generarDatosBloque(personas, camposBloque2);
+    const datosBloque3 = generarDatosBloque(personas, camposBloque3);
 
-        const camposBloque2 = [
-          { header: "Fecha de Ingreso", key: "fechaingreso" },
-          { header: "Estado", key: "estado" },
-          { header: "Tipo de Contrato", key: "tipocontrato" },
-          { header: "Inicio del Contrato", key: "iniciocontrato" },
-          { header: "Fin del Contrato", key: "fincontrato" },
-          { header: "Correo", key: "correo" },
-          { header: "INE", key: "ine" },
-          { header: "Estado Civil", key: "estadocivil" },
-          { header: "Cédula Profesional", key: "datosAcademicos.cedula" },
-          { header: "Carrera", key: "datosAcademicos.carrera" },
-        ];
+    // Crear un nuevo documento PDF
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
 
-        const camposBloque3 = [
-          { header: "Experiencia Laboral", key: "datosAcademicos.explaboral" },
-          { header: "Certificaciones", key: "datosAcademicos.certificaciones" },
-          { header: "Grado de Estudios", key: "datosAcademicos.gradoestudios" },
-          { header: "Alergias", key: "datosMedicos.alergias" },
-          {
-            header: "Enfermedades Crónicas",
-            key: "datosMedicos.enfercronicas",
-          },
-          { header: "Lesiones", key: "datosMedicos.lesiones" },
-          {
-            header: "Alergias a Medicamentos",
-            key: "datosMedicos.alergiasmed",
-          },
-          { header: "Número de Emergencia", key: "datosMedicos.numemergencia" },
-          { header: "Número de Seguro", key: "datosMedicos.numseguro" },
-          { header: "Tipo de Sangre", key: "datosMedicos.tiposangre" },
-        ];
+    // Agregar el logo al lado izquierdo
+    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
 
-        // Función para mapear los datos a cada bloque
-        const generarDatosBloque = (
-          personas: any[],
-          campos: { header: string; key: string }[]
-        ) => {
-          return personas.map((persona) => {
-            const bloque: any = {};
-            campos.forEach(({ header, key }) => {
-              const valor =
-                key.split(".").reduce((acc, curr) => acc?.[curr], persona) ||
-                "N/A";
-              bloque[header] = valor;
-            });
-            return bloque;
-          });
-        };
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
 
-        // Generar los datos para cada bloque
-        const datosBloque1 = generarDatosBloque(personas, camposBloque1);
-        const datosBloque2 = generarDatosBloque(personas, camposBloque2);
-        const datosBloque3 = generarDatosBloque(personas, camposBloque3);
+    // Medidas de la página A4 en horizontal
+    const pageWidth = doc.internal.pageSize.width; // 297 mm
+    const pageHeight = doc.internal.pageSize.height; // 210 mm
 
-        // Crear un nuevo documento PDF
-        const doc = new jsPDF({
-          orientation: "landscape",
-          unit: "mm",
-          format: "a4",
-        });
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    const text1 = "DATOS DE PERSONALES GENERALES";
+    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
 
-        // Agregar el logo al lado izquierdo
-        doc.addImage(logoBase64, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+    // Dibujar el primer título centrado en la página
+    doc.text(text1, xPosition1, yPosition1);
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(11);
+    // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
+    const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
+    const fontSize2 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth2 =
+      (doc.getStringUnitWidth(text2) * fontSize2) / doc.internal.scaleFactor;
+    const xPosition2 = pageWidth - textWidth2 - 10; // Alineación a la derecha con margen
+    const yPosition2 = 15; // Ubicación en el encabezado, un poco hacia abajo
 
-        // Medidas de la página A4 en horizontal
-        const pageWidth = doc.internal.pageSize.width; // 297 mm
-        const pageHeight = doc.internal.pageSize.height; // 210 mm
+    // Dibujar el segundo título alineado a la derecha en el encabezado
+    doc.text(text2, xPosition2, yPosition2);
 
-        // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-        const text1 = "DATOS DE PERSONALES GENERALES";
-        const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
-        const textWidth1 =
-          (doc.getStringUnitWidth(text1) * fontSize1) /
-          doc.internal.scaleFactor;
-        const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
-        const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+    // Ajusta la posición del texto
 
-        // Dibujar el primer título centrado en la página
-        doc.text(text1, xPosition1, yPosition1);
-
-        // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
-        const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
-        const fontSize2 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
-        const textWidth2 =
-          (doc.getStringUnitWidth(text2) * fontSize2) /
-          doc.internal.scaleFactor;
-        const xPosition2 = pageWidth - textWidth2 - 10; // Alineación a la derecha con margen
-        const yPosition2 = 15; // Ubicación en el encabezado, un poco hacia abajo
-
-        // Dibujar el segundo título alineado a la derecha en el encabezado
-        doc.text(text2, xPosition2, yPosition2);
-
-        // Ajusta la posición del texto
-
-        // Función para generar la tabla de cada bloque
-        const generarTabla = (datos: any[], startY: number) => {
-          autoTable(doc, {
-            head: [Object.keys(datos[0])], // Cabecera de la tabla
-            body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
-            startY, // Comienza en la posición Y proporcionada
-            theme: "grid",
-            headStyles: {
-              fillColor: [41, 128, 185], // Azul intenso para la cabecera
-              textColor: [255, 255, 255], // Texto blanco
-              fontSize: 7, // Tamaño de la fuente reducido
-              fontStyle: "bold",
-            },
-            bodyStyles: {
-              fontSize: 6, // Tamaño de la fuente reducido
-              cellPadding: 2, // Espaciado reducido dentro de las celdas
-              textColor: [51, 51, 51], // Color gris oscuro para el texto
-            },
-            alternateRowStyles: {
-              fillColor: [241, 245, 249], // Azul claro para filas alternas
-            },
-            styles: {
-              overflow: "linebreak",
-              cellWidth: "auto", // Ajuste automático del ancho de las celdas
-              lineColor: [200, 200, 200], // Bordes grises claros
-              lineWidth: 0.1, // Grosor de los bordes
-            },
-            columnStyles: {
-              0: { cellWidth: 15 }, // Ancho específico para la primera columna
-              1: { cellWidth: "auto" }, // Ancho automático para otras columnas
-            },
-            margin: { top: 25 },
-            pageBreak: "auto", // El salto de página se maneja automáticamente
-          });
-        };
-
-        // Imprimir los bloques en páginas separadas
-        generarTabla(datosBloque1, 30);
-        doc.addPage();
-        generarTabla(datosBloque2, 30);
-        doc.addPage();
-        generarTabla(datosBloque3, 30);
-
-        // Guardar el archivo PDF
-        doc.save("Reporte_Personas.pdf");
-      })
-      .catch((error) => {
-        console.error("Error al convertir el SVG a Base64:", error);
+    // Función para generar la tabla de cada bloque
+    const generarTabla = (datos: any[], startY: number) => {
+      autoTable(doc, {
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
+        theme: "grid",
+        headStyles: {
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
+        },
+        alternateRowStyles: {
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
+        },
+        styles: {
+          overflow: "linebreak",
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
+        },
+        columnStyles: {
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
+        },
+        margin: { top: 25 },
+        pageBreak: "auto", // El salto de página se maneja automáticamente
       });
+    };
+
+    generarTabla(datosBloque1, 30);
+    doc.addPage();
+    generarTabla(datosBloque2, 30);
+    doc.addPage();
+    generarTabla(datosBloque3, 30);
+
+    // Guardar el archivo PDF
+    doc.save("Reporte_Personas.pdf");
   };
 
   /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
