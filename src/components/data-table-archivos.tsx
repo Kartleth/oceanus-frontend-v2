@@ -133,7 +133,34 @@ async function deleteDocumento(idUsuario: number, keyDocumento: string) {
 }
 
 //--------------------------------------------------------------------------
+// UPLOAD DOCUMENTO
+async function uploadDocumento(
+  idUsuario: number,
+  documentKey: string,
+  file: File
+) {
+  const formData = new FormData();
+  formData.append(documentKey, file);
 
+  console.log("Uploading document:", documentKey, file);
+
+  const response = await fetch(
+    `http://localhost:3001/documentacion/${idUsuario}/updateDoc/${documentKey}`,
+    {
+      method: "PATCH",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error al subir el documento");
+  }
+
+  return response.json();
+}
 //--------------------------------------------------------------------------
 
 interface Documento {
@@ -147,11 +174,37 @@ interface Documento {
 interface ActionCellProps {
   row: { original: Documento };
   onDelete: (documentKey: string) => void;
+  onUpload: (documentKey: string, file: File) => void;
 }
 
-const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
+const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const uploadDocMutation = useMutation(
+    ({
+      idUsuario,
+      documentKey,
+      file,
+    }: {
+      idUsuario: number;
+      documentKey: string;
+      file: File;
+    }) => uploadDocumento(idUsuario, documentKey, file),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [documentos.documentKey, documentos.idUsuario],
+        });
+
+        console.log("Documento subido exitosamente");
+      },
+      onError: (error) => {
+        console.error("Error al subir el documento:", error);
+      },
+    }
+  );
 
   const deleteDocMutation = useMutation(
     () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
@@ -172,6 +225,35 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
       },
     }
   );
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+
+    console.log("File selected:", file);
+
+    setIsLoading(true);
+
+    try {
+      const response = await uploadDocMutation.mutateAsync({
+        idUsuario: documentos.idUsuario,
+        documentKey: documentos.documentKey,
+        file,
+      });
+      console.log("Upload response:", response);
+      onUpload(documentos.documentKey, file);
+    } catch (error) {
+      console.error("Error al subir el documento:", error);
+    } finally {
+      setIsLoading(false);
+      event.target.value = "";
+    }
+  };
 
   const tieneDocumentoSubido = documentos.nombreDocumentoSubido !== "-";
 
@@ -201,6 +283,19 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
             event.preventDefault();
             console.log("Agregar/Editar Documento clicked");
             console.log("documentos.documentKey:", documentos.documentKey);
+
+            // Obtiene la referencia del elemento input
+            const fileInput = document.getElementById(
+              `file-input-${documentos.documentKey}`
+            );
+
+            if (fileInput) {
+              // Imprime la referencia del elemento input antes de hacer click
+              console.log("File input element:", fileInput);
+              fileInput.click(); // Haz click en el input
+            } else {
+              console.error("File input element not found");
+            }
           }}
         >
           {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
@@ -211,6 +306,16 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete }) => {
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
+      {/* Input oculto para subir archivos */}
+      <input
+        id={`file-input-${documentos.documentKey}`}
+        type="file"
+        className="hidden"
+        onChange={(event) => {
+          console.log("File input changed");
+          handleFileChange(event);
+        }}
+      />
     </DropdownMenu>
   );
 };
@@ -256,6 +361,27 @@ export function DataTableArchivos({
           : item
       )
     );
+  };
+
+  const handleUpload = async (documentKey: string, file: File) => {
+    console.log("Uploading document:", documentKey, file);
+    try {
+      await uploadDocumento(personaId, documentKey, file);
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.documentKey === documentKey
+            ? {
+                ...item,
+                nombreDocumentoSubido: file.name, // Actualizar el nombre del documento subido
+                estatus: "Subido", // Cambiar estatus a "Subido"
+              }
+            : item
+        )
+      );
+      console.log("Document uploaded and state updated");
+    } catch (error) {
+      console.error("Error al subir el documento:", error);
+    }
   };
 
   const columns: ColumnDef<Documento>[] = [
@@ -315,7 +441,9 @@ export function DataTableArchivos({
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => <ActionCell row={row} onDelete={handleDelete} />,
+      cell: ({ row }) => (
+        <ActionCell row={row} onDelete={handleDelete} onUpload={handleUpload} />
+      ),
     },
   ];
 
