@@ -247,21 +247,15 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     setIsLoading(true);
 
     try {
-      // Llamamos a la función de carga de archivo
       const response = await uploadDocMutation.mutateAsync({
         idUsuario: documentos.idUsuario,
         documentKey: documentos.documentKey,
         file,
       });
-
       console.log("Upload response:", response);
-
-      // Aquí actualizamos el estado con el nuevo nombre del archivo
-      const newFileName = response.newFilePath; // Suponiendo que "newFilePath" es el nuevo nombre generado por el backend
-      setFileName(newFileName); // Este es el estado que puede mostrar el nombre del archivo actualizado en tu interfaz
+      const newFileName = response.newFilePath;
+      setFileName(newFileName);
       onUpload(documentos.documentKey, file);
-
-      // Actualizamos el estado para reflejar el nuevo nombre del archivo en la UI
     } catch (error) {
       console.error("Error al subir el documento:", error);
     } finally {
