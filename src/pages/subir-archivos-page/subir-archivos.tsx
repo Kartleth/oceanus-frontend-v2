@@ -41,7 +41,7 @@ export default function SubirArchivos() {
 
             <BreadcrumbItem>
               <BreadcrumbLink href={`/subir-archivos/:id`}>
-                Subir Archivos
+                Gestionar archivos
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -62,7 +62,7 @@ export default function SubirArchivos() {
       </div>
 
       <div className="px-6">
-        <DataTableArchivos personaId={empleado?.id}></DataTableArchivos>
+        <DataTableArchivos personaId={empleado?.id ?? 0}></DataTableArchivos>
       </div>
     </Layout>
   );

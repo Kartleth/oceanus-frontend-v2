@@ -97,7 +97,7 @@ async function prepareTableData(personaId: number) {
         nombreDocumentoSubido,
         estatus,
         documentKey,
-        idUsuario: personaId, // Agregar el idUsuario
+        idUsuario: personaId,
       };
     });
 
@@ -109,7 +109,7 @@ async function prepareTableData(personaId: number) {
       nombreDocumentoSubido: "-",
       estatus: "No subido",
       documentKey: key,
-      idUsuario: personaId, // Agregar el idUsuario también aquí
+      idUsuario: personaId,
     }));
   }
 }
@@ -159,7 +159,14 @@ async function uploadDocumento(
     throw new Error("Error al subir el documento");
   }
 
-  return response.json();
+  // Obtener la respuesta, que debería contener el nuevo nombre del archivo
+  const data = await response.json();
+
+  // Aquí estamos extrayendo el nuevo nombre del archivo
+  const newFilePath = data.newFilePath;
+
+  // Devolvemos el nuevo nombre para actualizar la UI
+  return newFilePath;
 }
 //--------------------------------------------------------------------------
 
@@ -181,6 +188,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [fileName, setFileName] = React.useState<string>("");
 
   const uploadDocMutation = useMutation(
     ({
@@ -205,7 +213,6 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
       },
     }
   );
-
   const deleteDocMutation = useMutation(
     () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
     {
@@ -240,13 +247,21 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     setIsLoading(true);
 
     try {
+      // Llamamos a la función de carga de archivo
       const response = await uploadDocMutation.mutateAsync({
         idUsuario: documentos.idUsuario,
         documentKey: documentos.documentKey,
         file,
       });
+
       console.log("Upload response:", response);
+
+      // Aquí actualizamos el estado con el nuevo nombre del archivo
+      const newFileName = response.newFilePath; // Suponiendo que "newFilePath" es el nuevo nombre generado por el backend
+      setFileName(newFileName); // Este es el estado que puede mostrar el nombre del archivo actualizado en tu interfaz
       onUpload(documentos.documentKey, file);
+
+      // Actualizamos el estado para reflejar el nuevo nombre del archivo en la UI
     } catch (error) {
       console.error("Error al subir el documento:", error);
     } finally {
@@ -261,7 +276,6 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     const downloadUrl = `http://localhost:3001/documentacion/${documentos.idUsuario}/getDoc/${documentos.documentKey}`;
     window.open(downloadUrl, "_blank");
   };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -284,15 +298,13 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
             console.log("Agregar/Editar Documento clicked");
             console.log("documentos.documentKey:", documentos.documentKey);
 
-            // Obtiene la referencia del elemento input
             const fileInput = document.getElementById(
               `file-input-${documentos.documentKey}`
             );
 
             if (fileInput) {
-              // Imprime la referencia del elemento input antes de hacer click
               console.log("File input element:", fileInput);
-              fileInput.click(); // Haz click en el input
+              fileInput.click();
             } else {
               console.error("File input element not found");
             }
@@ -332,6 +344,7 @@ export function DataTableArchivos({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const queryClient = useQueryClient();
+
   React.useEffect(() => {
     if (!personaId) return;
 
@@ -355,8 +368,8 @@ export function DataTableArchivos({
         item.documentKey === documentKey
           ? {
               ...item,
-              nombreDocumentoSubido: "-", // Se coloca "-" en la columna Documento subido
-              estatus: "No subido", // Cambiar estatus a "No subido"
+              nombreDocumentoSubido: "-",
+              estatus: "No subido",
             }
           : item
       )
@@ -366,14 +379,14 @@ export function DataTableArchivos({
   const handleUpload = async (documentKey: string, file: File) => {
     console.log("Uploading document:", documentKey, file);
     try {
-      await uploadDocumento(personaId, documentKey, file);
+      const newFileName = await uploadDocumento(personaId, documentKey, file);
       setData((prevData) =>
         prevData.map((item) =>
           item.documentKey === documentKey
             ? {
                 ...item,
-                nombreDocumentoSubido: file.name, // Actualizar el nombre del documento subido
-                estatus: "Subido", // Cambiar estatus a "Subido"
+                nombreDocumentoSubido: newFileName,
+                estatus: "Subido",
               }
             : item
         )
@@ -442,7 +455,13 @@ export function DataTableArchivos({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => (
-        <ActionCell row={row} onDelete={handleDelete} onUpload={handleUpload} />
+        <>
+          <ActionCell
+            row={row}
+            onDelete={handleDelete}
+            onUpload={handleUpload}
+          />
+        </>
       ),
     },
   ];
@@ -467,110 +486,112 @@ export function DataTableArchivos({
   });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filtrar..."
-          value={(table.getState().globalFilter as string) ?? ""}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
+    <div suppressHydrationWarning>
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Filtrar..."
+            value={(table.getState().globalFilter as string) ?? ""}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            className="max-w-sm"
+          />
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columnas <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
                   );
                 })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
