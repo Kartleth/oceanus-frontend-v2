@@ -159,13 +159,8 @@ async function uploadDocumento(
     throw new Error("Error al subir el documento");
   }
 
-  // Obtener la respuesta, que debería contener el nuevo nombre del archivo
   const data = await response.json();
-
-  // Aquí estamos extrayendo el nuevo nombre del archivo
   const newFilePath = data.newFilePath;
-
-  // Devolvemos el nuevo nombre para actualizar la UI
   return newFilePath;
 }
 //--------------------------------------------------------------------------
