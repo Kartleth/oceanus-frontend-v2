@@ -15,6 +15,7 @@ const queryClient = new QueryClient();
 import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
+import { VerDetallesContratos } from "./pages/ver-detalles-contratos-page/Ver-detalles-contratos-page";
 
 function App() {
   return (
@@ -29,6 +30,10 @@ function App() {
           <Route path="/facturas" element={<Facturas />} />
           <Route path="/personal_terceros" element={<Terceros />} />
           <Route path="/cotizaciones" element={<Cotizaciones />} />
+          <Route
+            path="/detalles-contratos"
+            element={<VerDetallesContratos />}
+          />
           <Route
             path="/agregar-trabajador"
             element={<PageAgregarTrabajador />}
@@ -45,6 +50,10 @@ function App() {
             path="/detalles-trabajador/:id"
             element={<VerDetallesPersonal />}
           />
+          {/* <Route
+            path="/detalles-contratos/:id"
+            element={<VerDetallesContratos />}
+          /> */}
           <Route
             path="/reporte-de-empleado/:id"
             element={<VerReportePersonal />}

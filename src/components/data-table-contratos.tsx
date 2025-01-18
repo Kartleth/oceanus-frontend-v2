@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import { Link } from "react-router-dom";
 
 export const data: ContractsInformation[] = [
   {
@@ -159,7 +160,9 @@ export const columns: ColumnDef<ContractsInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("start_contract")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("start_contract")}</div>
+    ),
   },
   {
     accessorKey: "end_contract",
@@ -174,7 +177,9 @@ export const columns: ColumnDef<ContractsInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("end_contract")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("end_contract")}</div>
+    ),
   },
   {
     id: "actions",
@@ -197,7 +202,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
                 navigator.clipboard.writeText(ContractsInformation.id)
               }
             >
-              Ver detalles
+              <Link to={"/detalles-contratos"}> Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Crear convenio</DropdownMenuItem>
