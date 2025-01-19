@@ -41,7 +41,7 @@ type DocumentacionKey =
   | "pasaporte"
   | "cv"
   | "curp"
-  | "inss"
+  | "nss"
   | "constanciasat"
   | "foto"
   | "actnacimiento"
@@ -57,7 +57,7 @@ const documentacionMap: { [key in DocumentacionKey]: string } = {
   pasaporte: "Pasaporte",
   cv: "Currículum Vitae",
   curp: "CURP",
-  inss: "INSS",
+  nss: "NSS",
   constanciasat: "Constancia SAT",
   foto: "Foto",
   actnacimiento: "Acta de Nacimiento",
