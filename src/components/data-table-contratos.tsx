@@ -266,7 +266,6 @@ export function DataTableContratos() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem>Copiar datos</DropdownMenuItem>
             <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>

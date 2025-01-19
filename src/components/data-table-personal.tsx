@@ -189,7 +189,6 @@ export const columns: ColumnDef<Persona>[] = [
               <Link to={`/editar-trabajador/${Persona.id}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
-              asChild
               onClick={() => {
                 detelePersona.mutate();
               }}

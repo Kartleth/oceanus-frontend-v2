@@ -10,6 +10,7 @@ import Layout from "../../components/Layout";
 import { DataTableContratos } from "@/components/data-table-contratos";
 import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Contratos() {
   return (
@@ -27,9 +28,12 @@ export default function Contratos() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button className="bg-deepSea hover:bg-deepLightSea">
-          <CirclePlus />
-          Agregar contrato
+        <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
+          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
+          <Link to="/agregar-trabajador">
+            <CirclePlus />
+            Agregar contratos
+          </Link>
         </Button>
         <Button className="bg-deepSea hover:bg-deepLightSea">
           <Upload /> Subir Excel

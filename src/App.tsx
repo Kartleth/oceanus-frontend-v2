@@ -16,6 +16,7 @@ import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-t
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
 import { VerDetallesContratos } from "./pages/ver-detalles-contratos-page/Ver-detalles-contratos-page";
+import { PageAgregarContratos } from "./pages/agregar-contratos-page/agregar-contartos-page";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             path="/detalles-contratos"
             element={<VerDetallesContratos />}
           />
+          <Route path="/agregar-contratos" element={<PageAgregarContratos />} />
           <Route
             path="/agregar-trabajador"
             element={<PageAgregarTrabajador />}
