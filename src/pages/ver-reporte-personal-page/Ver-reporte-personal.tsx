@@ -25,6 +25,7 @@ import { Persona } from "@/modelos/personal";
 import { useQuery } from "react-query";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
+import "../../assets/styles/print.css";
 
 export default function VerReportePersonal() {
   const { id } = useParams();
@@ -86,17 +87,22 @@ export default function VerReportePersonal() {
 
       <div ref={contentRef}>
         <div className="flex items-center">
-          <Avatar>
+          <Avatar className="p-4">
             <AvatarImage
               src="https://github.com/shadcn.png"
               alt="@shadcn"
-              className="w-60 rounded-full p-6"
+              className="w-64 rounded-full p-2"
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <h1 className="font-medium text-2xl w-1/2">
-            {empleado?.nombre ?? "No disponible"}
-          </h1>
+          <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
+            <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+              Reporte
+            </h1>
+            <p className="max-w-2xl text-lg font-light text-foreground">
+              ID: {empleado?.id}, {empleado?.nombre}
+            </p>
+          </div>
           <div className="px-6 w-full flex justify-end">
             <Button
               className="bg-deepSea hover:bg-deepLightSea print:hidden"
@@ -112,8 +118,8 @@ export default function VerReportePersonal() {
           <hr />
         </div>
 
-        <div  className="p-6 grid gap-6 md:grid-cols-2">
-          <Card className="w-full">
+        <div className="p-6 grid gap-6 md:grid-cols-2">
+          <Card className="w-full print-card text-gray-600">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <UserRound className="w-6 h-6" />
@@ -164,7 +170,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card text-gray-600">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <Stethoscope className="w-6 h-6" /> Datos médicos
@@ -211,7 +217,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card text-gray-600">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <GraduationCap className="w-6 h-6" />
@@ -249,7 +255,7 @@ export default function VerReportePersonal() {
             </CardContent>
           </Card>
 
-          <Card className="w-full">
+          <Card className="w-full print-card text-gray-600">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <BookUser />

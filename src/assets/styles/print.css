@@ -1,0 +1,13 @@
+/* Reglas de impresión */
+@media print {
+  .print-card {
+    page-break-inside: avoid;
+    break-inside: avoid-column;
+    margin-bottom: 30px;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}
