@@ -173,7 +173,7 @@ export function PageAgregarContratos() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbPage className="line-clamp-1 text-xl">
-                Agregar Trabajador
+                Agregar Contratos
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
