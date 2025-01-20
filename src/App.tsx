@@ -17,6 +17,7 @@ import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-c
 import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
 import { VerDetallesContratos } from "./pages/ver-detalles-contratos-page/Ver-detalles-contratos-page";
 import { PageAgregarContratos } from "./pages/agregar-contratos-page/agregar-contartos-page";
+import { PageEditarContratos } from "./pages/editar-contratos/editar-contratos";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             path="/editar-trabajador/:id"
             element={<PageEditarTrabajador />}
           />
+          <Route path="/editar-contratos" element={<PageEditarContratos />} />
           <Route
             path="/generar-credencial/:id"
             element={<PageGenerarCredencial />}
