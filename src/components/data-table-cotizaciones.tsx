@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import { Link } from "react-router-dom";
 
 export const data: CotizacionInformation[] = [
   {
@@ -245,7 +246,9 @@ export const columns: ColumnDef<CotizacionInformation>[] = [
                 navigator.clipboard.writeText(CompaniesInformation.id)
               }
             >
-              Ver detalles
+              <Link to={`/detalles-cotizacion`}>
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Importar información</DropdownMenuItem>

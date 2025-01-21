@@ -14,6 +14,7 @@ import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-t
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
+import { VerDetallesCotizacion } from "./pages/ver-detalles-cotizacion-page/Ver-detalles-cotizacion";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,12 @@ function App() {
               element={<VerReportePersonal />}
             />
             <Route path="/subir-archivos/:id" element={<SubirArchivos />} />
+
+            {/* Rutas para cotizacion */}
+            <Route
+              path="/detalles-cotizacion"
+              element={<VerDetallesCotizacion />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
