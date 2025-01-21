@@ -7,6 +7,9 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
+import { Button } from "@/components/ui/button";
+import { CirclePlus } from "lucide-react";
+import { DataTableCotizaciones } from "@/components/data-table-cotizaciones";
 
 export default function Cotizaciones() {
   return (
@@ -25,6 +28,15 @@ export default function Cotizaciones() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+      </div>
+      <div className="py-6 px-3 space-x-2 flex justify-end">
+        <Button className="bg-deepSea hover:bg-deepLightSea">
+          <CirclePlus />
+          Agregar cotización
+        </Button>
+      </div>
+      <div className="px-3">
+        <DataTableCotizaciones></DataTableCotizaciones>
       </div>
     </Layout>
   );
