@@ -251,6 +251,7 @@ export const columns: ColumnDef<CotizacionInformation>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
+            <DropdownMenuItem><Link to={`/subir-archivos-cotizacion`}>Gestionar archivos</Link></DropdownMenuItem>
             <DropdownMenuItem>Importar información</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>

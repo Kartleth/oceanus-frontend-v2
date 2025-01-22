@@ -15,6 +15,7 @@ import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-c
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
 import { VerDetallesCotizacion } from "./pages/ver-detalles-cotizacion-page/Ver-detalles-cotizacion";
+import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-cotizacion";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ function App() {
               path="/detalles-cotizacion"
               element={<VerDetallesCotizacion />}
             />
+            <Route path="/subir-archivos-cotizacion" element={<SubirArchivosCotizacion />} />
           </Route>
         </Routes>
       </BrowserRouter>

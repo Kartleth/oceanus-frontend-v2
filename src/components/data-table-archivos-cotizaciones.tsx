@@ -35,14 +35,37 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-type DocumentacionKey = "rfc" | "nss" | "ine" | "curp" | "foto";
+type DocumentacionKey =
+  | "credencial"
+  | "licencia"
+  | "pasaporte"
+  | "cv"
+  | "curp"
+  | "nss"
+  | "constanciasat"
+  | "foto"
+  | "actnacimiento"
+  | "estcuenta"
+  | "altasegsocial"
+  | "cedulaprofe"
+  | "copiacontrato"
+  | "comprodomicilio";
 
 const documentacionMap: { [key in DocumentacionKey]: string } = {
-  rfc: "RFC",
-  nss: "NSS",
-  ine: "INE",
+  credencial: "Credencial",
+  licencia: "Licencia de Conducir",
+  pasaporte: "Pasaporte",
+  cv: "Currículum Vitae",
   curp: "CURP",
+  nss: "NSS",
+  constanciasat: "Constancia SAT",
   foto: "Foto",
+  actnacimiento: "Acta de Nacimiento",
+  estcuenta: "Estado de Cuenta",
+  altasegsocial: "Alta en Seguridad Social",
+  cedulaprofe: "Cédula Profesional",
+  copiacontrato: "Copia del Contrato",
+  comprodomicilio: "Comprobante de Domicilio",
 };
 
 async function fetchDocumentacion(personaId: number) {
@@ -298,7 +321,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   );
 };
 
-export function DataTableArchivos({
+export function DataTableArchivosCotizaciones({
   personaId,
 }: Readonly<{ personaId: number }>) {
   const [data, setData] = React.useState<Documento[]>([]);
