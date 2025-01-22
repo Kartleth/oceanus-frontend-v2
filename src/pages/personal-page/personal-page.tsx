@@ -46,5 +46,5 @@ export function Page_personal() {
         <DataTableDemo></DataTableDemo>
       </div>
     </Layout>
-  );
+  );
 }

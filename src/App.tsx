@@ -10,12 +10,13 @@ import { Page_personal } from "./pages/personal-page/personal-page";
 import { LoginForm } from "./components/login-form";
 import { VerDetallesPersonal } from "./pages/ver-detalles-personal-page/Ver-detalles-personal";
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
-import { PageAgregarTrabajador } from "./pages/agregar-trabajador-page/agregar-trabajador-page";
+import { PageAgregarTrabajador } from "./pages/agregar/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
 import { VerDetallesCotizacion } from "./pages/ver-detalles-cotizacion-page/Ver-detalles-cotizacion";
 import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-cotizacion";
+import { PageAgregarCotizacion } from "./pages/agregar/agregar-cotizacion-page";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,10 @@ function App() {
               element={<VerDetallesCotizacion />}
             />
             <Route path="/subir-archivos-cotizacion" element={<SubirArchivosCotizacion />} />
+            <Route
+              path="/agregar-cotizacion"
+              element={<PageAgregarCotizacion />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
