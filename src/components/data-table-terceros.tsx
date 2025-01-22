@@ -37,88 +37,13 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
+import { Subcontratado } from "@/modelos/subcontratado";
+import { useQuery } from "react-query";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const data: TercerosInformation[] = [
+export const columns: ColumnDef<Subcontratado>[] = [
   {
-    id: "1",
-    nombre: "Juan Pérez",
-    rfc: "PEJ800101XYZ",
-    nss: "12345678901",
-    ine: "INE123456789",
-    curp: "PEJ800101HDFRZN08",
-    estado: "Activo",
-  },
-  {
-    id: "2",
-    nombre: "María López",
-    rfc: "LOM850202ABC",
-    nss: "10987654321",
-    ine: "INE987654321",
-    curp: "LOM850202MDFRPR09",
-    estado: "Inactivo",
-  },
-  {
-    id: "3",
-    nombre: "Carlos Gómez",
-    rfc: "GOC900303JKL",
-    nss: "23456789012",
-    ine: "INE234567890",
-    curp: "GOC900303HDFRZN05",
-    estado: "Activo",
-  },
-  {
-    id: "4",
-    nombre: "Laura Ramírez",
-    rfc: "RAL940404DEF",
-    nss: "34567890123",
-    ine: "INE345678901",
-    curp: "RAL940404MDFRMR02",
-    estado: "Suspendido",
-  },
-  {
-    id: "5",
-    nombre: "Pedro Sánchez",
-    rfc: "SAP950505GHJ",
-    nss: "45678901234",
-    ine: "INE456789012",
-    curp: "SAP950505HDFRNC06",
-    estado: "Activo",
-  },
-  {
-    id: "6",
-    nombre: "Ana Torres",
-    rfc: "TOA960606QWE",
-    nss: "56789012345",
-    ine: "INE567890123",
-    curp: "TOA960606MDFRMC04",
-    estado: "Baja",
-  },
-  {
-    id: "7",
-    nombre: "Luis Hernández",
-    rfc: "HEL970707RTY",
-    nss: "67890123456",
-    ine: "INE678901234",
-    curp: "HEL970707HDFRLN07",
-    estado: "Activo",
-  },
-];
-
-export type TercerosInformation = {
-  id: string;
-  nombre: string;
-  rfc: string;
-  nss: string;
-  ine: string;
-  curp: string;
-  estado: string;
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const columns: ColumnDef<TercerosInformation>[] = [
-  {
-    accessorKey: "id",
+    accessorKey: "idsubcontratado",
     header: ({ column }) => {
       return (
         <Button
@@ -130,7 +55,7 @@ export const columns: ColumnDef<TercerosInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("idsubcontratado")}</div>,
   },
   {
     accessorKey: "nombre",
@@ -162,9 +87,7 @@ export const columns: ColumnDef<TercerosInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("rfc")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("rfc")}</div>,
   },
   {
     accessorKey: "curp",
@@ -179,9 +102,7 @@ export const columns: ColumnDef<TercerosInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("curp")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("curp")}</div>,
   },
   {
     id: "actions",
@@ -221,6 +142,34 @@ export const columns: ColumnDef<TercerosInformation>[] = [
 ];
 
 export function DataTableTerceros() {
+  const subcontratadosQuery = useQuery({
+    queryKey: ["subcontratado"],
+    queryFn: async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
+      const res = await fetch("http://localhost:3001/subcontratados", {
+        //El await es para esperar a que se resulevan las promesas antes de seguir con el código
+        headers: {
+          "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const subcontratadoParse = Subcontratado.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente.
+      if (!subcontratadoParse.success) {
+        console.error(subcontratadoParse.error);
+        throw new Error(subcontratadoParse.error.toString());
+      }
+      return subcontratadoParse.data;
+    },
+  });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -230,7 +179,7 @@ export function DataTableTerceros() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: subcontratadosQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
