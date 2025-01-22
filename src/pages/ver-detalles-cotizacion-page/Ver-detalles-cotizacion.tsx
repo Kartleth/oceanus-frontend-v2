@@ -91,13 +91,6 @@ export function VerDetallesCotizacion() {
                 ID: {cotizacion.id}, {cotizacion.titulo}
               </p>
             </div>
-
-            <div className="px-3 w-full flex justify-end gap-2">
-              <Button className="bg-deepSea hover:bg-deepLightSea">
-                <FileUser />
-                <Link to={`/reporte-de-cotizacion/${id}`}>Generar reporte</Link>
-              </Button>
-            </div>
           </>
         )}
       </div>
