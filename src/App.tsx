@@ -72,7 +72,7 @@ function App() {
             />
             {/* Rutas para terceros */}
             <Route
-              path="/detalles-terceros"
+              path="/detalles-terceros/:id"
               element={<VerDetallesTerceros />}
             />
           </Route>

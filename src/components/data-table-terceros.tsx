@@ -108,7 +108,7 @@ export const columns: ColumnDef<Subcontratado>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const CompaniesInformation = row.original;
+      const Subcontratado = row.original;
 
       return (
         <DropdownMenu>
@@ -122,10 +122,10 @@ export const columns: ColumnDef<Subcontratado>[] = [
             <DropdownMenuLabel>Acciones de empresa</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(CompaniesInformation.id)
+                navigator.clipboard.writeText(Subcontratado.idsubcontratado.toString())
               }
             >
-              <Link to={`/detalles-terceros`}>Ver detalles</Link>
+              <Link to={`/detalles-terceros/${Subcontratado.idsubcontratado}`}>Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

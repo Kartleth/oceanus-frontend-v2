@@ -8,51 +8,28 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  FileUser,
-  HandCoins,
-  Handshake,
-} from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
-import { Persona } from "@/modelos/personal";
+import { Subcontratado } from "@/modelos/subcontratado";
 
 export function VerDetallesTerceros() {
   const { id } = useParams();
-  const fetchEmpleado = async (): Promise<Persona> => {
-    const response = await axios.get(`http://localhost:3001/personas/${id}`);
+  const fetchSubcontratado = async (): Promise<Subcontratado> => {
+    const response = await axios.get(
+      `http://localhost:3001/subcontratados/${id}`
+    );
     return response.data;
   };
   const {
-    data: empleado,
+    data: subcontratado,
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Persona>(["empleado", id], fetchEmpleado);
-
-  const cotizacion = {
-    id: 1,
-    titulo: "Proyecto de Construcción",
-    nombreDelContrato: "Construcción de Edificio Central",
-    contratante: "Gobierno Municipal",
-    contratado: "Constructora XYZ",
-    tipoDeContrato: "Licitación Pública",
-    numeroDeContrato: "12345-ABC",
-    inicioContrato: "2025-01-01",
-    finContrato: "2026-12-31",
-    montoContrato: 5000000,
-    anticipoContrato: 1000000,
-    subContratos: [
-      { nombre: "Subcontrato 1", monto: 200000 },
-      { nombre: "Subcontrato 2", monto: 300000 },
-    ],
-    seleccionar: false,
-    direccion: "Av. Principal #123, Ciudad",
-  };
+  } = useQuery<Subcontratado>(["subcontratado", id], fetchSubcontratado);
 
   return (
     <Layout>
@@ -62,14 +39,16 @@ export function VerDetallesTerceros() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/personal_terceros">Personal de terceros</BreadcrumbLink>
+              <BreadcrumbLink href="/personal_terceros">
+                Personal de terceros
+              </BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/detalles-terceros`}>
-                Nombre de tercero
+              <BreadcrumbLink href={`/detalles-terceros/${id}`}>
+                {subcontratado?.nombre ?? "Trabajador de terceros"}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -88,7 +67,7 @@ export function VerDetallesTerceros() {
                 Detalles
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {cotizacion.id}, {cotizacion.titulo}
+                ID: {subcontratado?.idsubcontratado}, {subcontratado?.nombre}
               </p>
             </div>
           </>
@@ -99,9 +78,9 @@ export function VerDetallesTerceros() {
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
-              <HandCoins className="w-6 h-6" />
+              <BriefcaseBusiness className="w-6 h-6" />
               <h2 className="font-medium text-xl tracking-tighter">
-                Datos de cotiazción
+                Datos de Subcontratado
               </h2>
             </div>
 
@@ -112,204 +91,109 @@ export function VerDetallesTerceros() {
                   id
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.id || "No disponible"}
+                    value={subcontratado?.idsubcontratado || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Título
+                  Nombre
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.titulo || "No disponible"}
+                    value={subcontratado?.nombre || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Nombre de contrato
+                  RFC
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion.nombreDelContrato || "No disponible"}
+                    value={subcontratado.rfc || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Contratante
+                  NSS
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.contratado || "No disponible"}
+                    value={subcontratado?.nss || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Contratado
+                  INE
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.contratado || "No disponible"}
+                    value={subcontratado?.ine || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Tipo de contrato
+                  CURP
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.tipoDeContrato || "No disponible"}
+                    value={subcontratado?.curp || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Número de contrato
+                  Estado
                 </Label>
                 {/* Skeleton Loader */}
-                {!cotizacion ? (
+                {!subcontratado ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={cotizacion?.numeroDeContrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Inicio de contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!cotizacion ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="date"
-                    value={cotizacion?.inicioContrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Fin de contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!cotizacion ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="date"
-                    value={cotizacion?.finContrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Monto de contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!cotizacion ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="number"
-                    value={cotizacion?.montoContrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Anticipo de contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!cotizacion ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="number"
-                    value={cotizacion?.anticipoContrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
-        <div className="grid auto-rows-min gap-4">
-          <div className="rounded-xl bg-muted/50 p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Handshake className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">
-                Sub contratos
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Sub contratado
-                </Label>
-                {/* Skeleton Loader */}
-                {!cotizacion ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value="No disponible"
+                    value={subcontratado?.estado || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
