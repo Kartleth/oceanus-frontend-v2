@@ -22,7 +22,7 @@ export default function Terceros() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/cotizaciones">
+                <BreadcrumbLink href="/personal_terceros">
                   Personal de terceros
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -37,7 +37,7 @@ export default function Terceros() {
             className="flex items-center space-x-2"
           >
             <CirclePlus className="w-5 h-5" />
-            <span>Agregar personal</span>
+            <span>Agregar tercero</span>
           </Link>
         </Button>
       </div>

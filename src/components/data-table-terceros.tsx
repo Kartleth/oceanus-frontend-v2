@@ -204,7 +204,7 @@ export const columns: ColumnDef<TercerosInformation>[] = [
                 navigator.clipboard.writeText(CompaniesInformation.id)
               }
             >
-              <Link to={`/detalles-cotizacion`}>Ver detalles</Link>
+              <Link to={`/detalles-terceros`}>Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

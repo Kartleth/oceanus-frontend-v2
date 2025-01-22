@@ -8,15 +8,16 @@ import Terceros from "./pages/terceros-page/Terceros";
 import Cotizaciones from "./pages/cotizaciones-page/Cotizaciones";
 import { Page_personal } from "./pages/personal-page/personal-page";
 import { LoginForm } from "./components/login-form";
-import { VerDetallesPersonal } from "./pages/ver-detalles-personal-page/Ver-detalles-personal";
+import { VerDetallesPersonal } from "./pages/ver-detalles/Ver-detalles-personal";
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
 import { PageAgregarTrabajador } from "./pages/agregar/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
-import { VerDetallesCotizacion } from "./pages/ver-detalles-cotizacion-page/Ver-detalles-cotizacion";
+import { VerDetallesCotizacion } from "./pages/ver-detalles/Ver-detalles-cotizacion";
 import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-cotizacion";
 import { PageAgregarCotizacion } from "./pages/agregar/agregar-cotizacion-page";
+import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,11 @@ function App() {
             <Route
               path="/agregar-cotizacion"
               element={<PageAgregarCotizacion />}
+            />
+            {/* Rutas para terceros */}
+            <Route
+              path="/detalles-terceros"
+              element={<VerDetallesTerceros />}
             />
           </Route>
         </Routes>
