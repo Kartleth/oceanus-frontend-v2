@@ -78,20 +78,6 @@ export function VerDetallesContratos() {
             <h1 className="font-medium text-2xl w-1/2">
               {empleado?.nombre ?? "No disponible"}
             </h1>
-
-            <div className="px-3 w-full flex justify-end gap-2">
-              <Button className="bg-deepSea hover:bg-deepLightSea">
-                <IdCard />
-                <Link to={`/generar-credencial/${id}`}>
-                  Generar credencial{" "}
-                </Link>
-              </Button>
-
-              <Button className="bg-deepSea hover:bg-deepLightSea">
-                <FileUser />
-                <Link to={`/reporte-de-empleado/${id}`}>Generar reporte</Link>
-              </Button>
-            </div>
           </>
         )}
       </div>
