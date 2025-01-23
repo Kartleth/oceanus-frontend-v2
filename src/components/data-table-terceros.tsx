@@ -129,7 +129,7 @@ export const columns: ColumnDef<Subcontratado>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos-cotizacion`}>Gestionar archivos</Link>
+              <Link to={`/subir-archivos-tercero/${Subcontratado.idsubcontratado}`}>Gestionar archivos</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>

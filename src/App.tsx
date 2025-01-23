@@ -18,6 +18,7 @@ import { VerDetallesCotizacion } from "./pages/ver-detalles/Ver-detalles-cotizac
 import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-cotizacion";
 import { PageAgregarCotizacion } from "./pages/agregar/agregar-cotizacion-page";
 import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
+import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +76,7 @@ function App() {
               path="/detalles-terceros/:id"
               element={<VerDetallesTerceros />}
             />
+            <Route path="/subir-archivos-tercero/:id" element={<SubirArchivosTerceros />} />
           </Route>
         </Routes>
       </BrowserRouter>
