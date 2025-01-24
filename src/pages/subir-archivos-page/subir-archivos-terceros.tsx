@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Subcontratado } from "@/modelos/subcontratado";
-import { DataTableArchivosTerceros } from "@/components/ui/data-table-archivos-terceros";
+import { DataTableArchivosTerceros } from "@/components/data-table-archivos-terceros";
 
 export default function SubirArchivosTerceros() {
   const { id } = useParams();
@@ -64,7 +64,7 @@ export default function SubirArchivosTerceros() {
       </div>
 
       <div className="px-6">
-        <DataTableArchivosTerceros personaId={subcontratado?.idsubcontratado ?? 0}></DataTableArchivosTerceros>
+        <DataTableArchivosTerceros subcontratadoId={subcontratado?.idsubcontratado ?? 0}></DataTableArchivosTerceros>
       </div>
     </Layout>
   );

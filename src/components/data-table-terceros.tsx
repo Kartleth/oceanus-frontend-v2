@@ -147,11 +147,9 @@ export function DataTableTerceros() {
     queryFn: async () => {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
       const res = await fetch("http://localhost:3001/subcontratados", {
-        //El await es para esperar a que se resulevan las promesas antes de seguir con el código
         headers: {
-          "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -160,8 +158,8 @@ export function DataTableTerceros() {
         console.error(resData);
         throw new Error(resData.message);
       }
-      console.log(resData);
-      const subcontratadoParse = Subcontratado.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente.
+      console.log("Response Data:", resData);
+      const subcontratadoParse = Subcontratado.array().safeParse(resData);
       if (!subcontratadoParse.success) {
         console.error(subcontratadoParse.error);
         throw new Error(subcontratadoParse.error.toString());

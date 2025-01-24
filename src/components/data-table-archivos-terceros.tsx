@@ -45,10 +45,10 @@ const documentacionMap: { [key in DocumentacionKey]: string } = {
   foto: "Foto",
 };
 
-async function fetchDocumentacion(personaId: number) {
+async function fetchDocumentacion(subcontratadoId: number) {
   try {
     const response = await fetch(
-      `http://localhost:3001/subcontratados/${personaId}/documento`
+      `http://localhost:3001/docsubcontratado/${subcontratadoId}`
     );
     if (!response.ok) {
       throw new Error("Error fetching documentacion");
@@ -60,9 +60,9 @@ async function fetchDocumentacion(personaId: number) {
   }
 }
 
-async function prepareTableData(personaId: number) {
+async function prepareTableData(subcontratadoId: number) {
   try {
-    const documentacion = await fetchDocumentacion(personaId);
+    const documentacion = await fetchDocumentacion(subcontratadoId);
     const tableData = Object.keys(documentacionMap).map((key) => {
       const documentKey = key as DocumentacionKey;
       const nombreDocumentoEsperado = documentacionMap[documentKey];
@@ -74,7 +74,7 @@ async function prepareTableData(personaId: number) {
         nombreDocumentoSubido,
         estatus,
         documentKey,
-        idUsuario: personaId,
+        idUsuario: subcontratadoId,
       };
     });
 
@@ -86,7 +86,7 @@ async function prepareTableData(personaId: number) {
       nombreDocumentoSubido: "-",
       estatus: "No subido",
       documentKey: key,
-      idUsuario: personaId,
+      idUsuario: subcontratadoId,
     }));
   }
 }
@@ -95,7 +95,7 @@ async function prepareTableData(personaId: number) {
 // DELETE DOCUMENTO
 async function deleteDocumento(idUsuario: number, keyDocumento: string) {
   const response = await fetch(
-    `http://localhost:3001/documentacion/${idUsuario}/deleteDoc/${keyDocumento}`,
+    `http://localhost:3001/docsubcontratado/${idUsuario}/deleteDoc/${keyDocumento}`,
     {
       method: "DELETE",
       headers: {
@@ -122,7 +122,7 @@ async function uploadDocumento(
   console.log("Uploading document:", documentKey, file);
 
   const response = await fetch(
-    `http://localhost:3001/documentacion/${idUsuario}/updateDoc/${documentKey}`,
+    `http://localhost:3001/docsubcontratado/${idUsuario}/updateDoc/${documentKey}`,
     {
       method: "PATCH",
       body: formData,
@@ -239,7 +239,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   const tieneDocumentoSubido = documentos.nombreDocumentoSubido !== "-";
 
   const handleDownload = () => {
-    const downloadUrl = `http://localhost:3001/documentacion/${documentos.idUsuario}/getDoc/${documentos.documentKey}`;
+    const downloadUrl = `http://localhost:3001/docsubcontratado/${documentos.idUsuario}/getDoc/${documentos.documentKey}`;
     window.open(downloadUrl, "_blank");
   };
   return (
@@ -299,8 +299,8 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
 };
 
 export function DataTableArchivosTerceros({
-  personaId,
-}: Readonly<{ personaId: number }>) {
+  subcontratadoId,
+}: Readonly<{ subcontratadoId: number }>) {
   const [data, setData] = React.useState<Documento[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -312,11 +312,11 @@ export function DataTableArchivosTerceros({
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    if (!personaId) return;
+    if (!subcontratadoId) return;
 
     async function loadData() {
       try {
-        const tableData = await prepareTableData(personaId);
+        const tableData = await prepareTableData(subcontratadoId);
         setData(tableData);
         console.log("Data loaded:", tableData);
       } catch (error) {
@@ -325,7 +325,7 @@ export function DataTableArchivosTerceros({
     }
 
     loadData();
-  }, [personaId]);
+  }, [subcontratadoId]);
 
   const handleDelete = (documentKey: string) => {
     console.log("Deleting document:", documentKey);
@@ -345,7 +345,7 @@ export function DataTableArchivosTerceros({
   const handleUpload = async (documentKey: string, file: File) => {
     console.log("Uploading document:", documentKey, file);
     try {
-      const newFileName = await uploadDocumento(personaId, documentKey, file);
+      const newFileName = await uploadDocumento(subcontratadoId, documentKey, file);
       setData((prevData) =>
         prevData.map((item) =>
           item.documentKey === documentKey
