@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -238,13 +239,13 @@ export function DataTableTerceros() {
     }
 
     const datos = subcontratados.map((subcontratado) => ({
-      ID: subcontratado.idsubcontratado || "N/A",
-      Nombre: subcontratado.nombre || "N/A",
-      RFC: subcontratado.rfc || "N/A",
-      NSS: subcontratado.nss || "N/A",
-      INE: subcontratado.ine || "N/A",
-      CURP: subcontratado.curp || "N/A",
-      Estado: subcontratado.estado || "N/A",
+      ID: subcontratado.idsubcontratado ?? "N/A",
+      Nombre: subcontratado.nombre ?? "N/A",
+      RFC: subcontratado.rfc ?? "N/A",
+      NSS: subcontratado.nss ?? "N/A",
+      INE: subcontratado.ine ?? "N/A",
+      CURP: subcontratado.curp ?? "N/A",
+      Estado: subcontratado.estado ?? "N/A",
     }));
 
     // Exportar a Excel
@@ -282,7 +283,9 @@ export function DataTableTerceros() {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
-            key.split(".").reduce((acc, curr) => acc?.[curr], subcontratado as any) ||
+            key
+              .split(".")
+              .reduce((acc, curr) => acc?.[curr], subcontratado as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -320,7 +323,6 @@ export function DataTableTerceros() {
 
     // Dibujar el primer título centrado en la página
     doc.text(text1, xPosition1, yPosition1);
-
 
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
@@ -370,77 +372,107 @@ export function DataTableTerceros() {
       return;
     }
 
+    const logoPath = "src/assets/oceanus-logo-3.png";
+
+    const camposBloque1 = [
+      { header: "ID", key: "idsubcontratado" },
+      { header: "Nombre", key: "nombre" },
+      { header: "RFC", key: "rfc" },
+      { header: "NSS", key: "nss" },
+      { header: "INE", key: "ine" },
+      { header: "CURP", key: "curp" },
+      { header: "Estado", key: "estado" },
+    ];
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (
+      subcontratados: Subcontratado[],
+      campos: { header: string; key: string }[]
+    ) => {
+      return subcontratados.map((subcontratado) => {
+        const bloque: Record<string, string> = {};
+        campos.forEach(({ header, key }) => {
+          const valor =
+            key
+              .split(".")
+              .reduce((acc, curr) => acc?.[curr], subcontratado as any) ||
+            "N/A";
+          bloque[header] = valor;
+        });
+        return bloque;
+      });
+    };
+
+    // Generar los datos para cada bloque
+    const datosBloque1 = generarDatosBloque(subcontratados, camposBloque1);
+
+    // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "mm",
       format: "a4",
     });
 
+    // Agregar el logo al lado izquierdo
+    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text("Reporte Detallado de Personas", 14, 20);
+    doc.setFontSize(11);
+
+    // Medidas de la página A4 en horizontal
+    const pageWidth = doc.internal.pageSize.width; // 297 mm
+    const pageHeight = doc.internal.pageSize.height; // 210 mm
+
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    const text1 = "DATOS DE SUBCONTRATADO";
+    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+
+    // Dibujar el primer título centrado en la página
+    doc.text(text1, xPosition1, yPosition1);
 
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])],
-        body: datos.map((persona) => Object.values(persona)),
-        startY,
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
         theme: "grid",
         headStyles: {
-          fillColor: [22, 160, 133],
-          textColor: [255, 255, 255],
-          fontSize: 7,
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
+          fontStyle: "bold",
         },
         bodyStyles: {
-          fontSize: 6,
-          cellPadding: 1,
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
+        },
+        alternateRowStyles: {
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
         },
         styles: {
           overflow: "linebreak",
-          fontSize: 6,
-          cellWidth: "auto",
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
         },
         columnStyles: {
-          0: { cellWidth: 12 },
-          1: { cellWidth: "auto" },
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
         },
         margin: { top: 25 },
-        pageBreak: "auto",
+        pageBreak: "auto", // El salto de página se maneja automáticamente
       });
     };
-
-    const camposBloque1 = [
-      "ID",
-      "Nombre",
-      "RFC",
-      "NSS",
-      "INE",
-      "CURP",
-      "Estado",
-    ];
-
-    const generarDatosBloque = (subcontratados: Subcontratado[], campos: string[]) => {
-      return subcontratados.map((subcontratado) => {
-        const bloque: any = {};
-        campos.forEach((campo) => {
-          const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] = subcontratado[campoLower] || "N/A";
-        });
-        return bloque;
-      });
-    };
-
-    const datosBloque1 = generarDatosBloque(subcontratados, camposBloque1);
 
     generarTabla(datosBloque1, 30);
+    doc.addPage();
 
-    // Convertir el PDF a un blob
     const pdfBlob = doc.output("blob");
-
-    // Crear una URL temporal para el Blob
     const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    // Abrir el PDF en una nueva ventana para imprimir
     const printWindow = window.open(pdfUrl, "_blank");
 
     if (printWindow) {
