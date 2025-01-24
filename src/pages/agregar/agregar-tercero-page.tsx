@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import Layout from "@/components/Layout";
 import {
   Breadcrumb,
@@ -12,17 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useForm } from "react-hook-form";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -30,46 +18,19 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { FormSelect } from "@/components/ui/select";
-import { SelectItem } from "@radix-ui/react-select";
+import {
+  DatosTerceros,
+  DatosTercerosForm,
+  datosTercerosSchema,
+} from "@/components/forms/datos-terceros/datos-terceros-from";
 
-type AccordionValue = "datos-cotizacion";
-
-const datosCotizacionSchema = z.object({
-  titulo: z
-    .string({ required_error: "Introduce el título de cotización." })
-    .optional(),
-  nombreContrato: z.string({
-    required_error: "Introduce el nombre de contrato.",
-  }),
-  contratante: z.string({ required_error: "Introduce contratante." }),
-  contratado: z.string({ required_error: "Introduce contratado." }),
-  tipoContrato: z.string({ required_error: "Selecciona tipo de contrato" }),
-  numeroContrato: z.string({ required_error: "Ingresa número de contrato." }),
-  inicioContrato: z.string({
-    required_error: "Ingresa fecha de inicio de contrato.",
-  }),
-  finContrato: z.string({
-    required_error: "Ingresa fecha de fin de contrato.",
-  }),
-  montoContrato: z.string({ required_error: "Ingresa monto de contrato." }),
-  anticipoContrato: z.string({
-    required_error: "Ingresa anticipo de contrato.",
-  }),
-  subContrato: z.string({ required_error: "Selecciona subcontrato." }),
-  seleccionar: z.string({ required_error: "Seleccionar seleccionar." }),
-  direccion: z.string({ required_error: "Ingresa dirección." }),
-});
-
-type DatosCotizacionForm = z.infer<typeof datosCotizacionSchema>;
+type AccordionValue = "datos-tercero";
 
 export function PageAgregarTercero() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: unknown) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/personas", {
+    const res = await fetch("http://localhost:3001/subcontratados", {
       method: "post",
       body: JSON.stringify(data),
       headers: {
@@ -81,26 +42,39 @@ export function PageAgregarTercero() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["trabajadores"]);
-    navigate("/personal");
+    queryClient.invalidateQueries(["subcontratados"]);
   });
-  const [value, setValue] = useState<AccordionValue>("datos-cotizacion"); //Mantiene el estado en un componente.
-  const datosCotizacionForm = useForm<DatosCotizacionForm>({
-    resolver: zodResolver(datosCotizacionSchema),
+  const [value, setValue] = useState<AccordionValue>("datos-tercero");
+  const datosTercerosForm = useForm<DatosTerceros>({
+    resolver: zodResolver(datosTercerosSchema),
   });
-  function onSubmitCot(values: DatosCotizacionForm) {
+  function onSubmit(values: DatosTerceros) {
     console.log(values);
-    guardarCotizacion();
+    guardarSubcontratado();
   }
 
-  function guardarCotizacion() {
-    const datosCotizacion = datosCotizacionForm.getValues();
-    const cotizacion = {
-      datosCotizacion: datosCotizacion,
-    };
-    console.log(cotizacion);
-    mutation.mutate(cotizacion);
+  async function guardarSubcontratado() {
+    const validos = await formulariosSonValidos();
+    if (!validos) return;
+
+    const DatosTerceros = datosTercerosForm.getValues();
+    console.log(DatosTerceros);
+    mutation.mutate(DatosTerceros);
   }
+
+  async function formulariosSonValidos() {
+    if (!(await datosTercerosForm.trigger())) {
+      setValue("datos-tercero");
+
+      return false;
+    }
+    return true;
+  }
+
+  const erroresSubcontratado = Object.keys(
+    datosTercerosForm.formState.errors
+  ).length;
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
@@ -129,123 +103,22 @@ export function PageAgregarTercero() {
           type="single"
           collapsible
           value={value}
-          onValueChange={setValue}
+          onValueChange={setValue as (value: string) => void}
         >
-          <AccordionItem value="datos-medicos">
-            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos de tercero
+          <AccordionItem value="datos-tercero">
+            <AccordionTrigger
+              data-hasErrors={erroresSubcontratado > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos de tercero ${
+                erroresSubcontratado > 0 ? `(${erroresSubcontratado} errores)` : ""
+              }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <section>
-                <Form {...datosCotizacionForm}>
-                  <form
-                    className="grid grid-cols-3 gap-4"
-                    onSubmit={datosCotizacionForm.handleSubmit(onSubmitCot)}
-                  >
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="titulo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nombre</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="nombreContrato"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>RFC</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="contratante"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contratante</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="tipoContrato"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>NSS</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="numeroContrato"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>INE</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="inicioContrato"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>CURP</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="estado"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Estado del Empleado</FormLabel>
-                          <FormControl>
-                            <FormSelect
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              placeholder="Selecciona estado empleado"
-                            >
-                              <SelectItem value="activo">Activo</SelectItem>
-                              <SelectItem value="inactivo">Inactivo</SelectItem>
-                            </FormSelect>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
-                      Guardar
-                    </Button>
-                  </form>
-                </Form>
-              </section>
+              <DatosTercerosForm
+                form={datosTercerosForm}
+                onSubmit={onSubmit}
+              ></DatosTercerosForm>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
