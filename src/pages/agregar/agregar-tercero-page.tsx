@@ -131,12 +131,6 @@ export function PageAgregarTercero() {
           value={value}
           onValueChange={setValue}
         >
-          <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
-            <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] -mt-5">
-              Agregar personal de tercero
-            </h1>
-            <p className="max-w-2xl text-lg font-light text-foreground"></p>
-          </div>
           <AccordionItem value="datos-medicos">
             <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
               Datos de tercero

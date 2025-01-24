@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { string, z } from "zod";
 import Layout from "@/components/Layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -21,6 +22,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/datepicker";
+import {
+  FormSelect,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import {
   Accordion,
@@ -31,41 +41,80 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import {
+  DatosPersonales,
+  DatosPersonalesForm,
+  datosPersonalesSchema,
+} from "@/components/forms/datos-personales-form";
 
-type AccordionValue = "datos-cotizacion";
+type AccordionValue =
+  | "datos-personales"
+  | "datos-medicos"
+  | "datos-academicos"
+  | "datos-contratacion"
+  | string;
 
-const datosCotizacionSchema = z.object({
-  titulo: z
-    .string({ required_error: "Introduce el título de cotización." })
+const datosMedicosSchema = z.object({
+  alergias: z.string({ message: "Introduce el tipo de alergias." }).optional(),
+  enfercronicas: z
+    .string({ message: "Introduce si padeces de una enfermedad cronica." })
     .optional(),
-  nombreContrato: z.string({
-    required_error: "Introduce el nombre de contrato.",
+  lesiones: z.string({ message: "Introduce lesiones." }).optional(),
+  alergiasmed: z.string({ message: "" }),
+  numseguro: z.string({ required_error: "Numero seguro obligatorio." }),
+  relaemergencia: z.string({
+    required_error: "Relacion con trabajador obligaoria.",
   }),
-  contratante: z.string({ required_error: "Introduce contratante." }),
-  contratado: z.string({ required_error: "Introduce contratado." }),
-  tipoContrato: z.string({ required_error: "Selecciona tipo de contrato" }),
-  numeroContrato: z.string({ required_error: "Ingresa número de contrato." }),
-  inicioContrato: z.string({
-    required_error: "Ingresa fecha de inicio de contrato.",
+  numemergencia: z.string({
+    required_error: "Numero de emergencia obligatorio.",
   }),
-  finContrato: z.string({
-    required_error: "Ingresa fecha de fin de contrato.",
+  tiposangre: z.string({ required_error: "Tipo de sangre obligatorio." }),
+  genero: z.string({ required_error: "Genero obligatorio." }),
+  nombremergencia: z.string({
+    required_error: "Nombre de persona emergencia obligatorio.",
   }),
-  montoContrato: z.string({ required_error: "Ingresa monto de contrato." }),
-  anticipoContrato: z.string({
-    required_error: "Ingresa anticipo de contrato.",
-  }),
-  subContrato: z.string({ required_error: "Selecciona subcontrato." }),
-  seleccionar: z.string({ required_error: "Seleccionar seleccionar." }),
-  direccion: z.string({ required_error: "Ingresa dirección." }),
 });
 
-type DatosCotizacionForm = z.infer<typeof datosCotizacionSchema>;
+const datosAcademicosSchema = z.object({
+  cedula: z
+    .string({ required_error: "Ingresa cedula profesional." })
+    .optional(),
+  carrera: z.string({ required_error: "Carrera obligatorio." }),
+  explaboral: z
+    .string({ required_error: "Ingresa experiencia laboral." })
+    .optional(),
+  certificaciones: z
+    .string({ required_error: "Introduce certificaciones." })
+    .optional(),
+  gradoestudios: z.string({ required_error: "Nivel de estudios obligatorio" }),
+});
+const datosContratacionSchema = z.object({
+  tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
+  estado: z.string({ required_error: "Campo obligatorio." }),
+  iniciocontrato: z
+    .date({
+      required_error: "Fecha de ingreso obligatoria.",
+    })
+    .min(new Date(1914, 0, 1), {
+      message: "Fecha de ingreso no puede ser antes de 1914.",
+    }),
+  fincontrato: z
+    .date({
+      required_error: "Fecha de ingreso obligatoria.",
+    })
+    .min(new Date(1914, 0, 1), {
+      message: "Fecha de ingreso no puede ser antes de 1914.",
+    }),
+});
+
+type DatosMedicosForm = z.infer<typeof datosMedicosSchema>;
+type DatosAcademicosForm = z.infer<typeof datosAcademicosSchema>;
+type DatosContratacionForm = z.infer<typeof datosContratacionSchema>;
 
 export function PageAgregarEmpresa() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const mutation = useMutation(async (data: unknown) => {
+  const mutation = useMutation(async (data: any) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/personas", {
       method: "post",
@@ -82,22 +131,48 @@ export function PageAgregarEmpresa() {
     queryClient.invalidateQueries(["trabajadores"]);
     navigate("/personal");
   });
-  const [value, setValue] = useState<AccordionValue>("datos-cotizacion"); //Mantiene el estado en un componente.
-  const datosCotizacionForm = useForm<DatosCotizacionForm>({
-    resolver: zodResolver(datosCotizacionSchema),
+  const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
+  const datosContratacionForm = useForm<DatosContratacionForm>({
+    resolver: zodResolver(datosContratacionSchema),
   });
-  function onSubmitCot(values: DatosCotizacionForm) {
+  function onSubmitCon(values: DatosContratacionForm) {
     console.log(values);
-    guardarCotizacion();
+    guardarTrabajador();
+  }
+  const datosAcademicosForm = useForm<DatosAcademicosForm>({
+    resolver: zodResolver(datosAcademicosSchema),
+  });
+  function onSubmitAcd(values: DatosAcademicosForm) {
+    console.log(values);
+    setValue("datos-contratacion");
+  }
+  const datosMedicosForm = useForm<DatosMedicosForm>({
+    resolver: zodResolver(datosMedicosSchema),
+  });
+  function onSubmitMed(values: DatosMedicosForm) {
+    console.log(values);
+    setValue("datos-academicos");
   }
 
-  function guardarCotizacion() {
-    const datosCotizacion = datosCotizacionForm.getValues();
-    const cotizacion = {
-      datosCotizacion: datosCotizacion,
+  const datosPersonalesForm = useForm<DatosPersonales>({
+    resolver: zodResolver(datosPersonalesSchema),
+  });
+  function onSubmit(values: DatosPersonales) {
+    console.log(values);
+    setValue("datos-medicos");
+  }
+  function guardarTrabajador() {
+    const datosPersonales = datosPersonalesForm.getValues();
+    const datosMedicos = datosMedicosForm.getValues();
+    const datosAcademicos = datosAcademicosForm.getValues();
+    const datosContratacion = datosContratacionForm.getValues();
+    const trabajador = {
+      datosMedicos: datosMedicos,
+      datosAcademicos: datosAcademicos,
+      datosPersonales: { ...datosPersonales, ...datosContratacion },
     };
-    console.log(cotizacion);
-    mutation.mutate(cotizacion);
+    console.log(trabajador);
+    mutation.mutate(trabajador);
   }
   return (
     <Layout>
@@ -113,7 +188,7 @@ export function PageAgregarEmpresa() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/agregar-cotizacion`}>
+              <BreadcrumbLink href={`/agregar-empresa`}>
                 Agregar empresa
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -127,29 +202,23 @@ export function PageAgregarEmpresa() {
           value={value}
           onValueChange={setValue}
         >
-          <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
-            <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] -mt-5">
-              Agregar empresa
-            </h1>
-            <p className="max-w-2xl text-lg font-light text-foreground"></p>
-          </div>
           <AccordionItem value="datos-medicos">
             <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
-              Datos de empresa
+              Información de la empresa
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <section>
-                <Form {...datosCotizacionForm}>
+                <Form {...datosMedicosForm}>
                   <form
                     className="grid grid-cols-3 gap-4"
-                    onSubmit={datosCotizacionForm.handleSubmit(onSubmitCot)}
+                    onSubmit={datosMedicosForm.handleSubmit(onSubmitMed)}
                   >
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="titulo"
+                      control={datosMedicosForm.control}
+                      name="alergias"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Título</FormLabel>
+                          <FormLabel>Nombre de la empresa</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -158,11 +227,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="nombreContrato"
+                      control={datosMedicosForm.control}
+                      name="alergiasmed"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nombre de contrato</FormLabel>
+                          <FormLabel>Representante legal</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -171,11 +240,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="contratante"
+                      control={datosMedicosForm.control}
+                      name="enfercronicas"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Contratante</FormLabel>
+                          <FormLabel>Teléfono</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -184,11 +253,43 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="tipoContrato"
+                      control={datosAcademicosForm.control}
+                      name="gradoestudios"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tipo de contrato</FormLabel>
+                          <FormLabel>Correo</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+                      Siguiente
+                    </Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-academicos">
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Datos de facturación
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+              <section>
+                <Form {...datosAcademicosForm}>
+                  <form
+                    className="grid grid-cols-3 gap-4"
+                    onSubmit={datosAcademicosForm.handleSubmit(onSubmitAcd)}
+                  >
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="cedula"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>RFC</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -197,11 +298,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="numeroContrato"
+                      control={datosAcademicosForm.control}
+                      name="carrera"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Número de contrato</FormLabel>
+                          <FormLabel>Tipo de regimen</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -210,11 +311,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="inicioContrato"
+                      control={datosAcademicosForm.control}
+                      name="certificaciones"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Inicio de contrato</FormLabel>
+                          <FormLabel>Número de cuenta/Clave</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -223,11 +324,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="finContrato"
+                      control={datosAcademicosForm.control}
+                      name="explaboral"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Fin de contrato</FormLabel>
+                          <FormLabel>Banco</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -236,11 +337,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="montoContrato"
+                      control={datosAcademicosForm.control}
+                      name="gradoestudios"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Monto de contrato</FormLabel>
+                          <FormLabel>Correo de facturación</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -249,11 +350,48 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="anticipoContrato"
+                      control={datosContratacionForm.control}
+                      name="iniciocontrato"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Anticipo de contrato</FormLabel>
+                          <FormLabel>Fecha de vencimiento de constancia</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={field.value}
+                              onChange={field.onChange}
+                              maxDate={new Date()}
+                              minDate={new Date(1900, 1, 1)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+                      Siguiente
+                    </Button>
+                  </form>
+                </Form>
+              </section>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-contratacion">
+            <AccordionTrigger className="[&[data-state=open]]:bg-gray-200 p-4 rounded-t-md transition-colors">
+              Contacto
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+              <section>
+                <Form {...datosContratacionForm}>
+                  <form
+                    className="grid grid-cols-3 gap-4"
+                    onSubmit={datosContratacionForm.handleSubmit(onSubmitCon)}
+                  >
+                    <FormField
+                      control={datosAcademicosForm.control}
+                      name="gradoestudios"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre de contacto</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -262,11 +400,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="subContrato"
+                      control={datosAcademicosForm.control}
+                      name="gradoestudios"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Subcontrato</FormLabel>
+                          <FormLabel>Correo</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -275,24 +413,11 @@ export function PageAgregarEmpresa() {
                       )}
                     />
                     <FormField
-                      control={datosCotizacionForm.control}
-                      name="seleccionar"
+                      control={datosAcademicosForm.control}
+                      name="gradoestudios"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Seleccionar</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={datosCotizacionForm.control}
-                      name="direccion"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Dirección</FormLabel>
+                          <FormLabel>Teléfono</FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
