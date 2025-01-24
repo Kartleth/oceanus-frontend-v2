@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,32 +12,48 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CircleAlert} from "lucide-react";
+import { CircleAlert } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 
 export function LoginForm() {
-  const [usuario, setUsuario] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Token leído desde localStorage:", token);
+    if (token) {
+      navigate("/personal");
+    }
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // Enviar una solicitud POST al backend
-      const response = await axios.post(
-        "http://localhost:3001/usuarios/login",
-        {
-          usuario,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/auth/login", {
+        username,
+        password,
+      });
+
+      const token = response.data.access_token;
+      if (!token) {
+        console.error("No se recibió un token en la respuesta.");
+        return;
+      }
 
       // Si la respuesta es exitosa
-      console.log("Login exitoso:", response.data);
+      localStorage.setItem("token", token);
+      console.log("Token guardado correctamente:", token);
       navigate("/personal");
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
-      console.error("Error de login:", err);
+      console.error(
+        "Error en el inicio de sesión:",
+        err.response?.data || err.message
+      );
     }
   };
 
@@ -71,8 +87,8 @@ export function LoginForm() {
                 id="usuario"
                 type="text"
                 placeholder="Ingrese su usuario"
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
