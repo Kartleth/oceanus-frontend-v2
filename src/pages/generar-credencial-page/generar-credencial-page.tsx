@@ -20,6 +20,8 @@ import oceanusadmi from "@/assets/admin-logo.png";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
+
+
 export function PageGenerarCredencial() {
   const params = useParams();
   const id = params.id;

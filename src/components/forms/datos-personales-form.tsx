@@ -39,7 +39,7 @@ export const datosPersonalesSchema = z.object({
     })
     .regex(
       /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0\d|1[0-2])(?:[0-2]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/gm,
-      { message: "Curp incorrecta." }
+      { message: "Curp incorrecta, debe cumplir con los digitos correctos de la curp oficial." }
     ),
   rfc: z
     .string({
@@ -47,11 +47,11 @@ export const datosPersonalesSchema = z.object({
     })
     .regex(
       /^([A-Z,Ñ,&]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/gm,
-      { message: "RFC incorrecto." }
+      { message: "RFC incorrecto, no cumple con los digitos oficiales que complementan un RFCf." }
     ),
   ine: z
     .string({
-      required_error: "Numero de INE incorrecto.",
+      required_error: "Numero de INE incorrecto, debe cumplir con los 13 digitos correspondientes.",
     })
     .regex(/^\d{12,13}$/g, { message: "Numero de INE incorrecto." }),
   estadocivil: z.string({ required_error: "Estado civil obligatorio." }),

@@ -46,7 +46,7 @@ type AccordionValue =
   | "datos-contratacion"
   | string;
 
-export function PageAgregarTrabajador() {
+export function PageAgregarContratos() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
@@ -173,7 +173,7 @@ export function PageAgregarTrabajador() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbPage className="line-clamp-1 text-xl">
-                Agregar Trabajador
+                Agregar Contratos
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>

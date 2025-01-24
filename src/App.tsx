@@ -12,6 +12,10 @@ import { VerDetallesPersonal } from "./pages/ver-detalles/Ver-detalles-personal"
 import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
 import { PageAgregarTrabajador } from "./pages/agregar/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
+import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
+import { VerDetallesContratos } from "./pages/ver-detalles-contratos-page/Ver-detalles-contratos-page";
+import { PageAgregarContratos } from "./pages/agregar-contratos-page/agregar-contartos-page";
+import { PageEditarContratos } from "./pages/editar-contratos/editar-contratos";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
 import { VerDetallesCotizacion } from "./pages/ver-detalles/Ver-detalles-cotizacion";
@@ -43,14 +47,20 @@ function App() {
             <Route path="/personal_terceros" element={<Terceros />} />
             <Route path="/cotizaciones" element={<Cotizaciones />} />
             <Route
+              path="/detalles-contratos"
+              element={<VerDetallesContratos />}
+            />
+            <Route path="/agregar-contratos" element={<PageAgregarContratos />} />
+          <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}
             />
             <Route
-              path="/agregar-trabajador"
-              element={<PageAgregarTrabajador />}
-            />
-            <Route
+            path="/editar-trabajador/:id"
+            element={<PageEditarTrabajador />}
+          />
+          <Route path="/editar-contratos" element={<PageEditarContratos />} />
+          <Route
               path="/generar-credencial/:id"
               element={<PageGenerarCredencial />}
             />
@@ -58,7 +68,11 @@ function App() {
               path="/detalles-trabajador/:id"
               element={<VerDetallesPersonal />}
             />
-            <Route
+            {/* <Route
+            path="/detalles-contratos/:id"
+            element={<VerDetallesContratos />}
+          /> */}
+          <Route
               path="/reporte-de-empleado/:id"
               element={<VerReportePersonal />}
             />

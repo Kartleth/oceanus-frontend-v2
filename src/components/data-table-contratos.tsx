@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import { Link } from "react-router-dom";
 
 export const data: ContractsInformation[] = [
   {
@@ -159,7 +160,9 @@ export const columns: ColumnDef<ContractsInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("start_contract")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("start_contract")}</div>
+    ),
   },
   {
     accessorKey: "end_contract",
@@ -174,7 +177,9 @@ export const columns: ColumnDef<ContractsInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("end_contract")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("end_contract")}</div>
+    ),
   },
   {
     id: "actions",
@@ -197,14 +202,16 @@ export const columns: ColumnDef<ContractsInformation>[] = [
                 navigator.clipboard.writeText(ContractsInformation.id)
               }
             >
-              Ver detalles
+              <Link to={"/detalles-contratos"}> Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Crear convenio</DropdownMenuItem>
             <DropdownMenuItem>Personal</DropdownMenuItem>
             <DropdownMenuItem>SubContratados</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={"/editar-contratos"}>Editar</Link>
+            </DropdownMenuItem>
 
             <DropdownMenuItem>Borrar</DropdownMenuItem>
           </DropdownMenuContent>
@@ -261,7 +268,6 @@ export function DataTableContratos() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem>Copiar datos</DropdownMenuItem>
             <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>

@@ -151,38 +151,6 @@ export const columns: ColumnDef<Persona>[] = [
         }
         console.log(resData);
         queryClient.invalidateQueries(["trabajadores"]);
-
-        // Lógica para editar
-        const editPersona = useMutation(
-          async (updatedData) => {
-            const res = await fetch(
-              `http://localhost:3001/personas/${Persona.id}`,
-              {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedData),
-              }
-            );
-            const resData = await res.json();
-            if (!res.ok) {
-              throw new Error(
-                resData.message || "Error al actualizar la persona"
-              );
-            }
-            return resData;
-          },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries(["trabajadores"]);
-            },
-            onError: (error) => {
-              console.error("Error actualizando la persona:", error);
-            },
-          }
-        );
-
       });
 
       return (
@@ -196,6 +164,7 @@ export const columns: ColumnDef<Persona>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de empleado</DropdownMenuLabel>
             <DropdownMenuItem
+              asChild
               onClick={() =>
                 navigator.clipboard.writeText(Persona.id.toString())
               }
@@ -208,21 +177,19 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuItem>
               <Link to={`/subir-archivos/${Persona.id}`}>Gestionar archivos</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to={`/reporte-de-empleado/${Persona.id}`}>
                 Generar reporte
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to={`/generar-credencial/${Persona.id}`}>
-                Generar credencial{" "}
+                Generar credencial
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => `/agregar-trabajador/${Persona.id}`}
-            >
-              Editar
+            <DropdownMenuItem asChild>
+              <Link to={`/editar-trabajador/${Persona.id}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -351,7 +318,9 @@ export function DataTableDemo() {
       return;
     }
 
-    // Definir los campos de los tres bloques
+    // Ruta de la imagen
+    const logoPath = "src/assets/oceanus-logo-3.png";
+
     const camposBloque1 = [
       { header: "ID", key: "id" },
       { header: "Nombre", key: "nombre" },
@@ -383,21 +352,31 @@ export function DataTableDemo() {
       { header: "Certificaciones", key: "datosAcademicos.certificaciones" },
       { header: "Grado de Estudios", key: "datosAcademicos.gradoestudios" },
       { header: "Alergias", key: "datosMedicos.alergias" },
-      { header: "Enfermedades Crónicas", key: "datosMedicos.enfercronicas" },
+      {
+        header: "Enfermedades Crónicas",
+        key: "datosMedicos.enfercronicas",
+      },
       { header: "Lesiones", key: "datosMedicos.lesiones" },
-      { header: "Alergias a Medicamentos", key: "datosMedicos.alergiasmed" },
+      {
+        header: "Alergias a Medicamentos",
+        key: "datosMedicos.alergiasmed",
+      },
       { header: "Número de Emergencia", key: "datosMedicos.numemergencia" },
       { header: "Número de Seguro", key: "datosMedicos.numseguro" },
       { header: "Tipo de Sangre", key: "datosMedicos.tiposangre" },
     ];
 
     // Función para mapear los datos a cada bloque
-    const generarDatosBloque = (personas: any[], campos: string[]) => {
+    const generarDatosBloque = (
+      personas: Persona[],
+      campos: { header: string; key: string }[]
+    ) => {
       return personas.map((persona) => {
-        const bloque: any = {};
+        const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
-            key.split(".").reduce((acc, curr) => acc?.[curr], persona) || "N/A";
+            key.split(".").reduce((acc, curr) => acc?.[curr], persona as any) ||
+            "N/A";
           bloque[header] = valor;
         });
         return bloque;
@@ -416,9 +395,39 @@ export function DataTableDemo() {
       format: "a4",
     });
 
+    // Agregar el logo al lado izquierdo
+    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text("Reporte Detallado de Personas", 14, 20);
+    doc.setFontSize(11);
+
+    // Medidas de la página A4 en horizontal
+    const pageWidth = doc.internal.pageSize.width; // 297 mm
+    const pageHeight = doc.internal.pageSize.height; // 210 mm
+
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    const text1 = "DATOS DE PERSONALES GENERALES";
+    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+
+    // Dibujar el primer título centrado en la página
+    doc.text(text1, xPosition1, yPosition1);
+
+    // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
+    const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
+    const fontSize2 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth2 =
+      (doc.getStringUnitWidth(text2) * fontSize2) / doc.internal.scaleFactor;
+    const xPosition2 = pageWidth - textWidth2 - 10; // Alineación a la derecha con margen
+    const yPosition2 = 15; // Ubicación en el encabezado, un poco hacia abajo
+
+    // Dibujar el segundo título alineado a la derecha en el encabezado
+    doc.text(text2, xPosition2, yPosition2);
+
+    // Ajusta la posición del texto
 
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
@@ -455,7 +464,6 @@ export function DataTableDemo() {
       });
     };
 
-    // Imprimir los bloques en páginas separadas
     generarTabla(datosBloque1, 30);
     doc.addPage();
     generarTabla(datosBloque2, 30);
