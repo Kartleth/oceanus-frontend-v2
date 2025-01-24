@@ -38,7 +38,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { Subcontratado } from "@/modelos/subcontratado";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Subcontratado>[] = [
@@ -55,7 +55,9 @@ export const columns: ColumnDef<Subcontratado>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("idsubcontratado")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("idsubcontratado")}</div>
+    ),
   },
   {
     accessorKey: "nombre",
@@ -109,7 +111,24 @@ export const columns: ColumnDef<Subcontratado>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const Subcontratado = row.original;
-
+      const queryClient = useQueryClient();
+      const detelePersona = useMutation(async () => {
+        const res = await fetch(
+          `http://localhost:3001/subcontratados/${Subcontratado.idsubcontratado}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const resData = await res.json();
+        if (!res.ok) {
+          console.error(resData);
+        }
+        console.log(resData);
+        queryClient.invalidateQueries(["subcontratado"]);
+      });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -122,18 +141,32 @@ export const columns: ColumnDef<Subcontratado>[] = [
             <DropdownMenuLabel>Acciones de empresa</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(Subcontratado.idsubcontratado.toString())
+                navigator.clipboard.writeText(
+                  Subcontratado.idsubcontratado.toString()
+                )
               }
             >
-              <Link to={`/detalles-terceros/${Subcontratado.idsubcontratado}`}>Ver detalles</Link>
+              <Link to={`/detalles-terceros/${Subcontratado.idsubcontratado}`}>
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos-tercero/${Subcontratado.idsubcontratado}`}>Gestionar archivos</Link>
+              <Link
+                to={`/subir-archivos-tercero/${Subcontratado.idsubcontratado}`}
+              >
+                Gestionar archivos
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                detelePersona.mutate();
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
