@@ -21,6 +21,7 @@ import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros"
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
 import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
 import { PageAgregarTercero } from "./pages/agregar/agregar-tercero-page";
+import { PageAgregarEmpresa } from "./pages/agregar/agregar-empresa-page";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +88,10 @@ function App() {
             <Route
               path="/detalles-empresa"
               element={<VerDetallesEmpresa />}
+            />
+            <Route
+              path="/agregar-empresa"
+              element={<PageAgregarEmpresa />}
             />
           </Route>
         </Routes>
