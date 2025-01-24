@@ -20,6 +20,7 @@ import { PageAgregarCotizacion } from "./pages/agregar/agregar-cotizacion-page";
 import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
 import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
+import { PageAgregarTercero } from "./pages/agregar/agregar-tercero-page";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,10 @@ function App() {
               element={<VerDetallesTerceros />}
             />
             <Route path="/subir-archivos-tercero/:id" element={<SubirArchivosTerceros />} />
+            <Route
+              path="/agregar-tercero"
+              element={<PageAgregarTercero />}
+            />
             {/* Rutas para empresa */}
             <Route
               path="/detalles-empresa"

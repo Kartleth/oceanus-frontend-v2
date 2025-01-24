@@ -33,7 +33,7 @@ export default function Terceros() {
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
           <Link
-            to="/agregar-cotizacion"
+            to="/agregar-tercero"
             className="flex items-center space-x-2"
           >
             <CirclePlus className="w-5 h-5" />
