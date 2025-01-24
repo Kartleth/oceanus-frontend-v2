@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
+import { Link } from "react-router-dom";
 
 export const data: CompaniesInformation[] = [
   {
@@ -146,14 +147,12 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-           Correo
+          Correo
           <ArrowUpDown />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("email")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     id: "actions",
@@ -176,7 +175,7 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
                 navigator.clipboard.writeText(CompaniesInformation.id)
               }
             >
-              Ver detalles
+              <Link to={`/detalles-empresa`}>Ver detalles</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Importar información</DropdownMenuItem>
