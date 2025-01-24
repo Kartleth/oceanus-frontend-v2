@@ -229,34 +229,27 @@ export function DataTableTerceros() {
   });
 
   /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
-  const exportToExcel = (CotizacionInformation: CotizacionInformation[]) => {
-    if (!CotizacionInformation || CotizacionInformation.length === 0) {
+  const exportToExcel = (subcontratados: Subcontratado[]) => {
+    if (!subcontratados || subcontratados.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
 
-    const datos = CotizacionInformation.map((CotizacionInformation) => ({
-      ID: CotizacionInformation.id,
-      Título: CotizacionInformation.titulo,
-      "Nombre de contrato": CotizacionInformation.nombre_contrato,
-      Contratante: CotizacionInformation.contratante,
-      Contratado: CotizacionInformation.contratado,
-      "Tipo de contrato": CotizacionInformation.tipo_contrato,
-      "Numero de contrato": CotizacionInformation.numero_contrato,
-      "Inicio de contrato": CotizacionInformation.inicio_contrato,
-      "Fin de contrato": CotizacionInformation.fin_contrato,
-      "Monto de contrato": CotizacionInformation.monto_contrato,
-      "Anticipo de contrato": CotizacionInformation.anticipo_contrato,
-      SubContrato: CotizacionInformation.subcontrato,
-      Seleccionar: CotizacionInformation.seleccionar,
-      Dirección: CotizacionInformation.direccion,
+    const datos = subcontratados.map((subcontratado) => ({
+      ID: subcontratado.idsubcontratado,
+      Nombre: subcontratado.nombre,
+      RFC: subcontratado.rfc,
+      NSS: subcontratado.nss,
+      INE: subcontratado.ine,
+      CURP: subcontratado.curp,
+      Estado: subcontratado.estado,
     }));
 
     // Exportar a Excel
     const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Cotizacion");
-    XLSX.writeFile(workbook, "Cotizacion_oceanus.xlsx");
+    XLSX.writeFile(workbook, "Personal_de_tercero_oceanus.xlsx");
   };
 
   return (
@@ -278,7 +271,7 @@ export function DataTableTerceros() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => exportToExcel(data)}>
+            <DropdownMenuItem onClick={() => exportToExcel(subcontratadosQuery.data || [])}>
               Exportar a Excel
             </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
