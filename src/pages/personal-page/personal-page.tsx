@@ -1,4 +1,4 @@
-import { DataTableDemo } from "@/components/data-table-personal";
+import { DataTableDemo } from "@/components/data-tables/data-table-personal";
 import Layout from "@/components/Layout";
 import {
   Breadcrumb,

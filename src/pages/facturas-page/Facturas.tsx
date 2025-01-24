@@ -9,7 +9,7 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { DataTableFacturas } from "@/components/data-table-facturas";
+import { DataTableFacturas } from "@/components/data-tables/data-table-facturas";
 
 export default function Facturas() {
   return (

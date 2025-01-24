@@ -10,7 +10,7 @@ import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { DataTableTerceros } from "@/components/data-table-terceros";
+import { DataTableTerceros } from "@/components/data-tables/data-table-terceros";
 
 export default function Terceros() {
   return (

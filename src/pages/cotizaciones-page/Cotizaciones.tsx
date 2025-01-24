@@ -9,7 +9,7 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { DataTableCotizaciones } from "@/components/data-table-cotizaciones";
+import { DataTableCotizaciones } from "@/components/data-tables/data-table-cotizaciones";
 import { Link } from "react-router-dom";
 
 export default function Cotizaciones() {

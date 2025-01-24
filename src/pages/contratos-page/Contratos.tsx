@@ -7,7 +7,7 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
-import { DataTableContratos } from "@/components/data-table-contratos";
+import { DataTableContratos } from "@/components/data-tables/data-table-contratos";
 import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
 import { Link } from "react-router-dom";

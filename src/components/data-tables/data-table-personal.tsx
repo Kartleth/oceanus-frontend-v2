@@ -40,7 +40,7 @@ import { Persona } from "@/modelos/personal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import ErrorComponent from "./error-component";
+import ErrorComponent from "../error-component";
 
 
 // eslint-disable-next-line react-refresh/only-export-components

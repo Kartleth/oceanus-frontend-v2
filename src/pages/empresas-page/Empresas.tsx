@@ -9,7 +9,7 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { DataTableEmpresas } from "@/components/data-table-empresas";
+import { DataTableEmpresas } from "@/components/data-tables/data-table-empresas";
 import { Link } from "react-router-dom";
 
 export default function Empresas() {

@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Persona } from "@/modelos/personal";
 import axios from "axios";
-import { DataTableArchivosCotizaciones } from "@/components/data-table-archivos-cotizaciones";
+import { DataTableArchivosCotizaciones } from "@/components/data-table-archivos/data-table-archivos-cotizaciones";
 
 export default function SubirArchivosCotizacion() {
   const { id } = useParams();

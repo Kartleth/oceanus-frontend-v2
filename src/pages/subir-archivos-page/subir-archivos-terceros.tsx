@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Subcontratado } from "@/modelos/subcontratado";
-import { DataTableArchivosTerceros } from "@/components/data-table-archivos-terceros";
+import { DataTableArchivosTerceros } from "@/components/data-table-archivos/data-table-archivos-terceros";
 
 export default function SubirArchivosTerceros() {
   const { id } = useParams();
