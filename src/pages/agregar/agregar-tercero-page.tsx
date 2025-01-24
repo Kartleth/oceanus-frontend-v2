@@ -58,7 +58,7 @@ export function PageAgregarTercero() {
     if (!validos) return;
 
     const DatosTerceros = datosTercerosForm.getValues();
-    console.log(DatosTerceros);
+    console.log("Datos enviados al servidor:", DatosTerceros);
     mutation.mutate(DatosTerceros);
   }
 
