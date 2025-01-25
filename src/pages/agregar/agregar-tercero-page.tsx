@@ -107,8 +107,8 @@ export function PageAgregarTercero() {
         >
           <AccordionItem value="datos-tercero">
             <AccordionTrigger
-              data-hasErrors={erroresSubcontratado > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresSubcontratado > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos de tercero ${
                 erroresSubcontratado > 0 ? `(${erroresSubcontratado} errores)` : ""
