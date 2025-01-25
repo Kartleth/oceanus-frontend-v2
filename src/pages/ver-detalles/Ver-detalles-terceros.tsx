@@ -48,7 +48,7 @@ export function VerDetallesTerceros() {
 
             <BreadcrumbItem>
               <BreadcrumbLink href={`/detalles-terceros/${id}`}>
-                {subcontratado?.nombre ?? "Trabajador de terceros"}
+                Ver detalles de tercero
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>

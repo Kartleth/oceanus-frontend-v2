@@ -20,7 +20,7 @@ export const datosTercerosSchema = z.object({
       message: "El nombre no puede excederse de mas de 150 caracteres.",
     })
     .min(1, { message: "El nombre es obligatorio." }),
-  RFC: z
+  rfc: z
     .string({
       required_error: "RFC es obligatoria.",
     })
@@ -31,14 +31,14 @@ export const datosTercerosSchema = z.object({
           "RFC incorrecto, no cumple con los digitos oficiales que complementan un RFCf.",
       }
     ),
-  NSS: z.string({ required_error: "Numero seguro obligatorio." }),
-  INE: z
+  nss: z.string({ required_error: "Numero seguro obligatorio." }),
+  ine: z
     .string({
       required_error:
         "Numero de INE incorrecto, debe cumplir con los 13 digitos correspondientes.",
     })
     .regex(/^\d{12,13}$/g, { message: "Numero de INE incorrecto." }),
-  CURP: z
+  curp: z
     .string({
       required_error: "Curp es obligatoria.",
     })
@@ -84,7 +84,7 @@ export const DatosTercerosForm: FC<DatosTercerosProps> = ({
         />
         <FormField
           control={form.control}
-          name="RFC"
+          name="rfc"
           render={({ field }) => (
             <FormItem>
               <FormLabel>RFC</FormLabel>
@@ -97,7 +97,7 @@ export const DatosTercerosForm: FC<DatosTercerosProps> = ({
         />
         <FormField
           control={form.control}
-          name="NSS"
+          name="nss"
           render={({ field }) => (
             <FormItem>
               <FormLabel>NSS</FormLabel>
@@ -110,7 +110,7 @@ export const DatosTercerosForm: FC<DatosTercerosProps> = ({
         />
         <FormField
           control={form.control}
-          name="INE"
+          name="ine"
           render={({ field }) => (
             <FormItem>
               <FormLabel>INE</FormLabel>
@@ -123,7 +123,7 @@ export const DatosTercerosForm: FC<DatosTercerosProps> = ({
         />
         <FormField
           control={form.control}
-          name="CURP"
+          name="curp"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Curp</FormLabel>
@@ -146,7 +146,7 @@ export const DatosTercerosForm: FC<DatosTercerosProps> = ({
                   defaultValue={field.value}
                   placeholder="Selecciona un estado de contratación"
                 >
-                  <SelectItem value="activo">Activo(a)</SelectItem>
+                  <SelectItem value="Activo">Activo(a)</SelectItem>
                   <SelectItem value="Inactivo">Inactivo(a)</SelectItem>
                 </FormSelect>
               </FormControl>

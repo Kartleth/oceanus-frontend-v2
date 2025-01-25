@@ -10,6 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -27,6 +28,7 @@ import {
 type AccordionValue = "datos-tercero";
 
 export function PageAgregarTercero() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: unknown) => {
     console.log(data);
@@ -43,6 +45,7 @@ export function PageAgregarTercero() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["subcontratados"]);
+    navigate("/personal_terceros");
   });
   const [value, setValue] = useState<AccordionValue>("datos-tercero");
   const datosTercerosForm = useForm<DatosTerceros>({
