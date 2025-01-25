@@ -8,7 +8,7 @@ export const Subcontratado = z.object({
   ine: z.string(),
   curp: z.string(),
   estado: z.string(),
-  doc: z.string(),
+  doc: z.string().nullable(),
 });
 
 export type Subcontratado = z.infer<typeof Subcontratado>;
