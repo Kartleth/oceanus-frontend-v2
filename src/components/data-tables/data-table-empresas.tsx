@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -36,77 +37,33 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
+import * as XLSX from "xlsx";
+import { Empresa } from "@/modelos/empresa";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
-export const data: CompaniesInformation[] = [
+// eslint-disable-next-line react-refresh/only-export-components
+export const columns: ColumnDef<Empresa>[] = [
   {
-    id: "1",
-    social_reason: "Innovaciones Tecnológicas S.A. de C.V.",
-    type_regime: "Régimen General de Ley",
-    email: "contacto@innotech.com",
-  },
-  {
-    id: "2",
-    social_reason: "Servicios Empresariales Globales",
-    type_regime: "Persona Moral",
-    email: "info@seg.com",
-  },
-  {
-    id: "3",
-    social_reason: "Constructora del Norte",
-    type_regime: "Régimen Simplificado de Confianza",
-    email: "ventas@constructora.com",
-  },
-  {
-    id: "4",
-    social_reason: "Soluciones Ambientales y Energéticas",
-    type_regime: "Persona Física con Actividad Empresarial",
-    email: "soporte@sae.com",
-  },
-  {
-    id: "5",
-    social_reason: "Agroindustrias del Pacífico",
-    type_regime: "Régimen General de Ley",
-    email: "contacto@agropacifico.com",
-  },
-  {
-    id: "6",
-    social_reason: "Diseños Creativos Internacionales",
-    type_regime: "Régimen Simplificado de Confianza",
-    email: "diseño@dci.com",
-  },
-  {
-    id: "7",
-    social_reason: "Consultores en Finanzas y Negocios",
-    type_regime: "Persona Moral",
-    email: "consultoria@finneg.com",
-  },
-];
-
-export type CompaniesInformation = {
-  id: string;
-  social_reason: string;
-  type_regime: string;
-  email: string;
-};
-
-export const columns: ColumnDef<CompaniesInformation>[] = [
-  {
-    accessorKey: "id",
+    accessorKey: "idempresa",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID
+          ID de empresa
           <ArrowUpDown />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("idempresa")}</div>
+    ),
   },
   {
-    accessorKey: "social_reason",
+    accessorKey: "razonsocial",
     header: ({ column }) => {
       return (
         <Button
@@ -119,28 +76,28 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("social_reason")}</div>
+      <div className="lowercase">{row.getValue("razonsocial")}</div>
     ),
   },
   {
-    accessorKey: "type_regime",
+    accessorKey: "tiporegimen",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tipo de regimen
+          Tipo de régimen
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("type_regime")}</div>
+      <div className="lowercase">{row.getValue("tiporegimen")}</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "correo",
     header: ({ column }) => {
       return (
         <Button
@@ -152,14 +109,33 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("correo")}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const CompaniesInformation = row.original;
-
+      const Empresa = row.original;
+      const queryClient = useQueryClient();
+      const detelePersona = useMutation(async () => {
+        const res = await fetch(
+          `http://localhost:3001/subcontratados/${Empresa.idempresa}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const resData = await res.json();
+        if (!res.ok) {
+          console.error(resData);
+        }
+        console.log(resData);
+        queryClient.invalidateQueries(["empresa"]);
+      });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -172,16 +148,30 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
             <DropdownMenuLabel>Acciones de empresa</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(CompaniesInformation.id)
+                navigator.clipboard.writeText(Empresa.idempresa.toString())
               }
             >
-              <Link to={`/detalles-empresa`}>Ver detalles</Link>
+              <Link to={`/detalles-terceros/${Empresa.idempresa}`}>
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Importar información</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={`/subir-archivos-tercero/${Empresa.idempresa}`}>
+                Gestionar archivos
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/editar-tercero/${Empresa.idempresa}`}>Editar</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                detelePersona.mutate();
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -190,6 +180,32 @@ export const columns: ColumnDef<CompaniesInformation>[] = [
 ];
 
 export function DataTableEmpresas() {
+  const empresaQuery = useQuery({
+    queryKey: ["empresa"],
+    queryFn: async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      const res = await fetch("http://localhost:3001/empresa", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log("Response Data:", resData);
+      const empresaParse = Empresa.array().safeParse(resData);
+      if (!empresaParse.success) {
+        console.error(empresaParse.error);
+        throw new Error(empresaParse.error.toString());
+      }
+      return empresaParse.data;
+    },
+  });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -199,7 +215,7 @@ export function DataTableEmpresas() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: empresaQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -216,6 +232,270 @@ export function DataTableEmpresas() {
       rowSelection,
     },
   });
+
+  /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
+  const exportToExcel = (empresas: Empresa[]) => {
+    if (!empresas || empresas.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+
+    const datos = empresas.map((empresa) => ({
+      ID: empresa.idempresa ?? "N/A",
+      "Razón social": empresa.razonsocial ?? "N/A",
+      Correo: empresa.correo ?? "N/A",
+      Teléfono: empresa.telefono ?? "N/A",
+      Logo: empresa.logo ?? "N/A",
+      "Representante legal": empresa.represenatelegal ?? "N/A",
+      "Correo rep": empresa.correoRepresenatelegal ?? "N/A",
+      "Telefono de rep": empresa.telefonoRepresenatelegal ?? "N/A",
+      RFC: empresa.rfc ?? "N/A",
+      "Correo de facturación": empresa.correofacturacion ?? "N/A",
+      "Constancia fiscal": empresa.constanciafiscal ?? "N/A",
+      "Tipo de régimen": empresa.tiporegimen ?? "N/A",
+      "Número de cuenta": empresa.numerocuenta ?? "N/A",
+      Banco: empresa.numerocuenta ?? "N/A",
+      "Nombre de contrato": empresa.nombrecontrato ?? "N/A",
+      "Fecha de vencimiento de constancia":
+        empresa.fechavencimientoconstancia ?? "N/A",
+    }));
+
+    // Exportar a Excel
+    const worksheet = XLSX.utils.json_to_sheet(datos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Empresa");
+    XLSX.writeFile(workbook, "Empresas_oceanus.xlsx");
+  };
+
+  // Exportar a pdf
+  const exportToPDF = (empresas: Empresa[]) => {
+    if (!empresas || empresas.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+
+    const logoPath = "src/assets/oceanus-logo-3.png";
+
+    const camposBloque1 = [
+      { header: "ID", key: "idsubcontratado" },
+      { header: "Nombre", key: "nombre" },
+      { header: "RFC", key: "rfc" },
+      { header: "NSS", key: "nss" },
+      { header: "INE", key: "ine" },
+      { header: "CURP", key: "curp" },
+      { header: "Estado", key: "estado" },
+    ];
+
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (
+      empresas: Empresa[],
+      campos: { header: string; key: string }[]
+    ) => {
+      return empresas.map((empresa) => {
+        const bloque: Record<string, string> = {};
+        campos.forEach(({ header, key }) => {
+          const valor =
+            key
+              .split(".")
+              .reduce((acc, curr) => acc?.[curr], empresa as any) ||
+            "N/A";
+          bloque[header] = valor;
+        });
+        return bloque;
+      });
+    };
+
+    // Generar los datos para cada bloque
+    const datosBloque1 = generarDatosBloque(empresas, camposBloque1);
+
+    // Crear un nuevo documento PDF
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
+
+    // Agregar el logo al lado izquierdo
+    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+
+    // Medidas de la página A4 en horizontal
+    const pageWidth = doc.internal.pageSize.width; // 297 mm
+    const pageHeight = doc.internal.pageSize.height; // 210 mm
+
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    const text1 = "DATOS DE SUBCONTRATADO";
+    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+
+    // Dibujar el primer título centrado en la página
+    doc.text(text1, xPosition1, yPosition1);
+
+    const generarTabla = (datos: any[], startY: number) => {
+      autoTable(doc, {
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
+        theme: "grid",
+        headStyles: {
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
+        },
+        alternateRowStyles: {
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
+        },
+        styles: {
+          overflow: "linebreak",
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
+        },
+        columnStyles: {
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
+        },
+        margin: { top: 25 },
+        pageBreak: "auto", // El salto de página se maneja automáticamente
+      });
+    };
+
+    generarTabla(datosBloque1, 30);
+    doc.addPage();
+
+    doc.save("Personal_de_tercero_oceanus.pdf");
+  };
+
+  // Imprimir datos
+  const handlePrint = (empresas: Empresa[]) => {
+    if (!empresas || empresas.length === 0) {
+      alert("No hay datos disponibles para imprimir.");
+      return;
+    }
+
+    const logoPath = "src/assets/oceanus-logo-3.png";
+
+    const camposBloque1 = [
+      { header: "ID", key: "idsubcontratado" },
+      { header: "Nombre", key: "nombre" },
+      { header: "RFC", key: "rfc" },
+      { header: "NSS", key: "nss" },
+      { header: "INE", key: "ine" },
+      { header: "CURP", key: "curp" },
+      { header: "Estado", key: "estado" },
+    ];
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (
+      empresas: Empresa[],
+      campos: { header: string; key: string }[]
+    ) => {
+      return empresas.map((empresa) => {
+        const bloque: Record<string, string> = {};
+        campos.forEach(({ header, key }) => {
+          const valor =
+            key
+              .split(".")
+              .reduce((acc, curr) => acc?.[curr], empresa as any) ||
+            "N/A";
+          bloque[header] = valor;
+        });
+        return bloque;
+      });
+    };
+
+    // Generar los datos para cada bloque
+    const datosBloque1 = generarDatosBloque(empresas, camposBloque1);
+
+    // Crear un nuevo documento PDF
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+    });
+
+    // Agregar el logo al lado izquierdo
+    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+
+    // Medidas de la página A4 en horizontal
+    const pageWidth = doc.internal.pageSize.width; // 297 mm
+    const pageHeight = doc.internal.pageSize.height; // 210 mm
+
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    const text1 = "DATOS DE SUBCONTRATADO";
+    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
+    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+
+    // Dibujar el primer título centrado en la página
+    doc.text(text1, xPosition1, yPosition1);
+
+    const generarTabla = (datos: any[], startY: number) => {
+      autoTable(doc, {
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
+        theme: "grid",
+        headStyles: {
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
+        },
+        alternateRowStyles: {
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
+        },
+        styles: {
+          overflow: "linebreak",
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
+        },
+        columnStyles: {
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
+        },
+        margin: { top: 25 },
+        pageBreak: "auto", // El salto de página se maneja automáticamente
+      });
+    };
+
+    generarTabla(datosBloque1, 30);
+    doc.addPage();
+
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const printWindow = window.open(pdfUrl, "_blank");
+
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    } else {
+      alert("No se pudo abrir la ventana para imprimir.");
+    }
+  };
+  /* FIN DE LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
 
   return (
     <div className="w-full">
@@ -236,10 +516,21 @@ export function DataTableEmpresas() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem>Copiar datos</DropdownMenuItem>
-            <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
-            <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
-            <DropdownMenuItem>Imprimir</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => exportToExcel(empresaQuery.data || [])}
+            >
+              Exportar a Excel
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => exportToPDF(empresaQuery.data || [])}
+            >
+              Exportar a PDF
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handlePrint(empresaQuery.data || [])}
+            >
+              Imprimir
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
