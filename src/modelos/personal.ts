@@ -13,7 +13,7 @@ export const Persona = z.object({
   direccion: z.string(),
   estadocivil: z.string(),
   fechaingreso: z.string(),
-  fincontrato: z.string(),
+  fincontrato: z.string().optional().nullable(),
   ine: z.string(),
   iniciocontrato: z.string().date(),
   numerocelular: z.string(),
