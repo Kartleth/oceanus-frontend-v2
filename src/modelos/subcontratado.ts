@@ -4,7 +4,7 @@ export const EstadoSubcontratado = z.enum(["Activo", "Inactivo"]);
 
 export const Subcontratado = z.object({
   idsubcontratado: z.number(),
-  nombre: z.string().nullable(),
+  nombre: z.string(),
   rfc: z.string().max(13),
   nss: z.string().nullable(),
   ine: z.string().nullable(),

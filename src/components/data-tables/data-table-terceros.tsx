@@ -162,7 +162,9 @@ export const columns: ColumnDef<Subcontratado>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/editar-tercero/${Subcontratado.idsubcontratado}`}>Editar</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 detelePersona.mutate();

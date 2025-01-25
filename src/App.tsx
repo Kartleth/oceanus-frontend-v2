@@ -9,23 +9,24 @@ import Cotizaciones from "./pages/cotizaciones-page/Cotizaciones";
 import { Page_personal } from "./pages/personal-page/personal-page";
 import { LoginForm } from "./components/login-form";
 import { VerDetallesPersonal } from "./pages/ver-detalles/Ver-detalles-personal";
-import VerReportePersonal from "./pages/ver-reporte-personal-page/Ver-reporte-personal";
-import { PageAgregarTrabajador } from "./pages/agregar/agregar-trabajador-page";
+import VerReportePersonal from "./pages/ver-reporte/Ver-reporte-personal";
+import { PageAgregarTrabajador } from "./pages/agregar-pages/agregar-trabajador-page";
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
-import { PageEditarTrabajador } from "./pages/editar-trabajador/editar-trabajador";
-import { VerDetallesContratos } from "./pages/ver-detalles-contratos-page/Ver-detalles-contratos-page";
-import { PageAgregarContratos } from "./pages/agregar-contratos-page/agregar-contartos-page";
-import { PageEditarContratos } from "./pages/editar-contratos/editar-contratos";
+import { PageEditarTrabajador } from "./pages/editar-pages/editar-trabajador";
+import { VerDetallesContratos } from "./pages/ver-detalles/Ver-detalles-contratos-page";
+import { PageAgregarContratos } from "./pages/agregar-pages/agregar-contartos-page";
+import { PageEditarContratos } from "./pages/editar-pages/editar-contratos";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
 import { VerDetallesCotizacion } from "./pages/ver-detalles/Ver-detalles-cotizacion";
 import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-cotizacion";
-import { PageAgregarCotizacion } from "./pages/agregar/agregar-cotizacion-page";
+import { PageAgregarCotizacion } from "./pages/agregar-pages/agregar-cotizacion-page";
 import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
 import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
-import { PageAgregarTercero } from "./pages/agregar/agregar-tercero-page";
-import { PageAgregarEmpresa } from "./pages/agregar/agregar-empresa-page";
+import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
+import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
+import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ function App() {
               path="/agregar-tercero"
               element={<PageAgregarTercero />}
             />
+            <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para empresa */}
             <Route
               path="/detalles-empresa"
