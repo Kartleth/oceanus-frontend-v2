@@ -14,7 +14,7 @@ import { PageAgregarTrabajador } from "./pages/agregar-pages/agregar-trabajador-
 import { PageGenerarCredencial } from "./pages/generar-credencial-page/generar-credencial-page";
 import { PageEditarTrabajador } from "./pages/editar-pages/editar-trabajador";
 import { VerDetallesContratos } from "./pages/ver-detalles/Ver-detalles-contratos-page";
-import { PageAgregarContratos } from "./pages/agregar-pages/agregar-contartos-page";
+import { PageAgregarContratos } from "./pages/agregar-pages/agregar-contratos-page";
 import { PageEditarContratos } from "./pages/editar-pages/editar-contratos";
 import PrivateRoute from "./components/PrivateRoute";
 import SubirArchivos from "./pages/subir-archivos-page/subir-archivos";
