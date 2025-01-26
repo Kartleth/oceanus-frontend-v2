@@ -3,25 +3,25 @@ import { z } from "zod";
 // Información de la Empresa
 export const Empresa = z.object({
   idempresa: z.number(),
-  razonsocial: z.string(),
-  correo: z.string().email().optional(),
-  telefono: z.string().optional(),
-  logo: z.string().nullable(),
+  razonsocial: z.string().optional().nullable(),
+  correo: z.string().optional().nullable(),
+  telefono: z.string().optional().nullable(),
+  logo: z.string().optional().nullable(),
 
   // Representante legal
-  representantelegal: z.string().optional(),
-  correoRepresentantelegal: z.string().email().optional(),
-  telefonoRepresentantelegal: z.string().optional(),
+  representantelegal: z.string().optional().nullable(),
+  correoRepresentantelegal: z.string().optional().nullable(),
+  telefonoRepresentantelegal: z.string().optional().nullable(),
 
   // Datos de facturación
-  rfc: z.string().min(12).max(13),
-  correofacturacion: z.string().email().nullable(),
-  constanciafiscal: z.string().max(200).nullable(),
-  tiporegimen: z.string().optional(),
-  numerocuenta: z.string().optional(),
-  banco: z.string().optional(),
-  nombrecontrato: z.string().nullable(),
-  fechavencimientoconstancia: z.string().date().optional(),
+  rfc: z.string(),
+  correofacturacion: z.string().optional().nullable(),
+  constanciafiscal: z.string().optional().nullable(),
+  tiporegimen: z.string().optional().nullable(),
+  numerocuenta: z.string().optional().nullable(),
+  banco: z.string().optional().nullable(),
+  nombrecontrato: z.string().optional().nullable(),
+  fechavencimientoconstancia: z.string().nullable().optional(),
 
   // Relaciones
   //contratosEmitidos: z.array(z.unknown()).optional(), // Si necesitas agregar detalles de contratos, los defines aquí

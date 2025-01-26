@@ -78,6 +78,13 @@ export function PageAgregarEmpresa() {
     setValue("datos-facturacionEmpresa");
   }
   function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
+    const formattedValues = {
+      ...values,
+      fechavencimientoconstancia: values.fechavencimientoconstancia
+        ? new Date(values.fechavencimientoconstancia)
+        : null,
+    };
+    console.log("Enviando datos al backend:", formattedValues);
     console.log(values);
     setValue("datos-representante");
   }
@@ -112,9 +119,9 @@ export function PageAgregarEmpresa() {
     const datosRepresentante = datosRepresentanteForm.getValues();
 
     const empresa = {
-      datosEmpresa,
-      datosFacturacionEmpresa,
-      datosRepresentante,
+      ...datosEmpresa,
+      ...datosFacturacionEmpresa,
+      ...datosRepresentante,
     };
 
     console.log("ESTA ES LA EMPRESA", empresa);

@@ -15,10 +15,15 @@ import { DatePicker } from "@/components/ui/datepicker";
 
 export const datosFacturacionEmpresaSchema = z.object({
   rfc: z
-    .string({ required_error: "RFC es obligatorio." })
+    .string({
+      required_error: "RFC es obligatoria.",
+    })
     .regex(
-      /^([A-ZÑ&]{3,4}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[A-Z\d]{3})$/,
-      { message: "RFC incorrecto, debe cumplir con el formato oficial." }
+      /^([A-Z,Ñ,&]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/gm,
+      {
+        message:
+          "RFC incorrecto, no cumple con los digitos oficiales que complementan un RFCf.",
+      }
     ),
   correofacturacion: z
     .string()
