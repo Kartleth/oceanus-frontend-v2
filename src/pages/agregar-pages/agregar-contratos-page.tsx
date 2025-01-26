@@ -52,7 +52,7 @@ export function PageAgregarContratos() {
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/contratos", {
+    const res = await fetch("http://localhost:3001/contrato", {
       method: "post",
       body: JSON.stringify(data),
       headers: {
@@ -71,20 +71,6 @@ export function PageAgregarContratos() {
   const datosGeneralesContratacionForm = useForm<DatosGeneralesContratacion>({
     resolver: zodResolver(datosContratacionSchema),
   });
-  function onSubmitCon(values: DatosGeneralesContratacion) {
-    console.log(values);
-
-    if (values.tipocontrato !== "indefinido" && !values.fincontrato) {
-      datosGeneralesContratacionForm.setError("fincontrato", {
-        message: "La fecha de fin de contrato es obligatoria.",
-        type: "required",
-      });
-
-      return;
-    }
-
-    guardarTrabajador();
-  }
   const datosGeneralesForm = useForm<DatosGeneralesContratacion>({
     resolver: zodResolver(datosGeneralesSchema),
   });
@@ -114,6 +100,7 @@ export function PageAgregarContratos() {
   function onSubmitAntic(values: DatosFianzaAnticipos) {
     console.log(values);
     setValue("datos-anticipos");
+    guardarContratos();
   }
 
   async function formulariosSonValidos() {
@@ -141,7 +128,7 @@ export function PageAgregarContratos() {
     return true;
   }
 
-  async function guardarTrabajador() {
+  async function guardarContratos() {
     const validos = await formulariosSonValidos();
 
     if (!validos) return;
@@ -194,8 +181,8 @@ export function PageAgregarContratos() {
         >
           <AccordionItem value="datos-generales">
             <AccordionTrigger
-              data-hasErrors={erroresGenerales > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresGenerales > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Generales ${
                 erroresGenerales > 0 ? `(${erroresGenerales} errores)` : ""
@@ -204,14 +191,14 @@ export function PageAgregarContratos() {
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosGeneralesContratacionForm
                 form={datosGeneralesForm}
-                onSubmit={onSubmitGe}
+                onSubmitCon={onSubmitGe}
               ></DatosGeneralesContratacionForm>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-cumplimiento">
             <AccordionTrigger
-              data-hasErrors={erroresCumplimiento > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresCumplimiento > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Cumplimiento ${
                 erroresCumplimiento > 0
@@ -228,8 +215,8 @@ export function PageAgregarContratos() {
           </AccordionItem>
           <AccordionItem value="datos-ocultos">
             <AccordionTrigger
-              data-hasErrors={erroresOculto > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresOculto > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Académicos ${
                 erroresOculto > 0 ? `(${erroresOculto} errores)` : ""
@@ -244,8 +231,8 @@ export function PageAgregarContratos() {
           </AccordionItem>
           <AccordionItem value="datos-anticipo">
             <AccordionTrigger
-              data-hasErrors={erroresAnticipo > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresAnticipo > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Anticipo ${
                 erroresAnticipo > 0 ? `(${erroresAnticipo} errores)` : ""

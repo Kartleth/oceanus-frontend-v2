@@ -188,8 +188,8 @@ export function PageAgregarTrabajador() {
         >
           <AccordionItem value="datos-personales">
             <AccordionTrigger
-              data-hasErrors={erroresPersonales > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresPersonales > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Personales ${
                 erroresPersonales > 0 ? `(${erroresPersonales} errores)` : ""
@@ -204,8 +204,8 @@ export function PageAgregarTrabajador() {
           </AccordionItem>
           <AccordionItem value="datos-medicos">
             <AccordionTrigger
-              data-hasErrors={erroresMedicos > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresMedicos > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Médicos ${
                 erroresMedicos > 0 ? `(${erroresMedicos} errores)` : ""
@@ -220,8 +220,8 @@ export function PageAgregarTrabajador() {
           </AccordionItem>
           <AccordionItem value="datos-academicos">
             <AccordionTrigger
-              data-hasErrors={erroresAcademicos > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresAcademicos > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Académicos ${
                 erroresAcademicos > 0 ? `(${erroresAcademicos} errores)` : ""
@@ -236,8 +236,8 @@ export function PageAgregarTrabajador() {
           </AccordionItem>
           <AccordionItem value="datos-contratacion">
             <AccordionTrigger
-              data-hasErrors={erroresContratacion > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+              data-haserrors={erroresContratacion > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos de Contratación ${
                 erroresContratacion > 0

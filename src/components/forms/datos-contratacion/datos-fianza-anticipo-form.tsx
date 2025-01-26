@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/form";
 import { FormSelect, SelectItem } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/datepicker";
-import { Button } from "react-day-picker";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const datosFianzaAnticipoSchema = z.object({
   documento: z.string({
@@ -44,12 +44,12 @@ export const datosFianzaAnticipoSchema = z.object({
 export type DatosFianzaAnticipos = z.infer<typeof datosFianzaAnticipoSchema>;
 
 interface DatosFianzaAnticiposProps {
-  onSubmitCon: (values: DatosFianzaAnticipos) => void;
+  onSubmit: (values: DatosFianzaAnticipos) => void;
   form: UseFormReturn<DatosFianzaAnticipos>;
 }
 
 export const DatosFianzaAnticiposForm: FC<DatosFianzaAnticiposProps> = ({
-  onSubmitCon,
+  onSubmit: onSubmitCon,
   form,
 }) => {
   return (

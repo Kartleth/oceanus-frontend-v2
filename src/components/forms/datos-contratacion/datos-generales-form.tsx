@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/form";
 import { FormSelect, SelectItem } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/datepicker";
-import { Button } from "react-day-picker";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const datosGeneralesSchema = z.object({
   nombrecontrato: z.string({
