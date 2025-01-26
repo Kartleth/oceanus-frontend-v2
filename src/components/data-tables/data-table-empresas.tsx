@@ -163,7 +163,7 @@ export const columns: ColumnDef<Empresa>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-tercero/${Empresa.idempresa}`}>Editar</Link>
+              <Link to={`/editar-empresa/${Empresa.idempresa}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

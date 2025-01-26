@@ -27,6 +27,7 @@ import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
 import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
 import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
+import { PageEditarEmpresa } from "./pages/editar-pages/editar-empresa";
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,7 @@ function App() {
               path="/agregar-empresa"
               element={<PageAgregarEmpresa />}
             />
+            <Route path="/editar-empresa/:id" element={<PageEditarEmpresa />} />
           </Route>
         </Routes>
       </BrowserRouter>
