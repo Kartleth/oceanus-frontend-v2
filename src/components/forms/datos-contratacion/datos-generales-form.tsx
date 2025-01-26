@@ -44,6 +44,7 @@ export const datosGeneralesSchema = z.object({
   direccion: z.string(),
   convenio: z.string(),
   personalcontrato: z.string(),
+  tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
 });
 
 export type DatosGeneralesContratacion = z.infer<typeof datosGeneralesSchema>;
@@ -56,6 +57,8 @@ interface DatosGeneralesContratacionProps {
 export const DatosGeneralesContratacionForm: FC<
   DatosGeneralesContratacionProps
 > = ({ onSubmitCon, form }) => {
+  const tipoContrato = form.watch("tipocontrato");
+  const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
   return (
     <Form {...form}>
       <form
@@ -109,6 +112,7 @@ export const DatosGeneralesContratacionForm: FC<
         <FormField
           control={form.control}
           name="fincontrato"
+          disabled={disableContractEnd}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fecha final del Contrato</FormLabel>
@@ -184,6 +188,27 @@ export const DatosGeneralesContratacionForm: FC<
               <FormLabel>Monto del Contrato</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="tipocontrato"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipo de contrato</FormLabel>
+              <FormControl>
+                <FormSelect
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  placeholder="Selecciona tipo de contrato"
+                >
+                  <SelectItem value="indefinido">Indefinido</SelectItem>
+                  <SelectItem value="temporal">Temporal</SelectItem>
+                  <SelectItem value="porObra">Por Obra</SelectItem>
+                </FormSelect>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -18,26 +18,30 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { DatosPersonalesForm } from "@/components/forms/datos-personales-form";
+import { DatosMedicosForm } from "@/components/forms/datos-medicos-form";
+import { DatosAcademicosForm } from "@/components/forms/datos-academicos-form";
 import {
-  DatosPersonales,
-  DatosPersonalesForm,
-  datosPersonalesSchema,
-} from "@/components/forms/datos-personales-form";
-import {
-  DatosMedicos,
-  DatosMedicosForm,
-  datosMedicosSchema,
-} from "@/components/forms/datos-medicos-form";
-import {
-  DatosAcademicos,
-  DatosAcademicosForm,
-  datosAcademicosSchema,
-} from "@/components/forms/datos-academicos-form";
-import {
-  DatosContratacion,
   DatosContratacionForm,
   datosContratacionSchema,
 } from "@/components/forms/datos-contratacion-form";
+import {
+  DatosGeneralesContratacion,
+  DatosGeneralesContratacionForm,
+  datosGeneralesSchema,
+} from "@/components/forms/datos-contratacion/datos-generales-form";
+import {
+  DatosFianzaCumplimientos,
+  datosFianzaCumplimientoSchema,
+} from "@/components/forms/datos-contratacion/datos-fianza-cumplimiento-form";
+import {
+  DatosFianzaOcultos,
+  datosFianzaOcultosSchema,
+} from "@/components/forms/datos-contratacion/datos-fianza-ocultos-form";
+import {
+  DatosFianzaAnticipos,
+  datosFianzaAnticipoSchema,
+} from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
 
 type AccordionValue =
   | "datos-personales"
@@ -51,7 +55,7 @@ export function PageAgregarContratos() {
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/personas", {
+    const res = await fetch("http://localhost:3001/contratos", {
       method: "post",
       body: JSON.stringify(data),
       headers: {
@@ -64,17 +68,17 @@ export function PageAgregarContratos() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["trabajadores"]);
-    navigate("/personal");
+    navigate("/contratos");
   });
-  const [value, setValue] = useState<AccordionValue>("datos-personales"); //Mantiene el estado en un componente.
-  const datosContratacionForm = useForm<DatosContratacion>({
+  const [value, setValue] = useState<AccordionValue>("datos-generales"); //Mantiene el estado en un componente.
+  const datosGeneralesContratacionForm = useForm<DatosGeneralesContratacion>({
     resolver: zodResolver(datosContratacionSchema),
   });
-  function onSubmitCon(values: DatosContratacion) {
+  function onSubmitCon(values: DatosGeneralesContratacion) {
     console.log(values);
 
     if (values.tipocontrato !== "indefinido" && !values.fincontrato) {
-      datosContratacionForm.setError("fincontrato", {
+      datosGeneralesContratacionForm.setError("fincontrato", {
         message: "La fecha de fin de contrato es obligatoria.",
         type: "required",
       });
@@ -84,47 +88,55 @@ export function PageAgregarContratos() {
 
     guardarTrabajador();
   }
-  const datosAcademicosForm = useForm<DatosAcademicos>({
-    resolver: zodResolver(datosAcademicosSchema),
+  const datosGeneralesForm = useForm<DatosGeneralesContratacion>({
+    resolver: zodResolver(datosGeneralesSchema),
   });
-  function onSubmitAcd(values: DatosAcademicos) {
+  function onSubmitAcd(values: DatosGeneralesContratacion) {
     console.log(values);
-    setValue("datos-contratacion");
+    setValue("datos-generales");
   }
-  const datosMedicosForm = useForm<DatosMedicos>({
-    resolver: zodResolver(datosMedicosSchema),
+  const datosCumplimientoForm = useForm<DatosFianzaCumplimientos>({
+    resolver: zodResolver(datosFianzaCumplimientoSchema),
   });
-  function onSubmitMed(values: DatosMedicos) {
+  function onSubmitMed(values: DatosFianzaCumplimientos) {
     console.log(values);
-    setValue("datos-academicos");
+    setValue("datos-cumplimiento");
   }
 
-  const datosPersonalesForm = useForm<DatosPersonales>({
-    resolver: zodResolver(datosPersonalesSchema),
+  const datosOcultosForm = useForm<DatosFianzaOcultos>({
+    resolver: zodResolver(datosFianzaOcultosSchema),
   });
-  function onSubmit(values: DatosPersonales) {
+  function onSubmit(values: DatosFianzaOcultos) {
     console.log(values);
-    setValue("datos-medicos");
+    setValue("datos-ocultos");
+  }
+
+  const datosAnticipoForm = useForm<DatosFianzaAnticipos>({
+    resolver: zodResolver(datosFianzaAnticipoSchema),
+  });
+  function onSubmit(values: DatosFianzaAnticipos) {
+    console.log(values);
+    setValue("datos-anticipos");
   }
 
   async function formulariosSonValidos() {
-    if (!(await datosPersonalesForm.trigger())) {
-      setValue("datos-personales");
+    if (!(await datosGeneralesForm.trigger())) {
+      setValue("datos-generales");
 
       return false;
     }
-    if (!(await datosMedicosForm.trigger())) {
-      setValue("datos-medicos");
+    if (!(await datosCumplimientoForm.trigger())) {
+      setValue("datos-cumplimiento");
 
       return false;
     }
-    if (!(await datosAcademicosForm.trigger())) {
-      setValue("datos-academicos");
+    if (!(await datosOcultosForm.trigger())) {
+      setValue("datos-ocultos");
 
       return false;
     }
-    if (!(await datosContratacionForm.trigger())) {
-      setValue("datos-contratacion");
+    if (!(await datosAnticipoForm.trigger())) {
+      setValue("datos-anticipo");
 
       return false;
     }
@@ -137,31 +149,30 @@ export function PageAgregarContratos() {
 
     if (!validos) return;
 
-    const datosPersonales = datosPersonalesForm.getValues();
-    const datosMedicos = datosMedicosForm.getValues();
-    const datosAcademicos = datosAcademicosForm.getValues();
-    const datosContratacion = datosContratacionForm.getValues();
+    const datosGenerales = datosGeneralesForm.getValues();
+    const datosAnticipo = datosAnticipoForm.getValues();
+    const datosCumplimiento = datosCumplimientoForm.getValues();
+    const datosOcultos = datosOcultosForm.getValues();
     const trabajador = {
-      datosMedicos: datosMedicos,
-      datosAcademicos: datosAcademicos,
-      datosPersonales: { ...datosPersonales, ...datosContratacion },
+      datosGenerales: datosGenerales,
+      datosFianza: { ...datosAnticipo, ...datosCumplimiento, ...datosOcultos },
     };
     console.log(trabajador);
     mutation.mutate(trabajador);
   }
 
-  const erroresPersonales = Object.keys(
-    datosPersonalesForm.formState.errors
+  const erroresGenerales = Object.keys(
+    datosGeneralesForm.formState.errors
   ).length;
 
   const erroresMedicos = Object.keys(datosMedicosForm.formState.errors).length;
 
   const erroresAcademicos = Object.keys(
-    datosAcademicosForm.formState.errors
+    datosGeneralesForm.formState.errors
   ).length;
 
   const erroresContratacion = Object.keys(
-    datosContratacionForm.formState.errors
+    datosGeneralesContratacionForm.formState.errors
   ).length;
 
   return (
@@ -186,20 +197,20 @@ export function PageAgregarContratos() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-personales">
+          <AccordionItem value="datos-generales">
             <AccordionTrigger
-              data-hasErrors={erroresPersonales > 0}
+              data-hasErrors={erroresGenerales > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos Personales ${
-                erroresPersonales > 0 ? `(${erroresPersonales} errores)` : ""
+                erroresGenerales > 0 ? `(${erroresGenerales} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosPersonalesForm
-                form={datosPersonalesForm}
+              <DatosGeneralesContratacionForm
+                form={datosGeneralesForm}
                 onSubmit={onSubmit}
-              ></DatosPersonalesForm>
+              ></DatosGeneralesContratacionForm>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="datos-medicos">
@@ -229,7 +240,7 @@ export function PageAgregarContratos() {
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosAcademicosForm
-                form={datosAcademicosForm}
+                form={datosGeneralesForm}
                 onSubmitAcd={onSubmitAcd}
               ></DatosAcademicosForm>
             </AccordionContent>
@@ -247,7 +258,7 @@ export function PageAgregarContratos() {
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosContratacionForm
-                form={datosContratacionForm}
+                form={datosGeneralesContratacionForm}
                 onSubmitCon={onSubmitCon}
               ></DatosContratacionForm>
             </AccordionContent>
