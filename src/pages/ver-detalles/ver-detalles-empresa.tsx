@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "@/components/Layout";
 import {
@@ -73,7 +73,7 @@ export function VerDetallesEmpresa() {
                 Detalles de empresa
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {empresa?.idempresa}, {empresa?.razonsocial}
+                ID: {empresa?.idempresa ?? "No disponible"} , {empresa?.razonsocial  ?? "No disponible"}
               </p>
             </div>
 

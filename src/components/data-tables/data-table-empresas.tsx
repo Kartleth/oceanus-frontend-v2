@@ -134,7 +134,7 @@ export const columns: ColumnDef<Empresa>[] = [
           console.error(resData);
         }
         console.log(resData);
-        queryClient.invalidateQueries(["empresa"]);
+        queryClient.invalidateQueries(["empresas"]);
       });
       return (
         <DropdownMenu>
@@ -246,9 +246,9 @@ export function DataTableEmpresas() {
       Correo: empresa.correo ?? "N/A",
       "Teléfono": empresa.telefono ?? "N/A",
       Logo: empresa.logo ?? "N/A",
-      "Representante legal": empresa.represenatelegal ?? "N/A",
-      "Correo rep": empresa.correoRepresenatelegal ?? "N/A",
-      "Telefono de rep": empresa.telefonoRepresenatelegal ?? "N/A",
+      "Representante legal": empresa.representantelegal ?? "N/A",
+      "Correo rep": empresa.correoRepresentantelegal ?? "N/A",
+      "Telefono de rep": empresa.telefonoRepresentantelegal ?? "N/A",
       RFC: empresa.rfc ?? "N/A",
       "Correo de facturación": empresa.correofacturacion ?? "N/A",
       "Constancia fiscal": empresa.constanciafiscal ?? "N/A",
@@ -281,9 +281,9 @@ export function DataTableEmpresas() {
       { header: "Razón social", key: "razonsocial" },
       { header: "Correo", key: "correo" },
       { header: "Teléfono", key: "telefono" },
-      { header: "Representante legal", key: "represenatelegal" },
-      { header: "Correo rep", key: "correoRepresenatelegal" },
-      { header: "Telefono de rep", key: "telefonoRepresenatelegal" },
+      { header: "Representante legal", key: "representantelegal" },
+      { header: "Correo rep", key: "correoRepresentantelegal" },
+      { header: "Telefono de rep", key: "telefonoRepresentantelegal" },
     ];
 
     const camposBloque2 = [
@@ -402,9 +402,9 @@ export function DataTableEmpresas() {
       { header: "Razón social", key: "razonsocial" },
       { header: "Correo", key: "correo" },
       { header: "Teléfono", key: "telefono" },
-      { header: "Representante legal", key: "represenatelegal" },
-      { header: "Correo rep", key: "correoRepresenatelegal" },
-      { header: "Telefono de rep", key: "telefonoRepresenatelegal" },
+      { header: "Representante legal", key: "representantelegal" },
+      { header: "Correo rep", key: "correoRepresentantelegal" },
+      { header: "Telefono de rep", key: "telefonoRepresentantelegal" },
     ];
 
     const camposBloque2 = [
