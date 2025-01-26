@@ -18,13 +18,7 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { DatosPersonalesForm } from "@/components/forms/datos-personales-form";
-import { DatosMedicosForm } from "@/components/forms/datos-medicos-form";
-import { DatosAcademicosForm } from "@/components/forms/datos-academicos-form";
-import {
-  DatosContratacionForm,
-  datosContratacionSchema,
-} from "@/components/forms/datos-contratacion-form";
+import { datosContratacionSchema } from "@/components/forms/datos-contratacion-form";
 import {
   DatosGeneralesContratacion,
   DatosGeneralesContratacionForm,
@@ -33,21 +27,24 @@ import {
 import {
   DatosFianzaCumplimientos,
   datosFianzaCumplimientoSchema,
+  DatosFianzaCumplimientosForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-cumplimiento-form";
 import {
   DatosFianzaOcultos,
+  DatosFianzaOcultosForm,
   datosFianzaOcultosSchema,
 } from "@/components/forms/datos-contratacion/datos-fianza-ocultos-form";
 import {
   DatosFianzaAnticipos,
   datosFianzaAnticipoSchema,
+  DatosFianzaAnticiposForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
 
 type AccordionValue =
-  | "datos-personales"
-  | "datos-medicos"
-  | "datos-academicos"
-  | "datos-contratacion"
+  | "datos-generales"
+  | "datos-cumplimiento"
+  | "datos-ocultos"
+  | "datos-anticipos"
   | string;
 
 export function PageAgregarContratos() {
@@ -67,7 +64,7 @@ export function PageAgregarContratos() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["trabajadores"]);
+    queryClient.invalidateQueries(["contratos"]);
     navigate("/contratos");
   });
   const [value, setValue] = useState<AccordionValue>("datos-generales"); //Mantiene el estado en un componente.
@@ -91,14 +88,14 @@ export function PageAgregarContratos() {
   const datosGeneralesForm = useForm<DatosGeneralesContratacion>({
     resolver: zodResolver(datosGeneralesSchema),
   });
-  function onSubmitAcd(values: DatosGeneralesContratacion) {
+  function onSubmitGe(values: DatosGeneralesContratacion) {
     console.log(values);
     setValue("datos-generales");
   }
   const datosCumplimientoForm = useForm<DatosFianzaCumplimientos>({
     resolver: zodResolver(datosFianzaCumplimientoSchema),
   });
-  function onSubmitMed(values: DatosFianzaCumplimientos) {
+  function onSubmitCum(values: DatosFianzaCumplimientos) {
     console.log(values);
     setValue("datos-cumplimiento");
   }
@@ -106,7 +103,7 @@ export function PageAgregarContratos() {
   const datosOcultosForm = useForm<DatosFianzaOcultos>({
     resolver: zodResolver(datosFianzaOcultosSchema),
   });
-  function onSubmit(values: DatosFianzaOcultos) {
+  function onSubmitOcu(values: DatosFianzaOcultos) {
     console.log(values);
     setValue("datos-ocultos");
   }
@@ -114,7 +111,7 @@ export function PageAgregarContratos() {
   const datosAnticipoForm = useForm<DatosFianzaAnticipos>({
     resolver: zodResolver(datosFianzaAnticipoSchema),
   });
-  function onSubmit(values: DatosFianzaAnticipos) {
+  function onSubmitAntic(values: DatosFianzaAnticipos) {
     console.log(values);
     setValue("datos-anticipos");
   }
@@ -165,15 +162,13 @@ export function PageAgregarContratos() {
     datosGeneralesForm.formState.errors
   ).length;
 
-  const erroresMedicos = Object.keys(datosMedicosForm.formState.errors).length;
-
-  const erroresAcademicos = Object.keys(
-    datosGeneralesForm.formState.errors
+  const erroresAnticipo = Object.keys(
+    datosAnticipoForm.formState.errors
   ).length;
-
-  const erroresContratacion = Object.keys(
-    datosGeneralesContratacionForm.formState.errors
+  const erroresCumplimiento = Object.keys(
+    datosCumplimientoForm.formState.errors
   ).length;
+  const erroresOculto = Object.keys(datosOcultosForm.formState.errors).length;
 
   return (
     <Layout>
@@ -202,65 +197,65 @@ export function PageAgregarContratos() {
               data-hasErrors={erroresGenerales > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Personales ${
+              {`Datos Generales ${
                 erroresGenerales > 0 ? `(${erroresGenerales} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosGeneralesContratacionForm
                 form={datosGeneralesForm}
-                onSubmit={onSubmit}
+                onSubmit={onSubmitGe}
               ></DatosGeneralesContratacionForm>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="datos-medicos">
+          <AccordionItem value="datos-cumplimiento">
             <AccordionTrigger
-              data-hasErrors={erroresMedicos > 0}
+              data-hasErrors={erroresCumplimiento > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Médicos ${
-                erroresMedicos > 0 ? `(${erroresMedicos} errores)` : ""
-              }`}
-            </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosMedicosForm
-                form={datosMedicosForm}
-                onSubmitMed={onSubmitMed}
-              ></DatosMedicosForm>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="datos-academicos">
-            <AccordionTrigger
-              data-hasErrors={erroresAcademicos > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos Académicos ${
-                erroresAcademicos > 0 ? `(${erroresAcademicos} errores)` : ""
-              }`}
-            </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosAcademicosForm
-                form={datosGeneralesForm}
-                onSubmitAcd={onSubmitAcd}
-              ></DatosAcademicosForm>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="datos-contratacion">
-            <AccordionTrigger
-              data-hasErrors={erroresContratacion > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos de Contratación ${
-                erroresContratacion > 0
-                  ? `(${erroresContratacion} errores)`
+              {`Datos Cumplimiento ${
+                erroresCumplimiento > 0
+                  ? `(${erroresCumplimiento} errores)`
                   : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosContratacionForm
-                form={datosGeneralesContratacionForm}
-                onSubmitCon={onSubmitCon}
-              ></DatosContratacionForm>
+              <DatosFianzaCumplimientosForm
+                form={datosCumplimientoForm}
+                onSubmit={onSubmitCum}
+              ></DatosFianzaCumplimientosForm>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-ocultos">
+            <AccordionTrigger
+              data-hasErrors={erroresOculto > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos Académicos ${
+                erroresOculto > 0 ? `(${erroresOculto} errores)` : ""
+              }`}
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+              <DatosFianzaOcultosForm
+                form={datosOcultosForm}
+                onSubmit={onSubmitOcu}
+              ></DatosFianzaOcultosForm>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="datos-anticipo">
+            <AccordionTrigger
+              data-hasErrors={erroresAnticipo > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos Anticipo ${
+                erroresAnticipo > 0 ? `(${erroresAnticipo} errores)` : ""
+              }`}
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+              <DatosFianzaAnticiposForm
+                form={datosAnticipoForm}
+                onSubmit={onSubmitAntic}
+              ></DatosFianzaAnticiposForm>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
