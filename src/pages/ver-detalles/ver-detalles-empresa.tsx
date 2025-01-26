@@ -231,22 +231,6 @@ export function VerDetallesEmpresa() {
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Constancia fiscal
-                </Label>
-                {/* Skeleton Loader */}
-                {!empresa ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={empresa?.constanciafiscal ?? "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
                   Tipo de régimen
                 </Label>
                 {/* Skeleton Loader */}

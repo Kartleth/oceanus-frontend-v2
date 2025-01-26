@@ -23,7 +23,7 @@ import {
   DatosTerceros,
   DatosTercerosForm,
   datosTercerosSchema,
-} from "@/components/forms/datos-terceros/datos-terceros-from";
+} from "@/components/forms/datos-tercero-form.tsx/datos-terceros-form";
 import { Subcontratado } from "@/modelos/subcontratado";
 
 type AccordionValue = "datos-tercero" | string;

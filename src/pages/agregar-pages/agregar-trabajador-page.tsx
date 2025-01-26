@@ -22,7 +22,7 @@ import {
   DatosPersonales,
   DatosPersonalesForm,
   datosPersonalesSchema,
-} from "@/components/forms/datos-personales-form";
+} from "@/components/forms/datos-trabajador-forms/datos-personales-form";
 import {
   DatosMedicos,
   DatosMedicosForm,

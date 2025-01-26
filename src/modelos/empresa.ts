@@ -21,7 +21,7 @@ export const Empresa = z.object({
   numerocuenta: z.string().nullable(),
   banco: z.string().nullable(),
   nombrecontrato: z.string().nullable(),
-  fechavencimientoconstancia: z.string().date(),
+  fechavencimientoconstancia: z.string().date().nullable(),
 
   // Relaciones
   //contratosEmitidos: z.array(z.unknown()).optional(), // Si necesitas agregar detalles de contratos, los defines aquí

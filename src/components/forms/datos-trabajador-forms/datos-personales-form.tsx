@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { DatePicker } from "../ui/datepicker";
+import { Button } from "../../ui/button";
+import { DatePicker } from "../../ui/datepicker";
 import {
   Form,
   FormControl,
@@ -8,9 +8,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { FormSelect, SelectItem } from "../ui/select";
+} from "../../ui/form";
+import { Input } from "../../ui/input";
+import { FormSelect, SelectItem } from "../../ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { FC } from "react";
 
