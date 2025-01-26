@@ -38,8 +38,7 @@ import {
 type AccordionValue =
   | "datos-empresa"
   | "datos-facturacionEmpresa"
-  | "datos-representante"
-  | string;
+  | "datos-representante";
 
 export function PageAgregarEmpresa() {
   const navigate = useNavigate();

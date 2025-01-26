@@ -320,7 +320,7 @@ export function VerDetallesEmpresa() {
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.represenatelegal ?? "No disponible"}
+                    value={empresa?.representantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -336,7 +336,7 @@ export function VerDetallesEmpresa() {
                   <Input
                     disabled
                     type="email"
-                    value={empresa?.correoRepresenatelegal ?? "No disponible"}
+                    value={empresa?.correoRepresentantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -352,7 +352,7 @@ export function VerDetallesEmpresa() {
                   <Input
                     disabled
                     type="string"
-                    value={empresa?.telefonoRepresenatelegal ?? "No disponible"}
+                    value={empresa?.telefonoRepresentantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
