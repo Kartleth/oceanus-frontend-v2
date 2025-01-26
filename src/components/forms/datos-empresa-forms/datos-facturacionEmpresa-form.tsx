@@ -24,19 +24,20 @@ export const datosFacturacionEmpresaSchema = z.object({
     .string()
     .max(50, { message: "Correo no puede exceder de 50 caracteres." })
     .email({ message: "Correo electrónico incorrecto." })
-    .nullable(),
-  tiporegimen: z.string().nullable(),
-  numerocuenta: z.string().nullable(),
+    .optional(),
+  tiporegimen: z.string().optional(),
+  numerocuenta: z.string().optional(),
+  banco: z.string().optional(),
   nombrecontrato: z
     .string()
     .max(150, { message: "Contrato no puede exceder de 150 caracteres." })
-    .nullable(),
+    .optional(),
   fechavencimientoconstancia: z
     .date()
     .min(new Date(1914, 0, 1), {
       message: "Fecha no puede ser anterior a 1914.",
     })
-    .nullable(),
+    .optional(),
 });
 
 export type DatosFacturacionEmpresa = z.infer<

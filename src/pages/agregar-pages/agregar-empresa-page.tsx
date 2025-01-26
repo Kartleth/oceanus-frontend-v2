@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -21,27 +20,26 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import {
-  DatosPersonales,
-  DatosPersonalesForm,
-  datosPersonalesSchema,
-} from "@/components/forms/datos-trabajador-forms/datos-personales-form";
+  DatosEmpresa,
+  DatosEmpresaForm,
+  datosEmpresaSchema,
+} from "@/components/forms/datos-empresa-forms/datos-empresa-form";
 import {
-  DatosMedicos,
-  DatosMedicosForm,
-  datosMedicosSchema,
-} from "@/components/forms/datos-medicos-form";
+  DatosFacturacionEmpresa,
+  DatosFacturacionEmpresaForm,
+  datosFacturacionEmpresaSchema,
+} from "@/components/forms/datos-empresa-forms/datos-facturacionEmpresa-form";
 import {
-  DatosAcademicos,
-  DatosAcademicosForm,
-  datosAcademicosSchema,
-} from "@/components/forms/datos-academicos-form";
-import {
-  DatosContratacion,
-  DatosContratacionForm,
-  datosContratacionSchema,
-} from "@/components/forms/datos-contratacion-form";
+  DatosRepresentante,
+  DatosRepresentanteForm,
+  datosRepresentanteSchema,
+} from "@/components/forms/datos-empresa-forms/datos-representateEmpresa-form";
 
-type AccordionValue = "datos-empresa";
+type AccordionValue =
+  | "datos-empresa"
+  | "datos-facturacionEmpresa"
+  | "datos-representante"
+  | string;
 
 export function PageAgregarEmpresa() {
   const navigate = useNavigate();
@@ -63,65 +61,46 @@ export function PageAgregarEmpresa() {
     queryClient.invalidateQueries(["empresa"]);
     navigate("/empresas");
   });
-  const [value, setValue] = useState<AccordionValue>("datos-empresa"); //Mantiene el estado en un componente.
-  const datosEmpresaForm = useForm<DatosContratacion>({
-    resolver: zodResolver(datosContratacionSchema),
-  });
-  function onSubmitCon(values: DatosContratacion) {
-    console.log(values);
+  const [value, setValue] = useState<AccordionValue>("datos-empresa");
 
-    if (values.tipocontrato !== "indefinido" && !values.fincontrato) {
-      datosContratacionForm.setError("fincontrato", {
-        message: "La fecha de fin de contrato es obligatoria.",
-        type: "required",
-      });
-
-      return;
-    }
-
-    guardarTrabajador();
-  }
-  const datosAcademicosForm = useForm<DatosAcademicos>({
-    resolver: zodResolver(datosAcademicosSchema),
+  const datosEmpresaForm = useForm<DatosEmpresa>({
+    resolver: zodResolver(datosEmpresaSchema),
   });
-  function onSubmitAcd(values: DatosAcademicos) {
+  function onSubmitEmp(values: DatosEmpresa) {
     console.log(values);
-    setValue("datos-contratacion");
-  }
-  const datosMedicosForm = useForm<DatosMedicos>({
-    resolver: zodResolver(datosMedicosSchema),
-  });
-  function onSubmitMed(values: DatosMedicos) {
-    console.log(values);
-    setValue("datos-academicos");
+    setValue("datos-empresa");
   }
 
-  const datosPersonalesForm = useForm<DatosPersonales>({
-    resolver: zodResolver(datosPersonalesSchema),
+  const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
+    resolver: zodResolver(datosFacturacionEmpresaSchema),
   });
-  function onSubmit(values: DatosPersonales) {
+  function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
     console.log(values);
-    setValue("datos-medicos");
+    setValue("datos-facturacionEmpresa");
+  }
+
+  const datosRepresentanteForm = useForm<DatosRepresentante>({
+    resolver: zodResolver(datosRepresentanteSchema),
+  });
+  function onSubmitRepLeg(values: DatosRepresentante) {
+    console.log(values);
+    setValue("datos-representante");
+    guardarEmpresa();
   }
 
   async function formulariosSonValidos() {
-    if (!(await datosPersonalesForm.trigger())) {
-      setValue("datos-personales");
+    if (!(await datosEmpresaForm.trigger())) {
+      setValue("datos-empresa");
 
       return false;
     }
-    if (!(await datosMedicosForm.trigger())) {
-      setValue("datos-medicos");
+    if (!(await datosFacturacionEmpresaForm.trigger())) {
+      setValue("datos-facturacionEmpresa");
 
       return false;
     }
-    if (!(await datosAcademicosForm.trigger())) {
-      setValue("datos-academicos");
-
-      return false;
-    }
-    if (!(await datosContratacionForm.trigger())) {
-      setValue("datos-contratacion");
+    if (!(await datosRepresentanteForm.trigger())) {
+      setValue("datos-representante");
 
       return false;
     }
@@ -129,36 +108,34 @@ export function PageAgregarEmpresa() {
     return true;
   }
 
-  async function guardarTrabajador() {
+  async function guardarEmpresa() {
     const validos = await formulariosSonValidos();
 
     if (!validos) return;
 
-    const datosPersonales = datosPersonalesForm.getValues();
-    const datosMedicos = datosMedicosForm.getValues();
-    const datosAcademicos = datosAcademicosForm.getValues();
-    const datosContratacion = datosContratacionForm.getValues();
-    const trabajador = {
-      datosMedicos: datosMedicos,
-      datosAcademicos: datosAcademicos,
-      datosPersonales: { ...datosPersonales, ...datosContratacion },
+    const datosEmpresa = datosEmpresaForm.getValues();
+    const datosFacturacion = datosFacturacionEmpresaForm.getValues();
+    const datosRepresentante = datosRepresentanteForm.getValues();
+
+    const empresa = {
+      datosEmpresa: datosEmpresa,
+      datosFacturacion: datosFacturacion,
+      datosRepresentante: datosRepresentante,
     };
-    console.log(trabajador);
-    mutation.mutate(trabajador);
+    console.log(empresa);
+    mutation.mutate(empresa);
   }
 
-  const erroresPersonales = Object.keys(
-    datosPersonalesForm.formState.errors
+  const erroresEmpresa = Object.keys(
+    datosEmpresaForm.formState.errors
   ).length;
 
-  const erroresMedicos = Object.keys(datosMedicosForm.formState.errors).length;
-
-  const erroresAcademicos = Object.keys(
-    datosAcademicosForm.formState.errors
+  const erroresFacturacion = Object.keys(
+    datosFacturacionEmpresaForm.formState.errors
   ).length;
 
-  const erroresContratacion = Object.keys(
-    datosContratacionForm.formState.errors
+  const erroresRepresentante = Object.keys(
+    datosRepresentanteForm.formState.errors
   ).length;
 
   return (
@@ -191,70 +168,52 @@ export function PageAgregarEmpresa() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-personales">
+          <AccordionItem value="datos-empresa">
             <AccordionTrigger
-              data-hasErrors={erroresPersonales > 0}
+              data-hasErrors={erroresEmpresa > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Personales ${
-                erroresPersonales > 0 ? `(${erroresPersonales} errores)` : ""
+              {`Datos Empresa ${
+                erroresEmpresa > 0 ? `(${erroresEmpresa} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosPersonalesForm
-                form={datosPersonalesForm}
-                onSubmit={onSubmit}
-              ></DatosPersonalesForm>
+              <DatosEmpresaForm
+                form={datosEmpresaForm}
+                onSubmitEmp={onSubmitEmp}
+              ></DatosEmpresaForm>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="datos-medicos">
+          <AccordionItem value="datos-facturacionEmpresa">
             <AccordionTrigger
-              data-hasErrors={erroresMedicos > 0}
+              data-hasErrors={erroresFacturacion > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Médicos ${
-                erroresMedicos > 0 ? `(${erroresMedicos} errores)` : ""
+              {`Datos Facturación ${
+                erroresFacturacion > 0 ? `(${erroresFacturacion} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosMedicosForm
-                form={datosMedicosForm}
-                onSubmitMed={onSubmitMed}
-              ></DatosMedicosForm>
+              <DatosFacturacionEmpresaForm
+                form={datosFacturacionEmpresaForm}
+                onSubmitFacEmp={onSubmitFacEmp}
+              ></DatosFacturacionEmpresaForm>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="datos-academicos">
+          <AccordionItem value="datos-representante">
             <AccordionTrigger
-              data-hasErrors={erroresAcademicos > 0}
+              data-hasErrors={erroresRepresentante > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Académicos ${
-                erroresAcademicos > 0 ? `(${erroresAcademicos} errores)` : ""
+              {`Datos representante ${
+                erroresRepresentante > 0 ? `(${erroresRepresentante} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosAcademicosForm
-                form={datosAcademicosForm}
-                onSubmitAcd={onSubmitAcd}
-              ></DatosAcademicosForm>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="datos-contratacion">
-            <AccordionTrigger
-              data-hasErrors={erroresContratacion > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos de Contratación ${
-                erroresContratacion > 0
-                  ? `(${erroresContratacion} errores)`
-                  : ""
-              }`}
-            </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosContratacionForm
-                form={datosContratacionForm}
-                onSubmitCon={onSubmitCon}
-              ></DatosContratacionForm>
+              <DatosRepresentanteForm
+                form={datosRepresentanteForm}
+                onSubmitRepLeg={onSubmitRepLeg}
+              ></DatosRepresentanteForm>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

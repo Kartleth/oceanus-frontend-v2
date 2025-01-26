@@ -23,7 +23,7 @@ import {
   DatosTerceros,
   DatosTercerosForm,
   datosTercerosSchema,
-} from "@/components/forms/datos-tercero-form.tsx/datos-terceros-form";
+} from "@/components/forms/datos-tercero-form/datos-terceros-form";
 
 type AccordionValue = "datos-tercero";
 

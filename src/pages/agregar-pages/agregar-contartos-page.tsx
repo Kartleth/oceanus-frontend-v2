@@ -27,17 +27,17 @@ import {
   DatosMedicos,
   DatosMedicosForm,
   datosMedicosSchema,
-} from "@/components/forms/datos-medicos-form";
+} from "@/components/forms/datos-trabajador-forms/datos-medicos-form";
 import {
   DatosAcademicos,
   DatosAcademicosForm,
   datosAcademicosSchema,
-} from "@/components/forms/datos-academicos-form";
+} from "@/components/forms/datos-trabajador-forms/datos-academicos-form";
 import {
   DatosContratacion,
   DatosContratacionForm,
   datosContratacionSchema,
-} from "@/components/forms/datos-contratacion-form";
+} from "@/components/forms/datos-trabajador-forms/datos-contratacion-form";
 
 type AccordionValue =
   | "datos-personales"
