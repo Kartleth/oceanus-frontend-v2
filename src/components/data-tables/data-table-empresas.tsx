@@ -119,9 +119,9 @@ export const columns: ColumnDef<Empresa>[] = [
     cell: ({ row }) => {
       const Empresa = row.original;
       const queryClient = useQueryClient();
-      const detelePersona = useMutation(async () => {
+      const deleteEmpresa = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/subcontratados/${Empresa.idempresa}`,
+          `http://localhost:3001/empresa/${Empresa.idempresa}`,
           {
             method: "delete",
             headers: {
@@ -151,7 +151,7 @@ export const columns: ColumnDef<Empresa>[] = [
                 navigator.clipboard.writeText(Empresa.idempresa.toString())
               }
             >
-              <Link to={`/detalles-terceros/${Empresa.idempresa}`}>
+              <Link to={`/detalles-empresa/${Empresa.idempresa}`}>
                 Ver detalles
               </Link>
             </DropdownMenuItem>
@@ -167,7 +167,7 @@ export const columns: ColumnDef<Empresa>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                detelePersona.mutate();
+                deleteEmpresa.mutate();
               }}
             >
               Borrar

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Datos de la Empresa
+// Información de la Empresa
 export const Empresa = z.object({
   idempresa: z.number(),
   razonsocial: z.string(),

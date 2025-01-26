@@ -102,7 +102,7 @@ function App() {
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para empresa */}
             <Route
-              path="/detalles-empresa"
+              path="/detalles-empresa/:id"
               element={<VerDetallesEmpresa />}
             />
             <Route

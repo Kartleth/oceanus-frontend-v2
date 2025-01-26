@@ -11,35 +11,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  Building2,
-  Contact,
-  FileText,
-  FileUser,
-  GraduationCap,
-  IdCard,
-  ReceiptText,
-  Stethoscope,
-  UserRound,
-} from "lucide-react";
+import { Building2, ReceiptText, Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "react-query";
-import { Persona } from "@/modelos/personal";
+import { Empresa } from "@/modelos/empresa";
 
 export function VerDetallesEmpresa() {
   const { id } = useParams();
-  const fetchEmpleado = async (): Promise<Persona> => {
-    const response = await axios.get(`http://localhost:3001/personas/${id}`);
+  const fetchEmpresa = async (): Promise<Empresa> => {
+    const response = await axios.get(`http://localhost:3001/empresa/${id}`);
     return response.data;
   };
   const {
-    data: empleado,
+    data: empresa,
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Persona>(["empleado", id], fetchEmpleado);
+  } = useQuery<Empresa>(["empresa", id], fetchEmpresa);
 
   return (
     <Layout>
@@ -83,7 +73,7 @@ export function VerDetallesEmpresa() {
                 Detalles de empresa
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {empleado?.id}, {empleado?.nombre}
+                ID: {empresa?.idempresa}, {empresa?.razonsocial}
               </p>
             </div>
 
@@ -103,70 +93,93 @@ export function VerDetallesEmpresa() {
             </div>
 
             <hr className="pb-6" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="flex flex-col">
+            <div>
+              {/* Razón Social */}
+              <div className="flex flex-col mb-4">
                 <Label htmlFor="" className="mb-2">
-                  Nombre de la empresa
+                  Razón social
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.nombre || "No disponible"}
+                    value={empresa?.razonsocial ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Representante legal
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="date"
-                    value={empleado?.fechanacimiento || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Teléfono
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="number"
-                    value={empleado.numerocelular || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Correo
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="email"
-                    value={empleado?.correo || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* ID de Empresa */}
+                <div className="flex flex-col">
+                  <Label htmlFor="" className="mb-2">
+                    Id de empresa
+                  </Label>
+                  {/* Skeleton Loader */}
+                  {!empresa ? (
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  ) : (
+                    <Input
+                      disabled
+                      type="number"
+                      value={empresa?.idempresa ?? "No disponible"}
+                      className="bg-white disabled:opacity-100"
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <Label htmlFor="" className="mb-2">
+                    Correo
+                  </Label>
+                  {/* Skeleton Loader */}
+                  {!empresa ? (
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  ) : (
+                    <Input
+                      disabled
+                      type="email"
+                      value={empresa?.correo ?? "No disponible"}
+                      className="bg-white disabled:opacity-100"
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <Label htmlFor="" className="mb-2">
+                    Teléfono
+                  </Label>
+                  {/* Skeleton Loader */}
+                  {!empresa ? (
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  ) : (
+                    <Input
+                      disabled
+                      type="number"
+                      value={empresa.telefono ?? "No disponible"}
+                      className="bg-white disabled:opacity-100"
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <Label htmlFor="" className="mb-2">
+                    Nombre de contrato
+                  </Label>
+                  {/* Skeleton Loader */}
+                  {!empresa ? (
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  ) : (
+                    <Input
+                      disabled
+                      type="string"
+                      value={empresa.nombrecontrato ?? "No disponible"}
+                      className="bg-white disabled:opacity-100"
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -189,61 +202,13 @@ export function VerDetallesEmpresa() {
                   RFC
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.nombre || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Tipo de regimen
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="date"
-                    value={empleado?.fechanacimiento || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Número de cuenta/ Clave
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={empleado?.curp || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Banco
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={empleado?.rfc || "No disponible"}
+                    value={empresa?.rfc ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -253,45 +218,95 @@ export function VerDetallesEmpresa() {
                   Correo de facturación
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
-                    type="number"
-                    value={empleado?.numerofijo || "No disponible"}
+                    type="email"
+                    value={empresa?.correofacturacion ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Fecha de vencimiento de constancia
+                  Constancia fiscal
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="number"
-                    value={empleado?.numerocelular || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Tiempo hasta el vencimiento
-                </Label>
-                {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.direccion || "No disponible"}
+                    value={empresa?.constanciafiscal ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Tipo de régimen
+                </Label>
+                {/* Skeleton Loader */}
+                {!empresa ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empresa?.tiporegimen ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Número de cuenta
+                </Label>
+                {/* Skeleton Loader */}
+                {!empresa ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="number"
+                    value={empresa?.numerocuenta ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Banco
+                </Label>
+                {/* Skeleton Loader */}
+                {!empresa ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={empresa?.banco ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Vencimiento de constancia
+                </Label>
+                {/* Skeleton Loader */}
+                {!empresa ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="date"
+                    value={
+                      empresa?.fechavencimientoconstancia ?? "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -304,22 +319,24 @@ export function VerDetallesEmpresa() {
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
-              <Contact className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">Contacto</h2>
+              <Scale className="w-6 h-6" />
+              <h2 className="font-medium text-xl tracking-tighter">
+                Representante legal
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Nombre de contacto
+                  Representante
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empleado?.datosMedicos?.alergias || "No disponible"}
+                    value={empresa?.represenatelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -329,15 +346,13 @@ export function VerDetallesEmpresa() {
                   Correo
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
-                    type="text"
-                    value={
-                      empleado?.datosMedicos?.enfercronicas || "No disponible"
-                    }
+                    type="email"
+                    value={empresa?.correoRepresenatelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -347,13 +362,13 @@ export function VerDetallesEmpresa() {
                   Teléfono
                 </Label>
                 {/* Skeleton Loader */}
-                {!empleado ? (
+                {!empresa ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
-                    type="text"
-                    value={empleado?.datosMedicos?.lesiones || "No disponible"}
+                    type="string"
+                    value={empresa?.telefonoRepresenatelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
