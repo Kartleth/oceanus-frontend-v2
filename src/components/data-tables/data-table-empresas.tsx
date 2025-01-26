@@ -384,7 +384,6 @@ export function DataTableEmpresas() {
     generarTabla(datosBloque1, 30);
     doc.addPage();
     generarTabla(datosBloque2, 30);
-    doc.addPage();
 
     doc.save("Empresas_oceanus.pdf");
   };
@@ -399,14 +398,25 @@ export function DataTableEmpresas() {
     const logoPath = "src/assets/oceanus-logo-3.png";
 
     const camposBloque1 = [
-      { header: "ID", key: "idsubcontratado" },
-      { header: "Nombre", key: "nombre" },
-      { header: "RFC", key: "rfc" },
-      { header: "NSS", key: "nss" },
-      { header: "INE", key: "ine" },
-      { header: "CURP", key: "curp" },
-      { header: "Estado", key: "estado" },
+      { header: "ID", key: "idempresa" },
+      { header: "Razón social", key: "razonsocial" },
+      { header: "Correo", key: "correo" },
+      { header: "Teléfono", key: "telefono" },
+      { header: "Representante legal", key: "represenatelegal" },
+      { header: "Correo rep", key: "correoRepresenatelegal" },
+      { header: "Telefono de rep", key: "telefonoRepresenatelegal" },
     ];
+
+    const camposBloque2 = [
+      { header: "RFC", key: "rfc" },
+      { header: "Correo de facturaciónl", key: "correofacturacion" },
+      { header: "Constancia fiscal", key: "constanciafiscal" },
+      { header: "Tipo de régimen", key: "tiporegimen" },
+      { header: "Número de cuenta", key: "numerocuenta" },
+      { header: "Banco", key: "banco" },
+      { header: "Fecha de vencimiento de constancia", key: "fechavencimientoconstancia" },
+    ];
+
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
       empresas: Empresa[],
@@ -428,7 +438,7 @@ export function DataTableEmpresas() {
 
     // Generar los datos para cada bloque
     const datosBloque1 = generarDatosBloque(empresas, camposBloque1);
-
+    const datosBloque2 = generarDatosBloque(empresas, camposBloque2);
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
@@ -447,7 +457,7 @@ export function DataTableEmpresas() {
     const pageHeight = doc.internal.pageSize.height; // 210 mm
 
     // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DE SUBCONTRATADO";
+    const text1 = "DATOS DE EMPRESAS";
     const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
@@ -494,6 +504,7 @@ export function DataTableEmpresas() {
 
     generarTabla(datosBloque1, 30);
     doc.addPage();
+    generarTabla(datosBloque2, 30);
 
     const pdfBlob = doc.output("blob");
     const pdfUrl = URL.createObjectURL(pdfBlob);
