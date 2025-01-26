@@ -18,7 +18,7 @@ export const datosRepresentanteSchema = z.object({
     .string()
     .email({ message: "Correo electrónico incorrecto." })
     .optional(),
-  telefonoRepresentantelegal: z
+    telefonoRepresentantelegal: z
     .string()
     .regex(/^\d{10}$/, { message: "Número de teléfono debe tener 10 dígitos." })
     .optional(),
@@ -77,8 +77,8 @@ export const DatosRepresentanteForm: FC<DatosRepresentanteProps> = ({ form, onSu
             </FormItem>
           )}
         />
-        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea ">
-          Siguiente
+        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+          Guardar
         </Button>
       </form>
     </Form>

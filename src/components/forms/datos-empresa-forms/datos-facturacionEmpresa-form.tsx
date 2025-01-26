@@ -155,7 +155,7 @@ export const DatosFacturacionEmpresaForm: FC<DatosFacturacionEmpresaProps> = ({
             </FormItem>
           )}
         />
-        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea ">
+        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
           Siguiente
         </Button>
       </form>

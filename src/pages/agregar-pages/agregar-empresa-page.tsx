@@ -58,7 +58,7 @@ export function PageAgregarEmpresa() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["empresa"]);
+    queryClient.invalidateQueries(["empresas"]);
     navigate("/empresas");
   });
   const [value, setValue] = useState<AccordionValue>("datos-empresa");
@@ -66,45 +66,39 @@ export function PageAgregarEmpresa() {
   const datosEmpresaForm = useForm<DatosEmpresa>({
     resolver: zodResolver(datosEmpresaSchema),
   });
-  function onSubmitEmp(values: DatosEmpresa) {
-    console.log(values);
-    setValue("datos-empresa");
-  }
-
   const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
     resolver: zodResolver(datosFacturacionEmpresaSchema),
   });
-  function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
-    console.log(values);
-    setValue("datos-facturacionEmpresa");
-  }
-
   const datosRepresentanteForm = useForm<DatosRepresentante>({
     resolver: zodResolver(datosRepresentanteSchema),
   });
-  function onSubmitRepLeg(values: DatosRepresentante) {
+
+  function onSubmitEmp(values: DatosEmpresa) {
+    console.log(values);
+    setValue("datos-facturacionEmpresa");
+  }
+  function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
     console.log(values);
     setValue("datos-representante");
+  }
+  function onSubmitRepLeg(values: DatosRepresentante) {
+    console.log(values);
     guardarEmpresa();
   }
 
   async function formulariosSonValidos() {
     if (!(await datosEmpresaForm.trigger())) {
       setValue("datos-empresa");
-
       return false;
     }
     if (!(await datosFacturacionEmpresaForm.trigger())) {
       setValue("datos-facturacionEmpresa");
-
       return false;
     }
     if (!(await datosRepresentanteForm.trigger())) {
       setValue("datos-representante");
-
       return false;
     }
-
     return true;
   }
 
@@ -114,26 +108,30 @@ export function PageAgregarEmpresa() {
     if (!validos) return;
 
     const datosEmpresa = datosEmpresaForm.getValues();
-    const datosFacturacion = datosFacturacionEmpresaForm.getValues();
+    const datosFacturacionEmpresa = datosFacturacionEmpresaForm.getValues();
     const datosRepresentante = datosRepresentanteForm.getValues();
 
     const empresa = {
-      datosEmpresa: datosEmpresa,
-      datosFacturacion: datosFacturacion,
-      datosRepresentante: datosRepresentante,
+      datosEmpresa,
+      datosFacturacionEmpresa,
+      datosRepresentante,
     };
-    console.log(empresa);
-    mutation.mutate(empresa);
+
+    console.log("ESTA ES LA EMPRESA", empresa);
+    mutation.mutate(empresa, {
+      onError: (error: any) => {
+        console.error("Errores del backend:", error.message);
+        alert(
+          `Errores en la solicitud:\n${JSON.stringify(error.message, null, 2)}`
+        );
+      },
+    });
   }
 
-  const erroresEmpresa = Object.keys(
-    datosEmpresaForm.formState.errors
-  ).length;
-
+  const erroresEmpresa = Object.keys(datosEmpresaForm.formState.errors).length;
   const erroresFacturacion = Object.keys(
     datosFacturacionEmpresaForm.formState.errors
   ).length;
-
   const erroresRepresentante = Object.keys(
     datosRepresentanteForm.formState.errors
   ).length;
@@ -146,9 +144,7 @@ export function PageAgregarEmpresa() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/empresas">
-                Empresas
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
@@ -184,6 +180,7 @@ export function PageAgregarEmpresa() {
               ></DatosEmpresaForm>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem value="datos-facturacionEmpresa">
             <AccordionTrigger
               data-hasErrors={erroresFacturacion > 0}
@@ -200,13 +197,16 @@ export function PageAgregarEmpresa() {
               ></DatosFacturacionEmpresaForm>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem value="datos-representante">
             <AccordionTrigger
               data-hasErrors={erroresRepresentante > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos representante ${
-                erroresRepresentante > 0 ? `(${erroresRepresentante} errores)` : ""
+                erroresRepresentante > 0
+                  ? `(${erroresRepresentante} errores)`
+                  : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">

@@ -81,7 +81,7 @@ export const DatosEmpresaForm: FC<DatosEmpresaProps> = ({ form, onSubmitEmp }) =
             </FormItem>
           )}
         />
-        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea ">
+        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
           Siguiente
         </Button>
       </form>
