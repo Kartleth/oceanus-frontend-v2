@@ -561,7 +561,7 @@ export function DataTableDemo() {
         const bloque: any = {};
         campos.forEach((campo) => {
           const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] = persona[campoLower] || "N/A";
+          bloque[campo] = (persona as Record<string, unknown>)[campoLower] || "N/A";
         });
         return bloque;
       });
