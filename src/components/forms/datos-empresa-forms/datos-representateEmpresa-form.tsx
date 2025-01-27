@@ -13,15 +13,15 @@ import { UseFormReturn } from "react-hook-form";
 import { FC } from "react";
 
 export const datosRepresentanteSchema = z.object({
-  representantelegal: z.string().optional(),
+  representantelegal: z.string().nullable().optional(),
   correoRepresentantelegal: z
     .string()
     .email({ message: "Correo electrónico incorrecto." })
-    .optional(),
+    .nullable().optional(),
     telefonoRepresentantelegal: z
     .string()
     .regex(/^\d{10}$/, { message: "Número de teléfono debe tener 10 dígitos." })
-    .optional(),
+    .nullable().optional(),
 });
 
 export type DatosRepresentante = z.infer<typeof datosRepresentanteSchema>;
