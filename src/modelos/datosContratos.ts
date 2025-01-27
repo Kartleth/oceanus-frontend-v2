@@ -1,19 +1,18 @@
 import { z } from "zod";
 import { PersonalContrato } from "./personalContrato";
 import { Fianza } from "./datosFianza";
-import { Subcontratado } from "./subcontratado";
 import { Contratante } from "./datosContratante";
 import { Contratado } from "./datosContratado";
 
 export const Contrato = z.object({
-  idcontarto: z.number(),
+  idcontrato: z.number(),
   nombrecontrato: z.string(),
-  subcontrato: Subcontratado,
-  idcontratofuente: z.number(),
+  subcontrato: z.string(),
+  idcontratofuente: z.number().nullable(),
   numerocontrato: z.string(),
-  contratante: Contratante,
-  contratado: Contratado,
-  facturas: z.string(),
+  contratante: Contratante.nullable(),
+  contratado: Contratado.nullable(),
+  facturas: z.array(z.object({})),
   iniciocontrato: z.string().date(),
   fincontrato: z.string().date(),
   montocontrato: z.number(),

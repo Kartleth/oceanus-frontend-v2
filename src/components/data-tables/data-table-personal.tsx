@@ -133,11 +133,11 @@ export const columns: ColumnDef<Persona>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const Persona = row.original;
+      const persona = row.original;
       const queryClient = useQueryClient();
       const detelePersona = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/personas/${Persona.id}`,
+          `http://localhost:3001/personas/${persona.id}`,
           {
             method: "delete",
             headers: {
@@ -166,30 +166,30 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuItem
               asChild
               onClick={() =>
-                navigator.clipboard.writeText(Persona.id.toString())
+                navigator.clipboard.writeText(persona.id.toString())
               }
             >
-              <Link to={`/detalles-trabajador/${Persona.id}`}>
+              <Link to={`/detalles-trabajador/${persona.id}`}>
                 Ver detalles
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos/${Persona.id}`}>Gestionar archivos</Link>
+              <Link to={`/subir-archivos/${persona.id}`}>Gestionar archivos</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to={`/reporte-de-empleado/${Persona.id}`}>
+              <Link to={`/reporte-de-empleado/${persona.id}`}>
                 Generar reporte
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to={`/generar-credencial/${Persona.id}`}>
+              <Link to={`/generar-credencial/${persona.id}`}>
                 Generar credencial
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-trabajador/${Persona.id}`}>Editar</Link>
+              <Link to={`/editar-trabajador/${persona.id}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

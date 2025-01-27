@@ -7,10 +7,10 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
-import { DataTableContratos } from "@/components/data-tables/data-table-contratos";
 import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { DataTableContratos } from "@/components/data-tables/data-table-contratos";
 
 export default function Contratos() {
   return (
@@ -39,6 +39,7 @@ export default function Contratos() {
           <Upload /> Subir Excel
         </Button>
       </div>
+      <div className="px-3"></div>
       <div className="px-3">
         <DataTableContratos></DataTableContratos>
       </div>

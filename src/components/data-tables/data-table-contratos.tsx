@@ -36,70 +36,13 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
+import { Contrato } from "@/modelos/datosContratos";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
-export const data: ContractsInformation[] = [
-  {
-    id: "1",
-    contract_name: "Servicio de Mantenimiento",
-    contract_number: "CT001",
-    start_contract: "2024-01-01",
-    end_contract: "2024-12-31",
-  },
-  {
-    id: "2",
-    contract_name: "Consultoría en TI",
-    contract_number: "CT002",
-    start_contract: "2023-06-01",
-    end_contract: "2024-05-31",
-  },
-  {
-    id: "3",
-    contract_name: "Soporte Técnico",
-    contract_number: "CT003",
-    start_contract: "2022-10-15",
-    end_contract: "2023-10-14",
-  },
-  {
-    id: "4",
-    contract_name: "Desarrollo de Software",
-    contract_number: "CT004",
-    start_contract: "2023-03-01",
-    end_contract: "2023-12-31",
-  },
-  {
-    id: "5",
-    contract_name: "Implementación de Redes",
-    contract_number: "CT005",
-    start_contract: "2023-09-01",
-    end_contract: "2024-08-31",
-  },
-  {
-    id: "6",
-    contract_name: "Seguridad Informática",
-    contract_number: "CT006",
-    start_contract: "2024-02-01",
-    end_contract: "2025-01-31",
-  },
-  {
-    id: "7",
-    contract_name: "Capacitación en Herramientas de Gestión",
-    contract_number: "CT007",
-    start_contract: "2023-11-01",
-    end_contract: "2024-10-31",
-  },
-];
 
-export type ContractsInformation = {
-  id: string;
-  contract_name: string;
-  contract_number: string;
-  start_contract: string;
-  end_contract: string;
-};
-
-export const columns: ColumnDef<ContractsInformation>[] = [
+export const columns: ColumnDef<Contrato>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "idcontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -114,7 +57,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "contract_name",
+    accessorKey: "nombrecontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -131,7 +74,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
     ),
   },
   {
-    accessorKey: "contract_number",
+    accessorKey: "numerocontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -148,7 +91,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
     ),
   },
   {
-    accessorKey: "start_contract",
+    accessorKey: "iniciocontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -165,7 +108,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
     ),
   },
   {
-    accessorKey: "end_contract",
+    accessorKey: "fincontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -182,10 +125,35 @@ export const columns: ColumnDef<ContractsInformation>[] = [
     ),
   },
   {
+    accessorKey: "estado",
+    header: "Estado",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("estado")}</div>
+    ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const ContractsInformation = row.original;
+      const contrato = row.original;
+      const queryClient = useQueryClient();
+      const deteleContrato = useMutation(async () => {
+        const res = await fetch(
+          `http://localhost:3001/contrato/${contrato.idcontrato}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const resData = await res.json();
+        if (!res.ok) {
+          console.error(resData);
+        }
+        console.log(resData);
+        queryClient.invalidateQueries(["contratos"]);
+      });
 
       return (
         <DropdownMenu>
@@ -199,7 +167,7 @@ export const columns: ColumnDef<ContractsInformation>[] = [
             <DropdownMenuLabel>Acciones de contrato</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(ContractsInformation.id)
+                navigator.clipboard.writeText(contrato.idcontrato.toString())
               }
             >
               <Link to={"/detalles-contratos"}> Ver detalles</Link>
@@ -213,15 +181,45 @@ export const columns: ColumnDef<ContractsInformation>[] = [
               <Link to={"/editar-contratos"}>Editar</Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem>Borrar</DropdownMenuItem>
+            <DropdownMenuItem
+            onClick={() => {
+              deteleContrato.mutate();
+            }}
+          >Borrar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
 ];
-
 export function DataTableContratos() {
+  const contratosQuery = useQuery({
+    queryKey: ["contratos"],
+    queryFn: async () => {
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
+      const res = await fetch("http://localhost:3001/contrato", {
+        //El await es para esperar a que se resulevan las promesas antes de seguir con el código
+        headers: {
+          "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      console.log(resData);
+      const contratoParse = Contrato.array().safeParse(resData); //toma los datos de persona, los guarda en un array y luego usa la función de safePersona para saber si la respuesta de los datos está validado correctamente.
+      if (!contratoParse.success) {
+        console.error(contratoParse.error);
+        throw new Error(contratoParse.error.toString());
+      }
+      return contratoParse.data;
+    },
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -231,7 +229,7 @@ export function DataTableContratos() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: contratosQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
