@@ -54,7 +54,7 @@ export const columns: ColumnDef<Contrato>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("idcontrato")}</div>,
   },
   {
     accessorKey: "nombrecontrato",
@@ -70,7 +70,7 @@ export const columns: ColumnDef<Contrato>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("contract_name")}</div>
+      <div className="lowercase">{row.getValue("nombrecontrato")}</div>
     ),
   },
   {
@@ -87,7 +87,7 @@ export const columns: ColumnDef<Contrato>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("contract_number")}</div>
+      <div className="lowercase">{row.getValue("numerocontrato")}</div>
     ),
   },
   {
@@ -104,7 +104,7 @@ export const columns: ColumnDef<Contrato>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("start_contract")}</div>
+      <div className="lowercase">{row.getValue("iniciocontrato")}</div>
     ),
   },
   {
@@ -121,7 +121,7 @@ export const columns: ColumnDef<Contrato>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("end_contract")}</div>
+      <div className="lowercase">{row.getValue("fincontrato")}</div>
     ),
   },
   {
