@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { datosContratacionSchema } from "@/components/forms/datos-contratacion-form";
+import { datosContratacionSchema } from "@/components/forms/datos-trabajador-forms/datos-contratacion-form";
 import {
   DatosGeneralesContratacion,
   DatosGeneralesContratacionForm,
