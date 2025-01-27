@@ -39,8 +39,8 @@ export const datosGeneralesSchema = z.object({
       message: "Fecha de ingreso no puede ser antes de 1914.",
     })
     .optional(),
-  montocontrato: z.number(),
-  anticipocontrato: z.number(),
+  montocontrato: z.string(),
+  anticipocontrato: z.string(),
   direccion: z.string(),
   convenio: z.string(),
   personalcontrato: z.string(),
@@ -73,6 +73,29 @@ export const DatosGeneralesContratacionForm: FC<
               <FormLabel>Nombre del Contrato</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="subcontrato"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipo de contrato</FormLabel>
+              <FormControl>
+                <FormSelect
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  placeholder="Selecciona tipo de subcontrato"
+                >
+                  <SelectItem value="subcontrato">Subcontarto</SelectItem>
+                  <SelectItem value="contrato origen">
+                    Contrato Origen
+                  </SelectItem>
+                  <SelectItem value="cotizacion">Cotizacion</SelectItem>
+                </FormSelect>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -147,19 +170,6 @@ export const DatosGeneralesContratacionForm: FC<
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre del Contratado</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="facturas"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Facturas</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

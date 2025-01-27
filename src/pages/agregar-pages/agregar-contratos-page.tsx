@@ -39,6 +39,7 @@ import {
   datosFianzaAnticipoSchema,
   DatosFianzaAnticiposForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
+import { da } from "date-fns/locale";
 
 type AccordionValue =
   | "datos-generales"
@@ -76,14 +77,14 @@ export function PageAgregarContratos() {
   });
   function onSubmitGe(values: DatosGeneralesContratacion) {
     console.log(values);
-    setValue("datos-generales");
+    setValue("datos-cumplimiento");
   }
   const datosCumplimientoForm = useForm<DatosFianzaCumplimientos>({
     resolver: zodResolver(datosFianzaCumplimientoSchema),
   });
   function onSubmitCum(values: DatosFianzaCumplimientos) {
     console.log(values);
-    setValue("datos-cumplimiento");
+    setValue("datos-ocultos");
   }
 
   const datosOcultosForm = useForm<DatosFianzaOcultos>({
@@ -91,7 +92,7 @@ export function PageAgregarContratos() {
   });
   function onSubmitOcu(values: DatosFianzaOcultos) {
     console.log(values);
-    setValue("datos-ocultos");
+    setValue("datos-anticipos");
   }
 
   const datosAnticipoForm = useForm<DatosFianzaAnticipos>({
@@ -120,7 +121,7 @@ export function PageAgregarContratos() {
       return false;
     }
     if (!(await datosAnticipoForm.trigger())) {
-      setValue("datos-anticipo");
+      setValue("datos-anticipos");
 
       return false;
     }
@@ -137,12 +138,36 @@ export function PageAgregarContratos() {
     const datosAnticipo = datosAnticipoForm.getValues();
     const datosCumplimiento = datosCumplimientoForm.getValues();
     const datosOcultos = datosOcultosForm.getValues();
-    const trabajador = {
-      datosGenerales: datosGenerales,
-      datosFianza: { ...datosAnticipo, ...datosCumplimiento, ...datosOcultos },
+    const contrato = {
+      nombreContrato: datosGenerales.nombrecontrato,
+      idContratante: 1,
+      idContratado: 2,
+      personal: [],
+      tipoSubcontrato: datosGenerales.subcontrato,
+      inicioContrato: datosGenerales.montocontrato,
+      finContrato: datosGenerales.fincontrato,
+      convenio: [],
+      fianzaCumplimiento: {
+        documento: datosCumplimiento.documento,
+        tipodecambio: datosCumplimiento.tipodecambio,
+        inicio: datosCumplimiento.inicio,
+        anticipodoc: datosCumplimiento.anticipodoc,
+        fin: datosCumplimiento.fin,
+        poliza: datosCumplimiento.poliza,
+        aseguradora: datosCumplimiento.aseguradora,
+        monto: datosCumplimiento.monto,
+      },
+      fianzaOculto: datosOcultos,
+      fianzaAnticipo: datosAnticipo,
+      montoContrato: datosGenerales.montocontrato,
+      anticipoContrato: datosGenerales.anticipocontrato,
+      direccion: datosGenerales.direccion,
+      numeroContrato: datosGenerales.numerocontrato,
+      facturas: [],
+      ordenes: [],
     };
-    console.log(trabajador);
-    mutation.mutate(trabajador);
+    console.log(contrato);
+    mutation.mutate(contrato);
   }
 
   const erroresGenerales = Object.keys(
@@ -218,7 +243,7 @@ export function PageAgregarContratos() {
               data-haserrors={erroresOculto > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Académicos ${
+              {`Datos Ocultos ${
                 erroresOculto > 0 ? `(${erroresOculto} errores)` : ""
               }`}
             </AccordionTrigger>
@@ -229,7 +254,7 @@ export function PageAgregarContratos() {
               ></DatosFianzaOcultosForm>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="datos-anticipo">
+          <AccordionItem value="datos-anticipos">
             <AccordionTrigger
               data-haserrors={erroresAnticipo > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"

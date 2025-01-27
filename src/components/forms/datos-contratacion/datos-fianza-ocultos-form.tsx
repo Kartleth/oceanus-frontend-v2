@@ -36,8 +36,8 @@ export const datosFianzaOcultosSchema = z.object({
       message: "Fecha de ingreso no puede ser antes de 1914.",
     })
     .optional(),
-  poliza: z.number(),
-  aseguradora: z.number(),
+  poliza: z.string(),
+  aseguradora: z.string(),
   monto: z.string(),
 });
 
@@ -66,6 +66,26 @@ export const DatosFianzaOcultosForm: FC<DatosFianzaOcultosProps> = ({
               <FormLabel>Documento</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+          <FormField
+          control={form.control}
+          name="tipodecambio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipo de Cambio</FormLabel>
+              <FormControl>
+                <FormSelect
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  placeholder="Selecciona un tipo de cambio"
+                >
+                  <SelectItem value="peso">Peso</SelectItem>
+                  <SelectItem value="dolar">Dolar</SelectItem>
+                </FormSelect>
               </FormControl>
               <FormMessage />
             </FormItem>
