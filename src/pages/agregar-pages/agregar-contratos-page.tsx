@@ -39,7 +39,6 @@ import {
   datosFianzaAnticipoSchema,
   DatosFianzaAnticiposForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
-import { da } from "date-fns/locale";
 
 type AccordionValue =
   | "datos-generales"
@@ -144,10 +143,10 @@ export function PageAgregarContratos() {
       idContratado: 2,
       personal: [],
       tipoSubcontrato: datosGenerales.subcontrato,
-      inicioContrato: datosGenerales.montocontrato,
-      finContrato: datosGenerales.fincontrato,
+      iniciocontrato: datosGenerales.iniciocontrato,
+      fincontrato: datosGenerales.fincontrato,
       convenio: [],
-      fianzaCumplimiento: {
+      fianzacumplimiento: {
         documento: datosCumplimiento.documento,
         tipodecambio: datosCumplimiento.tipodecambio,
         inicio: datosCumplimiento.inicio,
@@ -157,8 +156,8 @@ export function PageAgregarContratos() {
         aseguradora: datosCumplimiento.aseguradora,
         monto: datosCumplimiento.monto,
       },
-      fianzaOculto: datosOcultos,
-      fianzaAnticipo: datosAnticipo,
+      fianzaoculto: datosOcultos,
+      fianzaanticipo: datosAnticipo,
       montoContrato: datosGenerales.montocontrato,
       anticipoContrato: datosGenerales.anticipocontrato,
       direccion: datosGenerales.direccion,

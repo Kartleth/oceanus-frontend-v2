@@ -13,7 +13,7 @@ export const Contratado = z.object({
   numerocuenta: z.string(),
   banco: z.string(),
   tiporegimen: z.string(),
-  constancialfiscal: z.string(),
+  constanciafiscal: z.string(),
   fechavencimientoconstancia: z.string().date(),
 });
 

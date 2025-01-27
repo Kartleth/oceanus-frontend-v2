@@ -14,15 +14,15 @@ export const Contrato = z.object({
   contratado: Contratado.nullable(),
   facturas: z.array(z.object({})),
   iniciocontrato: z.string().date(),
-  fincontrato: z.string().date(),
-  montocontrato: z.number(),
-  anticipocontrato: z.number(),
+  fincontrato: z.string().date().optional().nullable(),
+  montocontrato: z.string(),
+  anticipocontrato: z.string(),
   direccion: z.string(),
   convenio: z.array(z.object({})).optional(),
   personalcontrato: PersonalContrato.partial().array(),
-  fianzaCumplimiento: Fianza.optional().nullable(),
-  fianzaAnticipo: Fianza.optional().nullable(),
-  fianzaOculto: Fianza.optional().nullable(),
+  fianzacumplimiento: Fianza.optional().nullable(),
+  fianzaanticipo: Fianza.optional().nullable(),
+  fianzaoculto: Fianza.optional().nullable(),
 });
 
 // Exportamos el tipo basado en el esquema
