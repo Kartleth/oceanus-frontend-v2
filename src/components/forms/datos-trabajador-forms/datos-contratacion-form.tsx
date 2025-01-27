@@ -8,10 +8,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { FormSelect, SelectItem } from "../ui/select";
-import { DatePicker } from "../ui/datepicker";
-import { Button } from "../ui/button";
+} from "../../ui/form";
+import { FormSelect, SelectItem } from "../../ui/select";
+import { DatePicker } from "../../ui/datepicker";
+import { Button } from "../../ui/button";
 
 export const datosContratacionSchema = z.object({
   tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),

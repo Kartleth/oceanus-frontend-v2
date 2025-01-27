@@ -16,9 +16,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DatosEmpresa,
   DatosEmpresaForm,
@@ -35,18 +35,43 @@ import {
   datosRepresentanteSchema,
 } from "@/components/forms/datos-empresa-forms/datos-representateEmpresa-form";
 
+import { Empresa } from "@/modelos/empresa";
+
 type AccordionValue =
   | "datos-empresa"
   | "datos-facturacionEmpresa"
   | "datos-representante";
 
-export function PageAgregarEmpresa() {
-  const navigate = useNavigate();
+export function PageEditarEmpresa() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["empresa", id],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:3001/empresa/${id}`, {
+        headers: { "Content-Type": "application/json" },
+      });
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      const empresaParse = Empresa.safeParse(resData);
+      if (!empresaParse.success) {
+        console.error(empresaParse.error);
+        throw new Error(empresaParse.error.toString());
+      }
+      return empresaParse.data;
+    },
+  });
+
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/empresa", {
-      method: "post",
+    const res = await fetch(`http://localhost:3001/empresa/${id}`, {
+      method: "put",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -57,54 +82,27 @@ export function PageAgregarEmpresa() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["empresas"]);
+    queryClient.invalidateQueries(["empresa"]);
     navigate("/empresas");
   });
-  const [value, setValue] = useState<AccordionValue>("datos-empresa");
-
-  const datosEmpresaForm = useForm<DatosEmpresa>({
-    resolver: zodResolver(datosEmpresaSchema),
-  });
-  const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
-    resolver: zodResolver(datosFacturacionEmpresaSchema),
-  });
-  const datosRepresentanteForm = useForm<DatosRepresentante>({
-    resolver: zodResolver(datosRepresentanteSchema),
-  });
-
-  function onSubmitEmp(values: DatosEmpresa) {
-    console.log(values);
-    setValue("datos-facturacionEmpresa");
-  }
-  function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
-    const formattedValues = {
-      ...values,
-      fechavencimientoconstancia: values.fechavencimientoconstancia
-        ? new Date(values.fechavencimientoconstancia)
-        : null,
-    };
-    console.log("Enviando datos al backend:", formattedValues);
-    console.log(values);
-    setValue("datos-representante");
-  }
-  function onSubmitRepLeg(values: DatosRepresentante) {
-    console.log(values);
-    guardarEmpresa();
-  }
 
   async function formulariosSonValidos() {
     if (!(await datosEmpresaForm.trigger())) {
       setValue("datos-empresa");
+
       return false;
     }
     if (!(await datosFacturacionEmpresaForm.trigger())) {
       setValue("datos-facturacionEmpresa");
+
       return false;
     }
     if (!(await datosRepresentanteForm.trigger())) {
       setValue("datos-representante");
+
       return false;
     }
+
     return true;
   }
 
@@ -122,25 +120,53 @@ export function PageAgregarEmpresa() {
       ...datosFacturacionEmpresa,
       ...datosRepresentante,
     };
-
-    console.log("ESTA ES LA EMPRESA", empresa);
-    mutation.mutate(empresa, {
-      onError: (error: any) => {
-        console.error("Errores del backend:", error.message);
-        alert(
-          `Errores en la solicitud:\n${JSON.stringify(error.message, null, 2)}`
-        );
-      },
-    });
+    console.log(empresa);
+    mutation.mutate(empresa);
   }
+  const datosEmpresaForm = useForm<DatosEmpresa>({
+    resolver: zodResolver(datosEmpresaSchema),
+  });
+  const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
+    resolver: zodResolver(datosFacturacionEmpresaSchema),
+  });
+  const datosRepresentanteForm = useForm<DatosRepresentante>({
+    resolver: zodResolver(datosRepresentanteSchema),
+  });
 
-  const erroresEmpresa = Object.keys(datosEmpresaForm.formState.errors).length;
-  const erroresFacturacion = Object.keys(
-    datosFacturacionEmpresaForm.formState.errors
-  ).length;
-  const erroresRepresentante = Object.keys(
-    datosRepresentanteForm.formState.errors
-  ).length;
+  const [value, setValue] = useState<AccordionValue | undefined>();
+
+  // Sincroniza los datos obtenidos con los formularios
+  useEffect(() => {
+    if (data) {
+      datosEmpresaForm.reset({
+        razonsocial: data.razonsocial ?? "",
+        correo: data.correo ?? "",
+        telefono: data.telefono ?? "",
+      });
+      datosFacturacionEmpresaForm.reset({
+        rfc: data.rfc ?? "",
+        correofacturacion: data.correofacturacion ?? "",
+        tiporegimen: data.tiporegimen ?? "",
+        numerocuenta: data.numerocuenta ?? "",
+        banco: data.banco ?? "",
+        fechavencimientoconstancia: data.fechavencimientoconstancia
+          ? new Date(data.fechavencimientoconstancia)
+          : undefined,
+      });
+      datosRepresentanteForm.reset({
+        representantelegal: data.representantelegal ?? "",
+        correoRepresentantelegal: data.correoRepresentantelegal ?? "",
+        telefonoRepresentantelegal: data.telefonoRepresentantelegal ?? "",
+      });
+
+      setValue("datos-empresa");
+    }
+    console.log(data);
+  }, [data]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Layout>
@@ -156,8 +182,8 @@ export function PageAgregarEmpresa() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/agregar-empresa`}>
-                Agregar empresa
+              <BreadcrumbLink href={`/editar-empresa/:id`}>
+                Ediar empresa
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -171,55 +197,38 @@ export function PageAgregarEmpresa() {
           onValueChange={setValue}
         >
           <AccordionItem value="datos-empresa">
-            <AccordionTrigger
-              data-hasErrors={erroresEmpresa > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos Empresa ${
-                erroresEmpresa > 0 ? `(${erroresEmpresa} errores)` : ""
-              }`}
+            <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
+              Datos Empresa
             </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+            <AccordionContent className="p-4">
               <DatosEmpresaForm
                 form={datosEmpresaForm}
-                onSubmitEmp={onSubmitEmp}
-              ></DatosEmpresaForm>
+                onSubmitEmp={() => setValue("datos-facturacionEmpresa")}
+              />
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="datos-facturacionEmpresa">
-            <AccordionTrigger
-              data-hasErrors={erroresFacturacion > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos Facturación ${
-                erroresFacturacion > 0 ? `(${erroresFacturacion} errores)` : ""
-              }`}
+            <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
+              Datos Facturación
             </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+            <AccordionContent className="p-4">
               <DatosFacturacionEmpresaForm
                 form={datosFacturacionEmpresaForm}
-                onSubmitFacEmp={onSubmitFacEmp}
-              ></DatosFacturacionEmpresaForm>
+                onSubmitFacEmp={() => setValue("datos-representante")}
+              />
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="datos-representante">
-            <AccordionTrigger
-              data-hasErrors={erroresRepresentante > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos representante ${
-                erroresRepresentante > 0
-                  ? `(${erroresRepresentante} errores)`
-                  : ""
-              }`}
+            <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
+              Datos Representante
             </AccordionTrigger>
-            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+            <AccordionContent className="p-4">
               <DatosRepresentanteForm
                 form={datosRepresentanteForm}
-                onSubmitRepLeg={onSubmitRepLeg}
-              ></DatosRepresentanteForm>
+                onSubmitRepLeg={() => guardarEmpresa()}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -27,6 +27,8 @@ import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
 import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
 import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
+import { PageEditarEmpresa } from "./pages/editar-pages/editar-empresa";
+import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 
 const queryClient = new QueryClient();
 
@@ -107,8 +109,16 @@ function App() {
             <Route path="/agregar-tercero" element={<PageAgregarTercero />} />
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para empresa */}
-            <Route path="/detalles-empresa" element={<VerDetallesEmpresa />} />
-            <Route path="/agregar-empresa" element={<PageAgregarEmpresa />} />
+            <Route
+              path="/detalles-empresa/:id"
+              element={<VerDetallesEmpresa />}
+            />
+            <Route
+              path="/agregar-empresa"
+              element={<PageAgregarEmpresa />}
+            />
+            <Route path="/editar-empresa/:id" element={<PageEditarEmpresa />} />
+            <Route path="/personal-empresa" element={<PagePersonalEmpresa />} />
           </Route>
         </Routes>
       </BrowserRouter>

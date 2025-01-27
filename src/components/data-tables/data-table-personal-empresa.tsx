@@ -133,11 +133,11 @@ export const columns: ColumnDef<Persona>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const persona = row.original;
+      const Persona = row.original;
       const queryClient = useQueryClient();
       const detelePersona = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/personas/${persona.id}`,
+          `http://localhost:3001/personas/${Persona.id}`,
           {
             method: "delete",
             headers: {
@@ -166,30 +166,30 @@ export const columns: ColumnDef<Persona>[] = [
             <DropdownMenuItem
               asChild
               onClick={() =>
-                navigator.clipboard.writeText(persona.id.toString())
+                navigator.clipboard.writeText(Persona.id.toString())
               }
             >
-              <Link to={`/detalles-trabajador/${persona.id}`}>
+              <Link to={`/detalles-trabajador/${Persona.id}`}>
                 Ver detalles
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos/${persona.id}`}>Gestionar archivos</Link>
+              <Link to={`/subir-archivos/${Persona.id}`}>Gestionar archivos</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to={`/reporte-de-empleado/${persona.id}`}>
+              <Link to={`/reporte-de-empleado/${Persona.id}`}>
                 Generar reporte
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to={`/generar-credencial/${persona.id}`}>
+              <Link to={`/generar-credencial/${Persona.id}`}>
                 Generar credencial
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-trabajador/${persona.id}`}>Editar</Link>
+              <Link to={`/editar-trabajador/${Persona.id}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -205,7 +205,7 @@ export const columns: ColumnDef<Persona>[] = [
   },
 ];
 
-export function DataTableDemo() {
+export function DataTablePersonalEmpresa() {
   const trabajadoresQuery = useQuery({
     queryKey: ["trabajadores"],
     queryFn: async () => {
@@ -561,7 +561,7 @@ export function DataTableDemo() {
         const bloque: any = {};
         campos.forEach((campo) => {
           const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] = (persona as Record<string, unknown>)[campoLower] || "N/A";
+          bloque[campo] = persona[campoLower] || "N/A";
         });
         return bloque;
       });
