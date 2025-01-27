@@ -144,18 +144,18 @@ export function PageEditarEmpresa() {
         telefono: data.telefono ?? "",
       });
       datosFacturacionEmpresaForm.reset({
-        rfc: data.rfc,
+        rfc: data.rfc ?? "",
         correofacturacion: data.correofacturacion ?? "",
         tiporegimen: data.tiporegimen ?? "",
         numerocuenta: data.numerocuenta ?? "",
         banco: data.banco ?? "",
-        fechavencimientoconstancia: new Date(
-          data.fecfechavencimientoconstanciahaingreso
-        ),
+        fechavencimientoconstancia: data.fechavencimientoconstancia
+          ? new Date(data.fechavencimientoconstancia)
+          : undefined,
       });
       datosRepresentanteForm.reset({
         representantelegal: data.representantelegal ?? "",
-        correoRepresentantelegal: data.representantelegal ?? "",
+        correoRepresentantelegal: data.correoRepresentantelegal ?? "",
         telefonoRepresentantelegal: data.telefonoRepresentantelegal ?? "",
       });
 
@@ -203,24 +203,24 @@ export function PageEditarEmpresa() {
             <AccordionContent className="p-4">
               <DatosEmpresaForm
                 form={datosEmpresaForm}
-                onSubmitEmp={() => setValue("datos-empresa")}
+                onSubmitEmp={() => setValue("datos-facturacionEmpresa")}
               />
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="datos-medicos">
+          <AccordionItem value="datos-facturacionEmpresa">
             <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
               Datos Facturación
             </AccordionTrigger>
             <AccordionContent className="p-4">
               <DatosFacturacionEmpresaForm
                 form={datosFacturacionEmpresaForm}
-                onSubmitFacEmp={() => setValue("datos-facturacionEmpresa")}
+                onSubmitFacEmp={() => setValue("datos-representante")}
               />
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="datos-academicos">
+          <AccordionItem value="datos-representante">
             <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
               Datos Representante
             </AccordionTrigger>
