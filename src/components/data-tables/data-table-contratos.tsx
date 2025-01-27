@@ -39,7 +39,6 @@ import { Link } from "react-router-dom";
 import { Contrato } from "@/modelos/datosContratos";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-
 export const columns: ColumnDef<Contrato>[] = [
   {
     accessorKey: "idcontrato",
@@ -54,7 +53,9 @@ export const columns: ColumnDef<Contrato>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("idcontrato")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("idcontrato")}</div>
+    ),
   },
   {
     accessorKey: "nombrecontrato",
@@ -170,7 +171,10 @@ export const columns: ColumnDef<Contrato>[] = [
                 navigator.clipboard.writeText(contrato.idcontrato.toString())
               }
             >
-              <Link to={"/detalles-contratos"}> Ver detalles</Link>
+              <Link to={`/detalles-contratos/${contrato.idcontrato}`}>
+                {" "}
+                Ver detalles
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Crear convenio</DropdownMenuItem>
@@ -182,10 +186,12 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuItem>
 
             <DropdownMenuItem
-            onClick={() => {
-              deteleContrato.mutate();
-            }}
-          >Borrar</DropdownMenuItem>
+              onClick={() => {
+                deteleContrato.mutate();
+              }}
+            >
+              Borrar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

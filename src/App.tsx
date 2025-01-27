@@ -48,20 +48,23 @@ function App() {
             <Route path="/personal_terceros" element={<Terceros />} />
             <Route path="/cotizaciones" element={<Cotizaciones />} />
             <Route
-              path="/detalles-contratos"
+              path="/detalles-contratos/:idcontrato"
               element={<VerDetallesContratos />}
             />
-            <Route path="/agregar-contratos" element={<PageAgregarContratos />} />
-          <Route
+            <Route
+              path="/agregar-contratos"
+              element={<PageAgregarContratos />}
+            />
+            <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}
             />
             <Route
-            path="/editar-trabajador/:id"
-            element={<PageEditarTrabajador />}
-          />
-          <Route path="/editar-contratos" element={<PageEditarContratos />} />
-          <Route
+              path="/editar-trabajador/:id"
+              element={<PageEditarTrabajador />}
+            />
+            <Route path="/editar-contratos" element={<PageEditarContratos />} />
+            <Route
               path="/generar-credencial/:id"
               element={<PageGenerarCredencial />}
             />
@@ -73,7 +76,7 @@ function App() {
             path="/detalles-contratos/:id"
             element={<VerDetallesContratos />}
           /> */}
-          <Route
+            <Route
               path="/reporte-de-empleado/:id"
               element={<VerReportePersonal />}
             />
@@ -84,7 +87,10 @@ function App() {
               path="/detalles-cotizacion"
               element={<VerDetallesCotizacion />}
             />
-            <Route path="/subir-archivos-cotizacion" element={<SubirArchivosCotizacion />} />
+            <Route
+              path="/subir-archivos-cotizacion"
+              element={<SubirArchivosCotizacion />}
+            />
             <Route
               path="/agregar-cotizacion"
               element={<PageAgregarCotizacion />}
@@ -94,21 +100,15 @@ function App() {
               path="/detalles-terceros/:id"
               element={<VerDetallesTerceros />}
             />
-            <Route path="/subir-archivos-tercero/:id" element={<SubirArchivosTerceros />} />
             <Route
-              path="/agregar-tercero"
-              element={<PageAgregarTercero />}
+              path="/subir-archivos-tercero/:id"
+              element={<SubirArchivosTerceros />}
             />
+            <Route path="/agregar-tercero" element={<PageAgregarTercero />} />
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para empresa */}
-            <Route
-              path="/detalles-empresa"
-              element={<VerDetallesEmpresa />}
-            />
-            <Route
-              path="/agregar-empresa"
-              element={<PageAgregarEmpresa />}
-            />
+            <Route path="/detalles-empresa" element={<VerDetallesEmpresa />} />
+            <Route path="/agregar-empresa" element={<PageAgregarEmpresa />} />
           </Route>
         </Routes>
       </BrowserRouter>

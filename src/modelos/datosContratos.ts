@@ -3,12 +3,13 @@ import { PersonalContrato } from "./personalContrato";
 import { Fianza } from "./datosFianza";
 import { Contratante } from "./datosContratante";
 import { Contratado } from "./datosContratado";
+import { Persona } from "./personal";
 
 export const Contrato = z.object({
   idcontrato: z.number(),
   nombrecontrato: z.string(),
   subcontrato: z.string(),
-  idcontratofuente: z.number().nullable(),
+  idcontratofuente: z.string().nullable(),
   numerocontrato: z.string(),
   contratante: Contratante.nullable(),
   contratado: Contratado.nullable(),
@@ -23,6 +24,8 @@ export const Contrato = z.object({
   fianzacumplimiento: Fianza.optional().nullable(),
   fianzaanticipo: Fianza.optional().nullable(),
   fianzaoculto: Fianza.optional().nullable(),
+  datosFianza: Fianza.nullable().optional(),
+  datosPersonal: Persona.nullable().optional(),
 });
 
 // Exportamos el tipo basado en el esquema
