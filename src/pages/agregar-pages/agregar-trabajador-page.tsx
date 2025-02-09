@@ -3,8 +3,10 @@ import Layout from "@/components/Layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -172,9 +174,15 @@ export function PageAgregarTrabajador() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="line-clamp-1 text-xl">
-                Agregar Trabajador
-              </BreadcrumbPage>
+              <BreadcrumbLink href="/personal">Personal</BreadcrumbLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbSeparator />
+
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/agregar-trabajador">
+                Agregar trabajador
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
