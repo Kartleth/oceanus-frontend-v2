@@ -22,22 +22,18 @@ import { useNavigate } from "react-router-dom";
 
 export function NavUser({
   user,
-}: {
+}: Readonly<{
   user: {
     name: string;
-    email: string;
+    type: string;
     avatar: string;
   };
-}) {
+}>) {
   const { isMobile } = useSidebar();
-
-  //Lógica para cerrar sesión
 
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Elimina el token de autenticación
     localStorage.removeItem("token");
-    // Redirige al usuario al login
     navigate("/login");
   };
 
@@ -56,7 +52,7 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate text-xs">{user.type}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -75,7 +71,7 @@ export function NavUser({
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate text-xs">{user.type}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

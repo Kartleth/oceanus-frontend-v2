@@ -1,5 +1,5 @@
 import * as React from "react";
-import logoSVG from "/src/assets/oceanus-logo.svg";
+import logoSVG from "../assets/oceanus-logo.svg";
 import {
   Users2,
   ReceiptText,
@@ -21,11 +21,6 @@ import {
 } from "@/components/ui/sidebar";
 
 const data = {
-  user: {
-    name: "AdminOceanus",
-    email: "AdminOceanus@example.com",
-    avatar: "https://ui-avatars.com/api/?name=Admin+Oceanus&background=C4EEF8",
-  },
   companys: [
     {
       name: "Oceanus",
@@ -68,6 +63,11 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user, setUser] = React.useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -77,7 +77,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavPages pages={data.pages} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {user ? (
+          <NavUser
+            user={{
+              name: user.usuario,
+              type: user.type,
+              avatar: `https://ui-avatars.com/api/?name=${user.usuario}&background=C4EEF8`,
+            }}
+          />
+        ) : (
+          <NavUser
+            user={{
+              name: "AdminOceanus",
+              type: "Administrador",
+              avatar:
+                "https://ui-avatars.com/api/?name=Admin+Oceanus&background=C4EEF8",
+            }}
+          />
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

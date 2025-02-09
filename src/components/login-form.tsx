@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import logoSVG from "/src/assets/oceanus-logo.svg";
+import logoSVG from "../assets/oceanus-logo.svg";
 import {
   Card,
   CardContent,
@@ -32,21 +32,25 @@ export function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Enviar una solicitud POST al backend
       const response = await axios.post("http://localhost:3001/auth/login", {
-        username,
+        usuario: username,
         password,
       });
 
       const token = response.data.access_token;
-      if (!token) {
-        console.error("No se recibió un token en la respuesta.");
+      const userData = response.data.user;
+
+      if (!token || !userData) {
+        console.error(
+          "No se recibió un token o datos de usuario en la respuesta."
+        );
         return;
       }
 
-      // Si la respuesta es exitosa
       localStorage.setItem("token", token);
-      console.log("Token guardado correctamente:", token);
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      console.log("Token y usuario guardados correctamente:", token, userData);
       navigate("/personal");
     } catch (err) {
       setError("Usuario o contraseña incorrectos");
@@ -79,7 +83,6 @@ export function LoginForm() {
               </AlertDescription>
             </Alert>
           )}
-          {/* Mostrar error */}
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="usuario">Usuario</Label>
