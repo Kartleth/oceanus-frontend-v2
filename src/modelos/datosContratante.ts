@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const Contratante = z.object({
   idempresa: z.number(),
-  logo: z.string(),
+  logo: z.string().optional().nullable(),
   rfc: z.string(),
-  razonsocial: z.string(),
+  razonsocial: z.string().optional().nullable(),
   representantelegal: z.string(),
   nombrecontrato: z.string(),
   correo: z.string(),
@@ -13,7 +13,7 @@ export const Contratante = z.object({
   numerocuenta: z.string(),
   banco: z.string(),
   tiporegimen: z.string(),
-  constanciafiscal: z.string(),
+  constanciafiscal: z.string().optional().nullable(),
   fechavencimientoconstancia: z.string().date(),
 });
 

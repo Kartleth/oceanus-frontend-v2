@@ -25,7 +25,7 @@ export const datosGeneralesSchema = z.object({
   numerocontrato: z.string({ required_error: "" }),
   contratante: z.string(),
   contratado: z.string(),
-  facturas: z.string(),
+  // facturas: z.string(),
   iniciocontrato: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
@@ -177,7 +177,7 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="facturas"
           render={({ field }) => (
@@ -189,7 +189,7 @@ export const DatosGeneralesContratacionForm: FC<
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="montocontrato"

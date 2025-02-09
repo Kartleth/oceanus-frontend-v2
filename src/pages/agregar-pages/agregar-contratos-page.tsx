@@ -146,7 +146,7 @@ export function PageAgregarContratos() {
       iniciocontrato: datosGenerales.iniciocontrato,
       fincontrato: datosGenerales.fincontrato,
       convenio: [],
-      fianzacumplimiento: {
+      fianzaCumplimiento: {
         documento: datosCumplimiento.documento,
         tipodecambio: datosCumplimiento.tipodecambio,
         inicio: datosCumplimiento.inicio,
@@ -156,8 +156,8 @@ export function PageAgregarContratos() {
         aseguradora: datosCumplimiento.aseguradora,
         monto: datosCumplimiento.monto,
       },
-      fianzaoculto: datosOcultos,
-      fianzaanticipo: datosAnticipo,
+      fianzaOculto: datosOcultos,
+      fianzaAnticipo: datosAnticipo,
       montoContrato: datosGenerales.montocontrato,
       anticipoContrato: datosGenerales.anticipocontrato,
       direccion: datosGenerales.direccion,
