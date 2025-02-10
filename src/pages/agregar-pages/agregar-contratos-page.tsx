@@ -141,8 +141,8 @@ export function PageAgregarContratos() {
     const datosOcultos = datosOcultosForm.getValues();
     const contrato = {
       nombreContrato: datosGenerales.nombrecontrato,
-      idContratante: 1,
-      idContratado: 2,
+      idContratante: 7,
+      idContratado: 13,
       personal: [],
       tipoSubcontrato: datosGenerales.subcontrato,
       iniciocontrato: datosGenerales.iniciocontrato,
