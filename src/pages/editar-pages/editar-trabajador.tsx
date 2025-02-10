@@ -176,7 +176,7 @@ export function PageEditarTrabajador() {
         tipocontrato: data.tipocontrato,
         estado: data.estado,
         iniciocontrato: new Date(data.iniciocontrato),
-        fincontrato: new Date(data.fincontrato),
+        fincontrato: data.fincontrato ? new Date(data.fincontrato) : undefined,
       });
       setValue("datos-personales");
     }

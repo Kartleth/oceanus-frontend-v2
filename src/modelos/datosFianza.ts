@@ -7,7 +7,7 @@ export const Fianza = z.object({
   tipodecambio: TipoDeCambio,
   anticipodoc: z.string(),
   inicio: z.string().date(),
-  fin: z.string().date(),
+  fin: z.string().date().nullable(),
   poliza: z.string(),
   aseguradora: z.string(),
   monto: z.string(),

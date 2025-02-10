@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import { Contrato } from "@/modelos/datosContratos";
+import { Button } from "@/components/ui/button";
 
 export function VerDetallesContratos() {
   const { idcontrato } = useParams();
@@ -59,14 +60,27 @@ export function VerDetallesContratos() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+      <div className="flex items-center">
+        <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
+          <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+            Contrato
+          </h1>
+          <p className="max-w-2xl text-lg font-light text-foreground">
+            ID: {contrato?.idcontrato}, {contrato?.nombrecontrato}
+          </p>
+        </div>
 
-      <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
-        <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-          Contrato
-        </h1>
-        <p className="max-w-2xl text-lg font-light text-foreground">
-          ID: {contrato?.idcontrato}, {contrato?.nombrecontrato}
-        </p>
+        <div className="px-3 w-full flex justify-end gap-2 ">
+          <Button className="bg-deepSea hover:bg-deepLightSea">
+            <IdCard />
+            <Link to={"#"}>Convenio </Link>
+          </Button>
+
+          <Button className="bg-deepSea hover:bg-deepLightSea">
+            <FileUser />
+            <Link to={"#"}>Facturas</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-4">

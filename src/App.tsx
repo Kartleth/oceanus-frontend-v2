@@ -65,7 +65,10 @@ function App() {
               path="/editar-trabajador/:id"
               element={<PageEditarTrabajador />}
             />
-            <Route path="/editar-contratos" element={<PageEditarContratos />} />
+            <Route
+              path="/editar-contratos/:id"
+              element={<PageEditarContratos />}
+            />
             <Route
               path="/generar-credencial/:id"
               element={<PageGenerarCredencial />}
@@ -113,10 +116,7 @@ function App() {
               path="/detalles-empresa/:id"
               element={<VerDetallesEmpresa />}
             />
-            <Route
-              path="/agregar-empresa"
-              element={<PageAgregarEmpresa />}
-            />
+            <Route path="/agregar-empresa" element={<PageAgregarEmpresa />} />
             <Route path="/editar-empresa/:id" element={<PageEditarEmpresa />} />
             <Route path="/personal-empresa" element={<PagePersonalEmpresa />} />
           </Route>
