@@ -41,10 +41,10 @@ import {
 import { Persona } from "@/modelos/personal";
 
 type AccordionValue =
-  | "datos-personales"
-  | "datos-medicos"
-  | "datos-academicos"
-  | "datos-contratacion"
+  | "datos-generales"
+  | "datos-cumplimiento"
+  | "datos-ocultos"
+  | "datos-anticipos"
   | string;
 
 export function PageEditarContratos() {
@@ -54,9 +54,9 @@ export function PageEditarContratos() {
   const id = params.id;
 
   const { data, isLoading } = useQuery({
-    queryKey: ["trabajador", id],
+    queryKey: ["contrato", id],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:3001/personas/${id}`, {
+      const res = await fetch(`http://localhost:3001/contrato/${id}`, {
         headers: { "Content-Type": "application/json" },
       });
       const resData = await res.json();
@@ -75,7 +75,7 @@ export function PageEditarContratos() {
 
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch(`http://localhost:3001/personas/${id}`, {
+    const res = await fetch(`http://localhost:3001/contrato/${id}`, {
       method: "put",
       body: JSON.stringify(data),
       headers: {
