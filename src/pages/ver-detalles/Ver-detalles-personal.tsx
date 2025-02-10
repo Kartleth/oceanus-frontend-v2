@@ -40,7 +40,7 @@ export function VerDetallesPersonal() {
 
   return (
     <Layout>
-      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4 bg-gray-50">
         <SidebarTrigger className="-ml-1" />
         <Separator className="h-6 w-px bg-gray-300 mx-2" />
         <Breadcrumb>
@@ -69,8 +69,10 @@ export function VerDetallesPersonal() {
           <>
             <Avatar className="p-4">
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="@shadcn"
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  empleado?.nombre ?? "Usuario"
+                )}&background=C4EEF8`}
+                alt="Avatar"
                 className="w-64 rounded-full p-2"
               />
             </Avatar>
@@ -106,7 +108,9 @@ export function VerDetallesPersonal() {
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
               <UserRound className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">Datos del usuario</h2>
+              <h2 className="font-medium text-xl tracking-tighter">
+                Datos del usuario
+              </h2>
             </div>
 
             <hr className="pb-6" />
@@ -251,7 +255,9 @@ export function VerDetallesPersonal() {
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">Datos personales</h2>
+              <h2 className="font-medium text-xl tracking-tighter">
+                Datos personales
+              </h2>
             </div>
 
             <hr className="pb-6" />
@@ -425,7 +431,9 @@ export function VerDetallesPersonal() {
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <Stethoscope className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">Datos medicos</h2>
+              <h2 className="font-medium text-xl tracking-tighter">
+                Datos medicos
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
@@ -607,7 +615,9 @@ export function VerDetallesPersonal() {
           <div className="rounded-xl bg-muted/50 p-4">
             <div className="flex items-center gap-2 mb-4">
               <GraduationCap className="w-6 h-6" />
-              <h2 className="font-medium text-xl tracking-tighter">Datos academicos</h2>
+              <h2 className="font-medium text-xl tracking-tighter">
+                Datos academicos
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">

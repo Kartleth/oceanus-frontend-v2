@@ -33,7 +33,7 @@ export function VerDetallesEmpresa() {
 
   return (
     <Layout>
-      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+      <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4 bg-gray-50">
         <SidebarTrigger className="-ml-1" />
         <Separator className="h-6 w-px bg-gray-300 mx-2" />
         <Breadcrumb>
@@ -62,8 +62,10 @@ export function VerDetallesEmpresa() {
           <>
             <Avatar className="p-4">
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="@shadcn"
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  empresa?.razonsocial ?? "Empresa"
+                )}&background=C4EEF8`}
+                alt="Avatar"
                 className="w-64 rounded-full p-2"
               />
             </Avatar>

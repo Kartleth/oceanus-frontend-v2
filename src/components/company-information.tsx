@@ -8,13 +8,13 @@ import {
 
 export function CompanyInformation({
   company,
-}: {
+}: Readonly<{
   company: {
     name: string;
     logo: string;
     fullNameCompany: string;
   }[];
-}) {
+}>) {
   const [activeTeam] = React.useState(company[0]);
 
   return (
@@ -22,12 +22,15 @@ export function CompanyInformation({
       <SidebarMenuItem>
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="flex items-center space-x-1 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="flex aspect-square size-12 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-            <img src={activeTeam.logo} alt="Logo Oceanus DB" className="w-24"/>
-          </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
+          <img
+            src={activeTeam.logo}
+            alt="Logo Oceanus DB"
+            className="h-auto w-[50px] transition-all duration-300 group-data-[collapsed=true]:w-[32px]"
+          />
+
+          <div className="flex flex-col text-start text-sm leading-tight transition-all duration-300 group-data-[collapsed=true]:hidden">
             <span className="truncate font-semibold">{activeTeam.name}</span>
             <span className="truncate text-xs">
               {activeTeam.fullNameCompany}
