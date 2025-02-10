@@ -177,7 +177,6 @@ export const columns: ColumnDef<Contrato>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Crear convenio</DropdownMenuItem>
             <DropdownMenuItem>Personal</DropdownMenuItem>
             <DropdownMenuItem>SubContratados</DropdownMenuItem>
             <DropdownMenuSeparator />

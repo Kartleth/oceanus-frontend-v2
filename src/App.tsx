@@ -29,6 +29,7 @@ import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
 import { PageEditarEmpresa } from "./pages/editar-pages/editar-empresa";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
+import Convenio from "./pages/convenio-page/Convenio";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ function App() {
             <Route path="/" element={<Page_personal />} />
             <Route path="/personal" element={<Page_personal />} />
             <Route path="/contratos" element={<Contratos />} />
+            <Route path="/convenio" element={<Convenio />} />
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/facturas" element={<Facturas />} />
             <Route path="/personal_terceros" element={<Terceros />} />
