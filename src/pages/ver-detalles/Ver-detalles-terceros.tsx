@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import { Subcontratado } from "@/modelos/subcontratado";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export function VerDetallesTerceros() {
   const { id } = useParams();
@@ -62,14 +63,26 @@ export function VerDetallesTerceros() {
           </div>
         ) : (
           <>
-            <div className="px-5 container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
-              <h1 className="text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-                Detalles
+            <Avatar className="p-4">
+              <AvatarImage
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  subcontratado?.nombre ?? "Empresa"
+                )}&background=C4EEF8`}
+                alt="Avatar"
+                className="w-64 rounded-full p-2"
+              />
+            </Avatar>
+
+            <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
+              <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+                Detalles de tercero
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {subcontratado?.idsubcontratado}, {subcontratado?.nombre}
+                ID: {subcontratado?.idsubcontratado ?? "No disponible"} , {subcontratado?.nombre  ?? "No disponible"}
               </p>
             </div>
+
+            <div className="px-3 w-full flex justify-end gap-2"></div>
           </>
         )}
       </div>
@@ -80,7 +93,7 @@ export function VerDetallesTerceros() {
             <div className="flex items-center gap-2 mb-4">
               <BriefcaseBusiness className="w-6 h-6" />
               <h2 className="font-medium text-xl tracking-tighter">
-                Datos de Subcontratado
+                Datos de tercero
               </h2>
             </div>
 

@@ -62,8 +62,10 @@ export function VerDetallesEmpresa() {
           <>
             <Avatar className="p-4">
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="@shadcn"
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  empresa?.razonsocial ?? "Empresa"
+                )}&background=C4EEF8`}
+                alt="Avatar"
                 className="w-64 rounded-full p-2"
               />
             </Avatar>
