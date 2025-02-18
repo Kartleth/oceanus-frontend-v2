@@ -38,28 +38,28 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { Empresa } from "@/modelos/cliente";
+import { Cliente } from "@/modelos/cliente";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const columns: ColumnDef<Empresa>[] = [
+export const columns: ColumnDef<Cliente>[] = [
   {
-    accessorKey: "idempresa",
+    accessorKey: "idCliente",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID de empresa
+          ID de cliente
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("idempresa")}</div>
+      <div className="lowercase">{row.getValue("idCliente")}</div>
     ),
   },
   {
@@ -117,11 +117,11 @@ export const columns: ColumnDef<Empresa>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const Empresa = row.original;
+      const Cliente = row.original;
       const queryClient = useQueryClient();
-      const deleteEmpresa = useMutation(async () => {
+      const deleteCliente = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/empresa/${Empresa.idempresa}`,
+          `http://localhost:3001/cliente/${Cliente.idCliente}`,
           {
             method: "delete",
             headers: {
@@ -134,7 +134,7 @@ export const columns: ColumnDef<Empresa>[] = [
           console.error(resData);
         }
         console.log(resData);
-        queryClient.invalidateQueries(["empresas"]);
+        queryClient.invalidateQueries(["clientes"]);
       });
       return (
         <DropdownMenu>
@@ -145,34 +145,34 @@ export const columns: ColumnDef<Empresa>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones de empresa</DropdownMenuLabel>
+            <DropdownMenuLabel>Acciones de clientes</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(Empresa.idempresa.toString())
+                navigator.clipboard.writeText(Cliente.idCliente.toString())
               }
             >
-              <Link to={`/detalles-empresa/${Empresa.idempresa}`}>
+              <Link to={`/detalles-cliente/${Cliente.idCliente}`}>
                 Ver detalles
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos-tercero/${Empresa.idempresa}`}>
+              <Link to={`/subir-archivos-tercero/${Cliente.idCliente}`}>
                 Gestionar archivos
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to={`/personal-empresa`}>
-                Ver personal empresa
+              <Link to={`/personal-cliente`}>
+                Ver personal de clientes
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-empresa/${Empresa.idempresa}`}>Editar</Link>
+              <Link to={`/editar-cliente/${Cliente.idCliente}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                deleteEmpresa.mutate();
+                deleteCliente.mutate();
               }}
             >
               Borrar
@@ -184,13 +184,13 @@ export const columns: ColumnDef<Empresa>[] = [
   },
 ];
 
-export function DataTableEmpresas() {
-  const empresaQuery = useQuery({
-    queryKey: ["empresa"],
+export function DataTableClientes() {
+  const clienteQuery = useQuery({
+    queryKey: ["cliente"],
     queryFn: async () => {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      const res = await fetch("http://localhost:3001/empresa", {
+      const res = await fetch("http://localhost:3001/cliente", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -202,12 +202,12 @@ export function DataTableEmpresas() {
         throw new Error(resData.message);
       }
       console.log("Response Data:", resData);
-      const empresaParse = Empresa.array().safeParse(resData);
-      if (!empresaParse.success) {
-        console.error(empresaParse.error);
-        throw new Error(empresaParse.error.toString());
+      const clienteParse = Cliente.array().safeParse(resData);
+      if (!clienteParse.success) {
+        console.error(clienteParse.error);
+        throw new Error(clienteParse.error.toString());
       }
-      return empresaParse.data;
+      return clienteParse.data;
     },
   });
 
@@ -220,7 +220,7 @@ export function DataTableEmpresas() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: empresaQuery.data || [],
+    data: clienteQuery.data || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -239,42 +239,42 @@ export function DataTableEmpresas() {
   });
 
   /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
-  const exportToExcel = (empresas: Empresa[]) => {
-    if (!empresas || empresas.length === 0) {
+  const exportToExcel = (clientes: Cliente[]) => {
+    if (!clientes || clientes.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
 
-    const datos = empresas.map((empresa) => ({
-      ID: empresa.idempresa ?? "N/A",
-      "Razón social": empresa.razonsocial ?? "N/A",
-      Correo: empresa.correo ?? "N/A",
-      "Teléfono": empresa.telefono ?? "N/A",
-      Logo: empresa.logo ?? "N/A",
-      "Representante legal": empresa.representantelegal ?? "N/A",
-      "Correo rep": empresa.correoRepresentantelegal ?? "N/A",
-      "Telefono de rep": empresa.telefonoRepresentantelegal ?? "N/A",
-      RFC: empresa.rfc ?? "N/A",
-      "Correo de facturación": empresa.correofacturacion ?? "N/A",
-      "Constancia fiscal": empresa.constanciafiscal ?? "N/A",
-      "Tipo de régimen": empresa.tiporegimen ?? "N/A",
-      "Número de cuenta": empresa.numerocuenta ?? "N/A",
-      Banco: empresa.numerocuenta ?? "N/A",
-      "Nombre de contrato": empresa.nombrecontrato ?? "N/A",
+    const datos = clientes.map((cliente) => ({
+      ID: cliente.idCliente ?? "N/A",
+      "Razón social": cliente.razonsocial ?? "N/A",
+      Correo: cliente.correo ?? "N/A",
+      "Teléfono": cliente.telefono ?? "N/A",
+      Logo: cliente.logo ?? "N/A",
+      "Representante legal": cliente.representantelegal ?? "N/A",
+      "Correo rep": cliente.correoRepresentantelegal ?? "N/A",
+      "Telefono de rep": cliente.telefonoRepresentantelegal ?? "N/A",
+      RFC: cliente.rfc ?? "N/A",
+      "Correo de facturación": cliente.correofacturacion ?? "N/A",
+      "Constancia fiscal": cliente.constanciafiscal ?? "N/A",
+      "Tipo de régimen": cliente.tiporegimen ?? "N/A",
+      "Número de cuenta": cliente.numerocuenta ?? "N/A",
+      Banco: cliente.numerocuenta ?? "N/A",
+      "Nombre de contrato": cliente.nombrecontrato ?? "N/A",
       "Fecha de vencimiento de constancia":
-        empresa.fechavencimientoconstancia ?? "N/A",
+      cliente.fechavencimientoconstancia ?? "N/A",
     }));
 
     // Exportar a Excel
     const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Empresa");
-    XLSX.writeFile(workbook, "Empresas_oceanus.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Cliente");
+    XLSX.writeFile(workbook, "Clientes_oceanus.xlsx");
   };
 
   // Exportar a pdf
-  const exportToPDF = (empresas: Empresa[]) => {
-    if (!empresas || empresas.length === 0) {
+  const exportToPDF = (clientes: Cliente[]) => {
+    if (!clientes || clientes.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
@@ -282,7 +282,7 @@ export function DataTableEmpresas() {
     const logoPath = "src/assets/oceanus-logo-3.png";
 
     const camposBloque1 = [
-      { header: "ID", key: "idempresa" },
+      { header: "ID", key: "idCliente" },
       { header: "Razón social", key: "razonsocial" },
       { header: "Correo", key: "correo" },
       { header: "Teléfono", key: "telefono" },
@@ -303,16 +303,16 @@ export function DataTableEmpresas() {
 
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
-      empresas: Empresa[],
+      clientes: Cliente[],
       campos: { header: string; key: string }[]
     ) => {
-      return empresas.map((empresa) => {
+      return clientes.map((cliente) => {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
             key
               .split(".")
-              .reduce((acc, curr) => acc?.[curr], empresa as any) ||
+              .reduce((acc, curr) => acc?.[curr], cliente as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -321,8 +321,8 @@ export function DataTableEmpresas() {
     };
 
     // Generar los datos para cada bloque
-    const datosBloque1 = generarDatosBloque(empresas, camposBloque1);
-    const datosBloque2 = generarDatosBloque(empresas, camposBloque2);
+    const datosBloque1 = generarDatosBloque(clientes, camposBloque1);
+    const datosBloque2 = generarDatosBloque(clientes, camposBloque2);
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
@@ -341,7 +341,7 @@ export function DataTableEmpresas() {
     const pageHeight = doc.internal.pageSize.height; // 210 mm
 
     // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DE EMPRESAS";
+    const text1 = "DATOS DEL CLIENTE";
     const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
@@ -390,12 +390,12 @@ export function DataTableEmpresas() {
     doc.addPage();
     generarTabla(datosBloque2, 30);
 
-    doc.save("Empresas_oceanus.pdf");
+    doc.save("Clientes_oceanus.pdf");
   };
 
   // Imprimir datos
-  const handlePrint = (empresas: Empresa[]) => {
-    if (!empresas || empresas.length === 0) {
+  const handlePrint = (clientes: Cliente[]) => {
+    if (!clientes || clientes.length === 0) {
       alert("No hay datos disponibles para imprimir.");
       return;
     }
@@ -403,7 +403,7 @@ export function DataTableEmpresas() {
     const logoPath = "src/assets/oceanus-logo-3.png";
 
     const camposBloque1 = [
-      { header: "ID", key: "idempresa" },
+      { header: "ID", key: "idCliente" },
       { header: "Razón social", key: "razonsocial" },
       { header: "Correo", key: "correo" },
       { header: "Teléfono", key: "telefono" },
@@ -424,16 +424,16 @@ export function DataTableEmpresas() {
 
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
-      empresas: Empresa[],
+      clientes: Cliente[],
       campos: { header: string; key: string }[]
     ) => {
-      return empresas.map((empresa) => {
+      return clientes.map((cliente) => {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
             key
               .split(".")
-              .reduce((acc, curr) => acc?.[curr], empresa as any) ||
+              .reduce((acc, curr) => acc?.[curr], cliente as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -442,8 +442,8 @@ export function DataTableEmpresas() {
     };
 
     // Generar los datos para cada bloque
-    const datosBloque1 = generarDatosBloque(empresas, camposBloque1);
-    const datosBloque2 = generarDatosBloque(empresas, camposBloque2);
+    const datosBloque1 = generarDatosBloque(clientes, camposBloque1);
+    const datosBloque2 = generarDatosBloque(clientes, camposBloque2);
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
@@ -462,7 +462,7 @@ export function DataTableEmpresas() {
     const pageHeight = doc.internal.pageSize.height; // 210 mm
 
     // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DE EMPRESAS";
+    const text1 = "DATOS DE CLIENTES";
     const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
@@ -545,17 +545,17 @@ export function DataTableEmpresas() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => exportToExcel(empresaQuery.data || [])}
+              onClick={() => exportToExcel(clienteQuery.data || [])}
             >
               Exportar a Excel
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => exportToPDF(empresaQuery.data || [])}
+              onClick={() => exportToPDF(clienteQuery.data || [])}
             >
               Exportar a PDF
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => handlePrint(empresaQuery.data || [])}
+              onClick={() => handlePrint(clienteQuery.data || [])}
             >
               Imprimir
             </DropdownMenuItem>

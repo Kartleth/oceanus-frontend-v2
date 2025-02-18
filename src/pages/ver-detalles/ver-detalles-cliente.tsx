@@ -89,7 +89,7 @@ export function VerDetallesCliente() {
             <div className="flex items-center gap-2 mb-4">
               <Building2 className="w-6 h-6" />
               <h2 className="font-medium text-xl tracking-tighter">
-                Información de la cliente
+                Información del cliente
               </h2>
             </div>
 

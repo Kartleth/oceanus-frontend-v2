@@ -9,7 +9,7 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { DataTableEmpresas } from "@/components/data-tables/data-table-empresas";
+import { DataTableClientes } from "@/components/data-tables/data-table-cliente";
 import { Link } from "react-router-dom";
 
 export default function Clientes() {
@@ -31,14 +31,14 @@ export default function Clientes() {
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
-          <Link to="/agregar-empresa" className="flex items-center space-x-2">
+          <Link to="/agregar-cliente" className="flex items-center space-x-2">
             <CirclePlus className="w-5 h-5" />
             <span>Agregar cliente</span>
           </Link>
         </Button>
       </div>
       <div className="px-3">
-        <DataTableEmpresas></DataTableEmpresas>
+        <DataTableClientes></DataTableClientes>
       </div>
     </Layout>
   );

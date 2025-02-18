@@ -26,7 +26,7 @@ import {
 } from "@/components/forms/datos-cliente-forms/datos-cliente-form";
 import {
   DatosFacturacionCliente,
-  DatosFacturacionClieneForm,
+  DatosFacturacionClienteForm,
   datosFacturacionClienteSchema,
 } from "@/components/forms/datos-cliente-forms/datos-facturacionCliente-form";
 import {
@@ -213,7 +213,7 @@ export function PageEditarCliente() {
               Datos Facturación
             </AccordionTrigger>
             <AccordionContent className="p-4">
-              <DatosFacturacionClieneForm
+              <DatosFacturacionClienteForm
                 form={datosFacturacionClienteForm}
                 onSubmitFacEmp={() => setValue("datos-representante")}
               />
