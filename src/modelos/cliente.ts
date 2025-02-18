@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 // Información de la Empresa
-export const Empresa = z.object({
-  idempresa: z.number(),
+export const Cliente = z.object({
+  idCliente: z.number(),
   razonsocial: z.string().optional().nullable(),
   correo: z.string().optional().nullable(),
   telefono: z.string().optional().nullable(),
@@ -30,4 +30,4 @@ export const Empresa = z.object({
   //facturas: z.array(z.unknown()).optional(),
 });
 
-export type Empresa = z.infer<typeof Empresa>;
+export type Cliente = z.infer<typeof Cliente>;

@@ -8,7 +8,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Building2, ReceiptText, Scale } from "lucide-react";
@@ -16,20 +15,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "react-query";
-import { Empresa } from "@/modelos/empresa";
+import { Cliente } from "@/modelos/cliente";
 
-export function VerDetallesEmpresa() {
+export function VerDetallesCliente() {
   const { id } = useParams();
-  const fetchEmpresa = async (): Promise<Empresa> => {
-    const response = await axios.get(`http://localhost:3001/empresa/${id}`);
+  const fetchCliente = async (): Promise<Cliente> => {
+    const response = await axios.get(`http://localhost:3001/cliente/${id}`);
     return response.data;
   };
   const {
-    data: empresa,
+    data: cliente,
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Empresa>(["empresa", id], fetchEmpresa);
+  } = useQuery<Cliente>(["cliente", id], fetchCliente);
 
   return (
     <Layout>
@@ -39,14 +38,14 @@ export function VerDetallesEmpresa() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
+              <BreadcrumbLink href="/clientes">Clientes</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/detalles-empresa`}>
-                Detalles de empresa
+              <BreadcrumbLink href={`/detalles-cliente`}>
+                Detalles de cliente
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -63,7 +62,7 @@ export function VerDetallesEmpresa() {
             <Avatar className="p-4">
               <AvatarImage
                 src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                  empresa?.razonsocial ?? "Empresa"
+                  cliente?.razonsocial ?? "cliente"
                 )}&background=C4EEF8`}
                 alt="Avatar"
                 className="w-64 rounded-full p-2"
@@ -72,10 +71,10 @@ export function VerDetallesEmpresa() {
 
             <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
               <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-                Detalles de empresa
+                Detalles de cliente
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {empresa?.idempresa ?? "No disponible"} , {empresa?.razonsocial  ?? "No disponible"}
+                ID: {cliente?.idCliente ?? "No disponible"} , {cliente?.razonsocial  ?? "No disponible"}
               </p>
             </div>
 
@@ -90,7 +89,7 @@ export function VerDetallesEmpresa() {
             <div className="flex items-center gap-2 mb-4">
               <Building2 className="w-6 h-6" />
               <h2 className="font-medium text-xl tracking-tighter">
-                Información de la empresa
+                Información de la cliente
               </h2>
             </div>
 
@@ -102,31 +101,31 @@ export function VerDetallesEmpresa() {
                   Razón social
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.razonsocial ?? "No disponible"}
+                    value={cliente?.razonsocial ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* ID de Empresa */}
+                {/* ID de cliente */}
                 <div className="flex flex-col">
                   <Label htmlFor="" className="mb-2">
-                    Id de empresa
+                    Id de cliente
                   </Label>
                   {/* Skeleton Loader */}
-                  {!empresa ? (
+                  {!cliente ? (
                     <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     <Input
                       disabled
                       type="number"
-                      value={empresa?.idempresa ?? "No disponible"}
+                      value={cliente?.idCliente ?? "No disponible"}
                       className="bg-white disabled:opacity-100"
                     />
                   )}
@@ -137,13 +136,13 @@ export function VerDetallesEmpresa() {
                     Correo
                   </Label>
                   {/* Skeleton Loader */}
-                  {!empresa ? (
+                  {!cliente ? (
                     <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     <Input
                       disabled
                       type="email"
-                      value={empresa?.correo ?? "No disponible"}
+                      value={cliente?.correo ?? "No disponible"}
                       className="bg-white disabled:opacity-100"
                     />
                   )}
@@ -154,13 +153,13 @@ export function VerDetallesEmpresa() {
                     Teléfono
                   </Label>
                   {/* Skeleton Loader */}
-                  {!empresa ? (
+                  {!cliente ? (
                     <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     <Input
                       disabled
                       type="number"
-                      value={empresa.telefono ?? "No disponible"}
+                      value={cliente.telefono ?? "No disponible"}
                       className="bg-white disabled:opacity-100"
                     />
                   )}
@@ -171,13 +170,13 @@ export function VerDetallesEmpresa() {
                     Nombre de contrato
                   </Label>
                   {/* Skeleton Loader */}
-                  {!empresa ? (
+                  {!cliente ? (
                     <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                   ) : (
                     <Input
                       disabled
                       type="string"
-                      value={empresa.nombrecontrato ?? "No disponible"}
+                      value={cliente.nombrecontrato ?? "No disponible"}
                       className="bg-white disabled:opacity-100"
                     />
                   )}
@@ -204,13 +203,13 @@ export function VerDetallesEmpresa() {
                   RFC
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.rfc ?? "No disponible"}
+                    value={cliente?.rfc ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -220,13 +219,13 @@ export function VerDetallesEmpresa() {
                   Correo de facturación
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="email"
-                    value={empresa?.correofacturacion ?? "No disponible"}
+                    value={cliente?.correofacturacion ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -236,13 +235,13 @@ export function VerDetallesEmpresa() {
                   Tipo de régimen
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.tiporegimen ?? "No disponible"}
+                    value={cliente?.tiporegimen ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -252,13 +251,13 @@ export function VerDetallesEmpresa() {
                   Número de cuenta
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="number"
-                    value={empresa?.numerocuenta ?? "No disponible"}
+                    value={cliente?.numerocuenta ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -268,13 +267,13 @@ export function VerDetallesEmpresa() {
                   Banco
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.banco ?? "No disponible"}
+                    value={cliente?.banco ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -284,14 +283,14 @@ export function VerDetallesEmpresa() {
                   Vencimiento de constancia
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="date"
                     value={
-                      empresa?.fechavencimientoconstancia ?? "No disponible"
+                      cliente?.fechavencimientoconstancia ?? "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -316,13 +315,13 @@ export function VerDetallesEmpresa() {
                   Representante
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={empresa?.representantelegal ?? "No disponible"}
+                    value={cliente?.representantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -332,13 +331,13 @@ export function VerDetallesEmpresa() {
                   Correo
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="email"
-                    value={empresa?.correoRepresentantelegal ?? "No disponible"}
+                    value={cliente?.correoRepresentantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -348,13 +347,13 @@ export function VerDetallesEmpresa() {
                   Teléfono
                 </Label>
                 {/* Skeleton Loader */}
-                {!empresa ? (
+                {!cliente ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="string"
-                    value={empresa?.telefonoRepresentantelegal ?? "No disponible"}
+                    value={cliente?.telefonoRepresentantelegal ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}

@@ -23,7 +23,7 @@ import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-
 import { PageAgregarCotizacion } from "./pages/agregar-pages/agregar-cotizacion-page";
 import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
-import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-empresa";
+import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-cliente";
 import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
 import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";

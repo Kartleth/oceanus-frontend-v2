@@ -35,7 +35,7 @@ import {
   datosRepresentanteSchema,
 } from "@/components/forms/datos-empresa-forms/datos-representateEmpresa-form";
 
-import { Empresa } from "@/modelos/empresa";
+import { Empresa } from "@/modelos/cliente";
 
 type AccordionValue =
   | "datos-empresa"
