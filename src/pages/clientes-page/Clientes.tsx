@@ -12,7 +12,7 @@ import { CirclePlus } from "lucide-react";
 import { DataTableEmpresas } from "@/components/data-tables/data-table-empresas";
 import { Link } from "react-router-dom";
 
-export default function Empresas() {
+export default function Clientes() {
   return (
     <Layout>
       <div>
@@ -22,7 +22,7 @@ export default function Empresas() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
+                <BreadcrumbLink href="/empresas">Clientes</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -33,7 +33,7 @@ export default function Empresas() {
         <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
           <Link to="/agregar-empresa" className="flex items-center space-x-2">
             <CirclePlus className="w-5 h-5" />
-            <span>Agregar empresa</span>
+            <span>Agregar cliente</span>
           </Link>
         </Button>
       </div>

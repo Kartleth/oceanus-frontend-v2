@@ -2,7 +2,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Contratos from "./pages/contratos-page/Contratos";
-import Empresas from "./pages/empresas-page/Empresas";
+import Clientes from "./pages/clientes-page/Clientes";
 import Facturas from "./pages/facturas-page/Facturas";
 import Terceros from "./pages/terceros-page/Terceros";
 import Cotizaciones from "./pages/cotizaciones-page/Cotizaciones";
@@ -47,7 +47,7 @@ function App() {
             <Route path="/personal" element={<Page_personal />} />
             <Route path="/contratos" element={<Contratos />} />
             <Route path="/convenio" element={<Convenio />} />
-            <Route path="/empresas" element={<Empresas />} />
+            <Route path="/clientes" element={<Clientes />} />
             <Route path="/facturas" element={<Facturas />} />
             <Route path="/personal_terceros" element={<Terceros />} />
             <Route path="/cotizaciones" element={<Cotizaciones />} />
@@ -113,7 +113,7 @@ function App() {
             />
             <Route path="/agregar-tercero" element={<PageAgregarTercero />} />
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
-            {/* Rutas para empresa */}
+            {/* Rutas para clientes */}
             <Route
               path="/detalles-empresa/:id"
               element={<VerDetallesEmpresa />}

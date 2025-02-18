@@ -3,10 +3,10 @@ import logoSVG from "../assets/oceanus-logo.svg";
 import {
   Users2,
   ReceiptText,
-  Building2,
   Receipt,
   Calculator,
   NetworkIcon,
+  Handshake,
 } from "lucide-react";
 
 import { NavPages } from "@/components/nav-pages";
@@ -40,9 +40,9 @@ const data = {
       icon: ReceiptText,
     },
     {
-      name: "Empresas",
-      url: "/empresas",
-      icon: Building2,
+      name: "Clientes",
+      url: "/clientes",
+      icon: Handshake,
     },
     {
       name: "Facturas",
