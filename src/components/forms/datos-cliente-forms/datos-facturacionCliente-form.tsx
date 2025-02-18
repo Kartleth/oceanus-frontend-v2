@@ -54,7 +54,7 @@ interface DatosFacturacionClienteProps {
   form: UseFormReturn<DatosFacturacionCliente>;
 }
 
-export const DatosFacturacionClieneForm: FC<DatosFacturacionClienteProps> = ({
+export const DatosFacturacionClienteForm: FC<DatosFacturacionClienteProps> = ({
   form,
   onSubmitFacEmp,
 }) => {

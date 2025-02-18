@@ -25,7 +25,7 @@ import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros"
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
 import { VerDetallesCliente } from "./pages/ver-detalles/ver-detalles-cliente";
 import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
-import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
+import { PageAgregarCliente } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
 import { PageEditarCliente } from "./pages/editar-pages/editar-cliente";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
@@ -118,7 +118,7 @@ function App() {
               path="/detalles-cliente/:id"
               element={<VerDetallesCliente />}
             />
-            <Route path="/agregar-cliente" element={<PageAgregarEmpresa />} />
+            <Route path="/agregar-cliente" element={<PageAgregarCliente />} />
             <Route path="/editar-cliente/:id" element={<PageEditarCliente />} />
             <Route path="/personal-cliente" element={<PagePersonalEmpresa />} />
           </Route>

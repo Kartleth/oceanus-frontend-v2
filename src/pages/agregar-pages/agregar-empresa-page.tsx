@@ -20,14 +20,14 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import {
-  DatosEmpresa,
-  DatosEmpresaForm,
-  datosEmpresaSchema,
+  DatosCliente,
+  DatosClienteForm,
+  datosClienteSchema,
 } from "@/components/forms/datos-cliente-forms/datos-cliente-form";
 import {
-  DatosFacturacionEmpresa,
-  DatosFacturacionEmpresaForm,
-  datosFacturacionEmpresaSchema,
+  DatosFacturacionCliente,
+  DatosFacturacionClienteForm,
+  datosFacturacionClienteSchema,
 } from "@/components/forms/datos-cliente-forms/datos-facturacionCliente-form";
 import {
   DatosRepresentante,
@@ -36,16 +36,16 @@ import {
 } from "@/components/forms/datos-cliente-forms/datos-representateCliente-form";
 
 type AccordionValue =
-  | "datos-empresa"
-  | "datos-facturacionEmpresa"
+  | "datos-cliente"
+  | "datos-facturacionCliente"
   | "datos-representante";
 
-export function PageAgregarEmpresa() {
+export function PageAgregarCliente() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/empresa", {
+    const res = await fetch("http://localhost:3001/cliente", {
       method: "post",
       body: JSON.stringify(data),
       headers: {
@@ -57,26 +57,26 @@ export function PageAgregarEmpresa() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["empresas"]);
-    navigate("/empresas");
+    queryClient.invalidateQueries(["clientes"]);
+    navigate("/clientes");
   });
-  const [value, setValue] = useState<AccordionValue>("datos-empresa");
+  const [value, setValue] = useState<AccordionValue>("datos-cliente");
 
-  const datosEmpresaForm = useForm<DatosEmpresa>({
-    resolver: zodResolver(datosEmpresaSchema),
+  const datosClienteForm = useForm<DatosCliente>({
+    resolver: zodResolver(datosClienteSchema),
   });
-  const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
-    resolver: zodResolver(datosFacturacionEmpresaSchema),
+  const datosFacturacionClienteForm = useForm<DatosFacturacionCliente>({
+    resolver: zodResolver(datosFacturacionClienteSchema),
   });
   const datosRepresentanteForm = useForm<DatosRepresentante>({
     resolver: zodResolver(datosRepresentanteSchema),
   });
 
-  function onSubmitEmp(values: DatosEmpresa) {
+  function onSubmitEmp(values: DatosCliente) {
     console.log(values);
-    setValue("datos-facturacionEmpresa");
+    setValue("datos-facturacionCliente");
   }
-  function onSubmitFacEmp(values: DatosFacturacionEmpresa) {
+  function onSubmitFacEmp(values: DatosFacturacionCliente) {
     const formattedValues = {
       ...values,
       fechavencimientoconstancia: values.fechavencimientoconstancia
@@ -89,16 +89,16 @@ export function PageAgregarEmpresa() {
   }
   function onSubmitRepLeg(values: DatosRepresentante) {
     console.log(values);
-    guardarEmpresa();
+    guardarCliente();
   }
 
   async function formulariosSonValidos() {
-    if (!(await datosEmpresaForm.trigger())) {
-      setValue("datos-empresa");
+    if (!(await datosClienteForm.trigger())) {
+      setValue("datos-cliente");
       return false;
     }
-    if (!(await datosFacturacionEmpresaForm.trigger())) {
-      setValue("datos-facturacionEmpresa");
+    if (!(await datosFacturacionClienteForm.trigger())) {
+      setValue("datos-facturacionCliente");
       return false;
     }
     if (!(await datosRepresentanteForm.trigger())) {
@@ -108,23 +108,23 @@ export function PageAgregarEmpresa() {
     return true;
   }
 
-  async function guardarEmpresa() {
+  async function guardarCliente() {
     const validos = await formulariosSonValidos();
 
     if (!validos) return;
 
-    const datosEmpresa = datosEmpresaForm.getValues();
-    const datosFacturacionEmpresa = datosFacturacionEmpresaForm.getValues();
+    const datosCliente = datosClienteForm.getValues();
+    const datosFacturacionCliente = datosFacturacionClienteForm.getValues();
     const datosRepresentante = datosRepresentanteForm.getValues();
 
-    const empresa = {
-      ...datosEmpresa,
-      ...datosFacturacionEmpresa,
+    const cliente = {
+      ...datosCliente,
+      ...datosFacturacionCliente,
       ...datosRepresentante,
     };
 
-    console.log("ESTA ES LA EMPRESA", empresa);
-    mutation.mutate(empresa, {
+    console.log("ESTA ES EL CLIENTE", cliente);
+    mutation.mutate(cliente, {
       onError: (error: any) => {
         console.error("Errores del backend:", error.message);
         alert(
@@ -134,9 +134,9 @@ export function PageAgregarEmpresa() {
     });
   }
 
-  const erroresEmpresa = Object.keys(datosEmpresaForm.formState.errors).length;
+  const erroresCliente = Object.keys(datosClienteForm.formState.errors).length;
   const erroresFacturacion = Object.keys(
-    datosFacturacionEmpresaForm.formState.errors
+    datosFacturacionClienteForm.formState.errors
   ).length;
   const erroresRepresentante = Object.keys(
     datosRepresentanteForm.formState.errors
@@ -150,14 +150,14 @@ export function PageAgregarEmpresa() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
+              <BreadcrumbLink href="/clientes">Clientes</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/agregar-empresa`}>
-                Agregar empresa
+              <BreadcrumbLink href={`/agregar-cliente`}>
+                Agregar cliente
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -170,24 +170,24 @@ export function PageAgregarEmpresa() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-empresa">
+          <AccordionItem value="datos-cliente">
             <AccordionTrigger
-              data-hasErrors={erroresEmpresa > 0}
+              data-hasErrors={erroresCliente > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos Empresa ${
-                erroresEmpresa > 0 ? `(${erroresEmpresa} errores)` : ""
+              {`Datos Cliente ${
+                erroresCliente > 0 ? `(${erroresCliente} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosEmpresaForm
-                form={datosEmpresaForm}
+              <DatosClienteForm
+                form={datosClienteForm}
                 onSubmitEmp={onSubmitEmp}
-              ></DatosEmpresaForm>
+              ></DatosClienteForm>
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="datos-facturacionEmpresa">
+          <AccordionItem value="datos-facturacionCliente">
             <AccordionTrigger
               data-hasErrors={erroresFacturacion > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
@@ -197,10 +197,10 @@ export function PageAgregarEmpresa() {
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosFacturacionEmpresaForm
-                form={datosFacturacionEmpresaForm}
+              <DatosFacturacionClienteForm
+                form={datosFacturacionClienteForm}
                 onSubmitFacEmp={onSubmitFacEmp}
-              ></DatosFacturacionEmpresaForm>
+              ></DatosFacturacionClienteForm>
             </AccordionContent>
           </AccordionItem>
 
