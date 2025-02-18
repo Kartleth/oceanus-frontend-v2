@@ -23,11 +23,11 @@ import SubirArchivosCotizacion from "./pages/subir-archivos-page/subir-archivos-
 import { PageAgregarCotizacion } from "./pages/agregar-pages/agregar-cotizacion-page";
 import { VerDetallesTerceros } from "./pages/ver-detalles/Ver-detalles-terceros";
 import SubirArchivosTerceros from "./pages/subir-archivos-page/subir-archivos-terceros";
-import { VerDetallesEmpresa } from "./pages/ver-detalles/ver-detalles-cliente";
+import { VerDetallesCliente } from "./pages/ver-detalles/ver-detalles-cliente";
 import { PageAgregarTercero } from "./pages/agregar-pages/agregar-tercero-page";
 import { PageAgregarEmpresa } from "./pages/agregar-pages/agregar-empresa-page";
 import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
-import { PageEditarEmpresa } from "./pages/editar-pages/editar-empresa";
+import { PageEditarCliente } from "./pages/editar-pages/editar-cliente";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 import Convenio from "./pages/convenio-page/Convenio";
 
@@ -115,12 +115,12 @@ function App() {
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para clientes */}
             <Route
-              path="/detalles-empresa/:id"
-              element={<VerDetallesEmpresa />}
+              path="/detalles-cliente/:id"
+              element={<VerDetallesCliente />}
             />
-            <Route path="/agregar-empresa" element={<PageAgregarEmpresa />} />
-            <Route path="/editar-empresa/:id" element={<PageEditarEmpresa />} />
-            <Route path="/personal-empresa" element={<PagePersonalEmpresa />} />
+            <Route path="/agregar-cliente" element={<PageAgregarEmpresa />} />
+            <Route path="/editar-cliente/:id" element={<PageEditarCliente />} />
+            <Route path="/personal-cliente" element={<PagePersonalEmpresa />} />
           </Route>
         </Routes>
       </BrowserRouter>

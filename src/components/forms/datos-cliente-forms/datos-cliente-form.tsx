@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FC } from "react";
 
-export const datosEmpresaSchema = z.object({
+export const datosClienteSchema = z.object({
   razonsocial: z
     .string({ required_error: "Razón social obligatoria." })
     .max(150, { message: "Razón social no puede exceder de 150 caracteres." })
@@ -28,14 +28,14 @@ export const datosEmpresaSchema = z.object({
     .optional(),
 });
 
-export type DatosEmpresa = z.infer<typeof datosEmpresaSchema>;
+export type DatosCliente = z.infer<typeof datosClienteSchema>;
 
-interface DatosEmpresaProps {
-  onSubmitEmp: (values: DatosEmpresa) => void;
-  form: UseFormReturn<DatosEmpresa>;
+interface DatosClienteProps {
+  onSubmitEmp: (values: DatosCliente) => void;
+  form: UseFormReturn<DatosCliente>;
 }
 
-export const DatosEmpresaForm: FC<DatosEmpresaProps> = ({ form, onSubmitEmp }) => {
+export const DatosClienteForm: FC<DatosClienteProps> = ({ form, onSubmitEmp }) => {
   return (
     <Form {...form}>
       <form

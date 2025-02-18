@@ -23,17 +23,17 @@ import {
   DatosEmpresa,
   DatosEmpresaForm,
   datosEmpresaSchema,
-} from "@/components/forms/datos-empresa-forms/datos-empresa-form";
+} from "@/components/forms/datos-cliente-forms/datos-cliente-form";
 import {
   DatosFacturacionEmpresa,
   DatosFacturacionEmpresaForm,
   datosFacturacionEmpresaSchema,
-} from "@/components/forms/datos-empresa-forms/datos-facturacionEmpresa-form";
+} from "@/components/forms/datos-cliente-forms/datos-facturacionCliente-form";
 import {
   DatosRepresentante,
   DatosRepresentanteForm,
   datosRepresentanteSchema,
-} from "@/components/forms/datos-empresa-forms/datos-representateEmpresa-form";
+} from "@/components/forms/datos-cliente-forms/datos-representateCliente-form";
 
 type AccordionValue =
   | "datos-empresa"

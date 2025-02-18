@@ -20,38 +20,38 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  DatosEmpresa,
-  DatosEmpresaForm,
-  datosEmpresaSchema,
-} from "@/components/forms/datos-empresa-forms/datos-empresa-form";
+  DatosCliente,
+  DatosClienteForm,
+  datosClienteSchema,
+} from "@/components/forms/datos-cliente-forms/datos-cliente-form";
 import {
-  DatosFacturacionEmpresa,
-  DatosFacturacionEmpresaForm,
-  datosFacturacionEmpresaSchema,
-} from "@/components/forms/datos-empresa-forms/datos-facturacionEmpresa-form";
+  DatosFacturacionCliente,
+  DatosFacturacionClieneForm,
+  datosFacturacionClienteSchema,
+} from "@/components/forms/datos-cliente-forms/datos-facturacionCliente-form";
 import {
   DatosRepresentante,
   DatosRepresentanteForm,
   datosRepresentanteSchema,
-} from "@/components/forms/datos-empresa-forms/datos-representateEmpresa-form";
+} from "@/components/forms/datos-cliente-forms/datos-representateCliente-form";
 
-import { Empresa } from "@/modelos/cliente";
+import { Cliente } from "@/modelos/cliente";
 
 type AccordionValue =
-  | "datos-empresa"
-  | "datos-facturacionEmpresa"
+  | "datos-cliente"
+  | "datos-facturacionCliente"
   | "datos-representante";
 
-export function PageEditarEmpresa() {
+export function PageEditarCliente() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
 
   const { data, isLoading } = useQuery({
-    queryKey: ["empresa", id],
+    queryKey: ["cliente", id],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:3001/empresa/${id}`, {
+      const res = await fetch(`http://localhost:3001/cliente/${id}`, {
         headers: { "Content-Type": "application/json" },
       });
       const resData = await res.json();
@@ -59,18 +59,18 @@ export function PageEditarEmpresa() {
         console.error(resData);
         throw new Error(resData.message);
       }
-      const empresaParse = Empresa.safeParse(resData);
-      if (!empresaParse.success) {
-        console.error(empresaParse.error);
-        throw new Error(empresaParse.error.toString());
+      const clienteParse = Cliente.safeParse(resData);
+      if (!clienteParse.success) {
+        console.error(clienteParse.error);
+        throw new Error(clienteParse.error.toString());
       }
-      return empresaParse.data;
+      return clienteParse.data;
     },
   });
 
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch(`http://localhost:3001/empresa/${id}`, {
+    const res = await fetch(`http://localhost:3001/cliente/${id}`, {
       method: "put",
       body: JSON.stringify(data),
       headers: {
@@ -82,18 +82,18 @@ export function PageEditarEmpresa() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["empresa"]);
-    navigate("/empresas");
+    queryClient.invalidateQueries(["cliente"]);
+    navigate("/clientes");
   });
 
   async function formulariosSonValidos() {
-    if (!(await datosEmpresaForm.trigger())) {
-      setValue("datos-empresa");
+    if (!(await datosClienteForm.trigger())) {
+      setValue("datos-cliente");
 
       return false;
     }
-    if (!(await datosFacturacionEmpresaForm.trigger())) {
-      setValue("datos-facturacionEmpresa");
+    if (!(await datosFacturacionClienteForm.trigger())) {
+      setValue("datos-facturacionCliente");
 
       return false;
     }
@@ -106,28 +106,28 @@ export function PageEditarEmpresa() {
     return true;
   }
 
-  async function guardarEmpresa() {
+  async function guardarCliente() {
     const validos = await formulariosSonValidos();
 
     if (!validos) return;
 
-    const datosEmpresa = datosEmpresaForm.getValues();
-    const datosFacturacionEmpresa = datosFacturacionEmpresaForm.getValues();
+    const datosCliente = datosClienteForm.getValues();
+    const datosFacturacionCliente = datosFacturacionClienteForm.getValues();
     const datosRepresentante = datosRepresentanteForm.getValues();
 
-    const empresa = {
-      ...datosEmpresa,
-      ...datosFacturacionEmpresa,
+    const cliente = {
+      ...datosCliente,
+      ...datosFacturacionCliente,
       ...datosRepresentante,
     };
-    console.log(empresa);
-    mutation.mutate(empresa);
+    console.log(cliente);
+    mutation.mutate(cliente);
   }
-  const datosEmpresaForm = useForm<DatosEmpresa>({
-    resolver: zodResolver(datosEmpresaSchema),
+  const datosClienteForm = useForm<DatosCliente>({
+    resolver: zodResolver(datosClienteSchema),
   });
-  const datosFacturacionEmpresaForm = useForm<DatosFacturacionEmpresa>({
-    resolver: zodResolver(datosFacturacionEmpresaSchema),
+  const datosFacturacionClienteForm = useForm<DatosFacturacionCliente>({
+    resolver: zodResolver(datosFacturacionClienteSchema),
   });
   const datosRepresentanteForm = useForm<DatosRepresentante>({
     resolver: zodResolver(datosRepresentanteSchema),
@@ -138,12 +138,12 @@ export function PageEditarEmpresa() {
   // Sincroniza los datos obtenidos con los formularios
   useEffect(() => {
     if (data) {
-      datosEmpresaForm.reset({
+      datosClienteForm.reset({
         razonsocial: data.razonsocial ?? "",
         correo: data.correo ?? "",
         telefono: data.telefono ?? "",
       });
-      datosFacturacionEmpresaForm.reset({
+      datosFacturacionClienteForm.reset({
         rfc: data.rfc ?? "",
         correofacturacion: data.correofacturacion ?? "",
         tiporegimen: data.tiporegimen ?? "",
@@ -159,7 +159,7 @@ export function PageEditarEmpresa() {
         telefonoRepresentantelegal: data.telefonoRepresentantelegal ?? "",
       });
 
-      setValue("datos-empresa");
+      setValue("datos-cliente");
     }
     console.log(data);
   }, [data]);
@@ -176,14 +176,14 @@ export function PageEditarEmpresa() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/empresas">Empresas</BreadcrumbLink>
+              <BreadcrumbLink href="/clientes">Clientes</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/editar-empresa/:id`}>
-                Ediar empresa
+              <BreadcrumbLink href={`/editar-cliente/:id`}>
+                Ediar cliente
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -196,25 +196,25 @@ export function PageEditarEmpresa() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-empresa">
+          <AccordionItem value="datos-cliente">
             <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
-              Datos Empresa
+              Datos Cliente
             </AccordionTrigger>
             <AccordionContent className="p-4">
-              <DatosEmpresaForm
-                form={datosEmpresaForm}
-                onSubmitEmp={() => setValue("datos-facturacionEmpresa")}
+              <DatosClienteForm
+                form={datosClienteForm}
+                onSubmitEmp={() => setValue("datos-facturacionCliente")}
               />
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="datos-facturacionEmpresa">
+          <AccordionItem value="datos-facturacionCliente">
             <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
               Datos Facturación
             </AccordionTrigger>
             <AccordionContent className="p-4">
-              <DatosFacturacionEmpresaForm
-                form={datosFacturacionEmpresaForm}
+              <DatosFacturacionClieneForm
+                form={datosFacturacionClienteForm}
                 onSubmitFacEmp={() => setValue("datos-representante")}
               />
             </AccordionContent>
@@ -227,7 +227,7 @@ export function PageEditarEmpresa() {
             <AccordionContent className="p-4">
               <DatosRepresentanteForm
                 form={datosRepresentanteForm}
-                onSubmitRepLeg={() => guardarEmpresa()}
+                onSubmitRepLeg={() => guardarCliente()}
               />
             </AccordionContent>
           </AccordionItem>

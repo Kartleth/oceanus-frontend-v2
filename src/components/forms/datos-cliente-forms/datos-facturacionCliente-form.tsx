@@ -13,7 +13,7 @@ import { UseFormReturn } from "react-hook-form";
 import { FC } from "react";
 import { DatePicker } from "@/components/ui/datepicker";
 
-export const datosFacturacionEmpresaSchema = z.object({
+export const datosFacturacionClienteSchema = z.object({
   rfc: z
     .string({
       required_error: "RFC es obligatoria.",
@@ -45,16 +45,16 @@ export const datosFacturacionEmpresaSchema = z.object({
     .optional(),
 });
 
-export type DatosFacturacionEmpresa = z.infer<
-  typeof datosFacturacionEmpresaSchema
+export type DatosFacturacionCliente = z.infer<
+  typeof datosFacturacionClienteSchema
 >;
 
-interface DatosFacturacionEmpresaProps {
-  onSubmitFacEmp: (values: DatosFacturacionEmpresa) => void;
-  form: UseFormReturn<DatosFacturacionEmpresa>;
+interface DatosFacturacionClienteProps {
+  onSubmitFacEmp: (values: DatosFacturacionCliente) => void;
+  form: UseFormReturn<DatosFacturacionCliente>;
 }
 
-export const DatosFacturacionEmpresaForm: FC<DatosFacturacionEmpresaProps> = ({
+export const DatosFacturacionClieneForm: FC<DatosFacturacionClienteProps> = ({
   form,
   onSubmitFacEmp,
 }) => {
