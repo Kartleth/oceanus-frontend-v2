@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { PersonalContrato } from "./personalContrato";
 import { Fianza } from "./datosFianza";
-import { Contratante } from "./datosContratante";
 import { Contratado } from "./datosContratado";
 import { Persona } from "./personal";
 

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DataTableContratos } from "@/components/data-tables/data-table-contratos";
+import { DataTableConvenio } from "@/components/data-tables/data-table-convenio";
 
 export default function Convenio() {
   return (
@@ -41,7 +42,7 @@ export default function Convenio() {
       </div>
       <div className="px-3"></div>
       <div className="px-3">
-        <DataTableContratos></DataTableContratos>
+        <DataTableConvenio></DataTableConvenio>
       </div>
     </Layout>
   );
