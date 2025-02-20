@@ -147,7 +147,7 @@ export function PageAgregarContratos() {
       fincontrato: datosGenerales.fincontrato,
       convenio: [],
       fianzaCumplimiento: {
-        documento: datosCumplimiento.documento,
+        // documento: datosCumplimiento.documento,
         tipodecambio: datosCumplimiento.tipodecambio,
         inicio: datosCumplimiento.inicio,
         anticipodoc: datosCumplimiento.anticipodoc,

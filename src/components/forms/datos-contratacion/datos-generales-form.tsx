@@ -23,7 +23,7 @@ export const datosGeneralesSchema = z.object({
     .string({ required_error: "Escribe correctamente el campo." })
     .optional(),
   numerocontrato: z.string({ required_error: "" }),
-  contratante: z.string(),
+  // contratante: z.string(),
   contratado: z.string(),
   // facturas: z.string(),
   iniciocontrato: z
@@ -151,7 +151,7 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="contratante"
           render={({ field }) => (
@@ -163,7 +163,7 @@ export const DatosGeneralesContratacionForm: FC<
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="contratado"
