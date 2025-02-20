@@ -13,6 +13,7 @@ import { FormSelect, SelectItem } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/datepicker";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SelectEmpresa } from "@/components/select-empresa/select-empresa";
 
 export const datosGeneralesSchema = z.object({
   nombrecontrato: z.string({
@@ -90,7 +91,7 @@ export const DatosGeneralesContratacionForm: FC<
                   defaultValue={field.value}
                   placeholder="Selecciona tipo de subcontrato"
                 >
-                  <SelectItem value="subcontrato">Subcontarto</SelectItem>
+                  <SelectItem value="subcontrato">Subcontrato</SelectItem>
                   <SelectItem value="contrato origen">
                     Contrato Origen
                   </SelectItem>
@@ -171,7 +172,7 @@ export const DatosGeneralesContratacionForm: FC<
             <FormItem>
               <FormLabel>Nombre del Contratado</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <SelectEmpresa value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>

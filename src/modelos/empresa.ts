@@ -3,7 +3,7 @@ import { z } from "zod";
 // Información de la Empresa
 export const Empresa = z.object({
   idempresa: z.number(),
-  razonsocial: z.string().optional().nullable(),
+  razonsocial: z.string(),
   correo: z.string().optional().nullable(),
   telefono: z.string().optional().nullable(),
   logo: z.string().optional().nullable(),

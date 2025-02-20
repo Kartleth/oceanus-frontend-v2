@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const TipoDeCambio = z.enum(["dolar", "peso"]);
 export const Fianza = z.object({
-  id: z.number(),
+  idfianza: z.number(),
   documento: z.string().nullable(),
   tipodecambio: TipoDeCambio,
   anticipodoc: z.string(),

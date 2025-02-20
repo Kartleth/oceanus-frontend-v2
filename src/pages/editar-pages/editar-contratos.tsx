@@ -190,46 +190,46 @@ export function PageEditarContratos() {
       });
 
       datosAnticipoForm.reset({
-        documento: data.fianzaanticipo?.documento ?? undefined,
-        tipodecambio: data.fianzaanticipo?.tipodecambio,
-        inicio: data.fianzaanticipo?.inicio
-          ? new Date(data.fianzaanticipo?.inicio)
+        documento: data.fianzaAnticipo?.documento ?? undefined,
+        tipodecambio: data.fianzaAnticipo?.tipodecambio,
+        inicio: data.fianzaAnticipo?.inicio
+          ? new Date(data.fianzaAnticipo?.inicio)
           : undefined,
-        anticipodoc: data.fianzaanticipo?.anticipodoc,
-        fin: data.fianzaanticipo?.fin
-          ? new Date(data.fianzaanticipo?.fin)
+        anticipodoc: data.fianzaAnticipo?.anticipodoc,
+        fin: data.fianzaAnticipo?.fin
+          ? new Date(data.fianzaAnticipo?.fin)
           : new Date(),
-        poliza: data.fianzaanticipo?.poliza,
-        aseguradora: data.fianzaanticipo?.aseguradora,
-        monto: data.fianzaanticipo?.monto,
+        poliza: data.fianzaAnticipo?.poliza,
+        aseguradora: data.fianzaAnticipo?.aseguradora,
+        monto: data.fianzaAnticipo?.monto,
       });
       datosCumplimientoForm.reset({
-        documento: data.fianzacumplimiento?.documento ?? undefined,
-        tipodecambio: data.fianzacumplimiento?.tipodecambio,
-        inicio: data.fianzacumplimiento?.inicio
-          ? new Date(data.fianzacumplimiento?.inicio)
+        documento: data.fianzaCumplimiento?.documento ?? undefined,
+        tipodecambio: data.fianzaCumplimiento?.tipodecambio,
+        inicio: data.fianzaCumplimiento?.inicio
+          ? new Date(data.fianzaCumplimiento?.inicio)
           : undefined,
-        anticipodoc: data.fianzacumplimiento?.anticipodoc,
-        fin: data.fianzacumplimiento?.fin
-          ? new Date(data.fianzacumplimiento?.fin)
+        anticipodoc: data.fianzaCumplimiento?.anticipodoc,
+        fin: data.fianzaCumplimiento?.fin
+          ? new Date(data.fianzaCumplimiento?.fin)
           : undefined,
-        poliza: data.fianzacumplimiento?.poliza,
-        aseguradora: data.fianzacumplimiento?.aseguradora,
-        monto: data.fianzacumplimiento?.monto,
+        poliza: data.fianzaCumplimiento?.poliza,
+        aseguradora: data.fianzaCumplimiento?.aseguradora,
+        monto: data.fianzaCumplimiento?.monto,
       });
       datosOcultosForm.reset({
-        documento: data.fianzaoculto?.documento ?? undefined,
-        tipodecambio: data.fianzaoculto?.tipodecambio,
-        inicio: data.fianzaoculto?.inicio
-          ? new Date(data.fianzaoculto.inicio)
+        documento: data.fianzaOculto?.documento ?? undefined,
+        tipodecambio: data.fianzaOculto?.tipodecambio,
+        inicio: data.fianzaOculto?.inicio
+          ? new Date(data.fianzaOculto.inicio)
           : undefined,
-        anticipodoc: data.fianzaoculto?.anticipodoc,
-        fin: data.fianzaoculto?.fin
-          ? new Date(data.fianzaoculto?.fin)
+        anticipodoc: data.fianzaOculto?.anticipodoc,
+        fin: data.fianzaOculto?.fin
+          ? new Date(data.fianzaOculto?.fin)
           : undefined,
-        poliza: data.fianzaoculto?.poliza,
-        aseguradora: data.fianzaoculto?.aseguradora,
-        monto: data.fianzaoculto?.monto,
+        poliza: data.fianzaOculto?.poliza,
+        aseguradora: data.fianzaOculto?.aseguradora,
+        monto: data.fianzaOculto?.monto,
       });
       setValue("datos-contrato");
     }

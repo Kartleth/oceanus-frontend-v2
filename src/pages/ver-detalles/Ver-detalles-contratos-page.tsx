@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 
 export function VerDetallesContratos() {
   const { idcontrato } = useParams();
-  const fetchContrato = async (): Promise<Contrato> => {
+  const fetchContrato = async () => {
     const response = await axios.get(
       `http://localhost:3001/contrato/${idcontrato}`
     );
@@ -159,24 +159,6 @@ export function VerDetallesContratos() {
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Contratante
-                </Label>
-                {/* Skeleton Loader */}
-                {!contrato ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={
-                      contrato?.contratante?.nombrecontrato || "No disponible"
-                    }
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
                   Inicio contrato
                 </Label>
                 {/* Skeleton Loader */}
@@ -298,7 +280,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.documento || "No disponible"}
+                    value={contrato?.fianzaOculto?.documento || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -315,7 +297,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.tipodecambio || "No disponible"
+                      contrato?.fianzaOculto?.tipodecambio || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -333,7 +315,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.anticipodoc || "No disponible"
+                      contrato?.fianzaOculto?.anticipodoc || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -350,7 +332,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.inicio || "No disponible"}
+                    value={contrato?.fianzaOculto?.inicio || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -366,7 +348,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.fin || "No disponible"}
+                    value={contrato?.fianzaOculto?.fin || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -382,7 +364,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.poliza || "No disponible"}
+                    value={contrato?.fianzaOculto?.poliza || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -399,7 +381,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.aseguradora || "No disponible"
+                      contrato?.fianzaOculto?.aseguradora || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -416,7 +398,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.monto || "No disponible"}
+                    value={contrato?.fianzaOculto?.monto || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -444,7 +426,9 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.documento || "No disponible"}
+                    value={
+                      contrato?.fianzaCumplimiento?.documento || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -461,7 +445,8 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.tipodecambio || "No disponible"
+                      contrato?.fianzaCumplimiento?.tipodecambio ||
+                      "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -478,7 +463,9 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.inicio || "No disponible"}
+                    value={
+                      contrato?.fianzaCumplimiento?.inicio || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -494,7 +481,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.fin || "No disponible"}
+                    value={contrato?.fianzaCumplimiento?.fin || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -510,7 +497,9 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.poliza || "No disponible"}
+                    value={
+                      contrato?.fianzaCumplimiento?.poliza || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -527,7 +516,8 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.aseguradora || "No disponible"
+                      contrato?.fianzaCumplimiento?.aseguradora ||
+                      "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -544,7 +534,9 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.monto || "No disponible"}
+                    value={
+                      contrato?.fianzaCumplimiento?.monto || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -572,7 +564,9 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.documento || "No disponible"}
+                    value={
+                      contrato?.fianzaAnticipo?.documento || "No disponible"
+                    }
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -589,7 +583,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.tipodecambio || "No disponible"
+                      contrato?.fianzaAnticipo?.tipodecambio || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -607,7 +601,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.anticipodoc || "No disponible"
+                      contrato?.fianzaAnticipo?.anticipodoc || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -624,7 +618,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.inicio || "No disponible"}
+                    value={contrato?.fianzaAnticipo?.inicio || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -640,7 +634,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.fin || "No disponible"}
+                    value={contrato?.fianzaAnticipo?.fin || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -656,7 +650,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.poliza || "No disponible"}
+                    value={contrato?.fianzaAnticipo?.poliza || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
@@ -673,7 +667,7 @@ export function VerDetallesContratos() {
                     disabled
                     type="text"
                     value={
-                      contrato?.datosFianza?.aseguradora || "No disponible"
+                      contrato?.fianzaAnticipo?.aseguradora || "No disponible"
                     }
                     className="bg-white disabled:opacity-100"
                   />
@@ -690,7 +684,7 @@ export function VerDetallesContratos() {
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.datosFianza?.monto || "No disponible"}
+                    value={contrato?.fianzaAnticipo?.monto || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}

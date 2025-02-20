@@ -11,7 +11,6 @@ export const Contrato = z.object({
   subcontrato: z.string(),
   idcontratofuente: z.string().nullable(),
   numerocontrato: z.string(),
-  contratante: Contratante.nullable(),
   contratado: Contratado.nullable(),
   facturas: z.array(z.object({})),
   iniciocontrato: z.string().date(),
@@ -21,10 +20,9 @@ export const Contrato = z.object({
   direccion: z.string(),
   convenio: z.array(z.object({})).optional(),
   personalcontrato: PersonalContrato.partial().array(),
-  fianzacumplimiento: Fianza.optional().nullable(),
-  fianzaanticipo: Fianza.optional().nullable(),
-  fianzaoculto: Fianza.optional().nullable(),
-  datosFianza: Fianza.nullable().optional(),
+  fianzaCumplimiento: Fianza.optional().nullable(),
+  fianzaAnticipo: Fianza.optional().nullable(),
+  fianzaOculto: Fianza.optional().nullable(),
   datosPersonal: Persona.nullable().optional(),
 });
 
