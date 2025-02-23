@@ -30,6 +30,7 @@ import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
 import { PageEditarEmpresa } from "./pages/editar-pages/editar-empresa";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 import Convenio from "./pages/convenio-page/Convenio";
+import { PageAgregarConvenio } from "./pages/agregar-pages/agregar-convenio-page";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ function App() {
               path="/agregar-contratos"
               element={<PageAgregarContratos />}
             />
+            <Route path="/agregar-convenio" element={<PageAgregarConvenio />} />
             <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}
