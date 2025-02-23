@@ -30,7 +30,7 @@ export const datosConvenioSchema = z.object({
     .optional(),
   montoadicional: z.string(),
   documento: z.string(),
-  contrato: z.string(),
+  contratos: z.string(),
 });
 
 export type DatosConvenio = z.infer<typeof datosConvenioSchema>;
@@ -52,7 +52,7 @@ export const DatosConvenioForm: FC<DatosConvenioProps> = ({
       >
         <FormField
           control={form.control}
-          name="contrato"
+          name="contratos"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre del Contrato</FormLabel>
