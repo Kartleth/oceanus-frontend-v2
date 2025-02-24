@@ -88,7 +88,7 @@ export const columns: ColumnDef<Convenio>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("fehchafinal")}</div>
+      <div className="lowercase">{row.getValue("fechafinal")}</div>
     ),
   },
   {
@@ -140,7 +140,7 @@ export const columns: ColumnDef<Convenio>[] = [
       const queryClient = useQueryClient();
       const deteleConvenio = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/contrato/convenio/${convenio.idconvenio}`,
+          `http://localhost:3001/convenio/${convenio.idconvenio}`,
           {
             method: "delete",
             headers: {
@@ -199,17 +199,17 @@ export const columns: ColumnDef<Convenio>[] = [
     },
   },
 ];
-export function DataTableConvenio() {
+
+export function DataTableConvenio({ idcontrato }: { idcontrato: number }) {
   const conveniosQuery = useQuery({
-    queryKey: ["convenios"],
+    queryKey: ["convenios", idcontrato],
     queryFn: async () => {
+      if (!idcontrato) return [];
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      //queryFn es la función que va a usar React Query para obtener los datos jsadhasd
       const res = await fetch(
-        "http://localhost:3001/contrato/${contrato.idcontrato}/covenio",
+        `http://localhost:3001/convenio/contrato/${idcontrato}`,
         {
-          //El await es para esperar a que se resulevan las promesas antes de seguir con el código
           headers: {
             "Content-Type": "application/json", //configuración de las cabeceras de la solicitud para indicar que la respuesta es de tipo JSON
             Authorization: `Bearer ${token}`,

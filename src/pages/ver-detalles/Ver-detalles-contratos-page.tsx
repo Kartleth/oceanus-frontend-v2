@@ -73,7 +73,9 @@ export function VerDetallesContratos() {
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
-            <Link to={"/convenio"}>Convenio </Link>
+            <Link to={`/contratos/${contrato?.idcontrato}/convenio`}>
+              Convenio{" "}
+            </Link>
           </Button>
 
           <Button className="bg-deepSea hover:bg-deepLightSea">

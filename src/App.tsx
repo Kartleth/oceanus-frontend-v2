@@ -47,7 +47,7 @@ function App() {
             <Route path="/" element={<Page_personal />} />
             <Route path="/personal" element={<Page_personal />} />
             <Route path="/contratos" element={<Contratos />} />
-            <Route path="/convenio" element={<Convenio />} />
+            <Route path="/contratos/:idcontrato/convenio" element={<Convenio />} />
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/facturas" element={<Facturas />} />
             <Route path="/personal_terceros" element={<Terceros />} />
