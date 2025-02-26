@@ -44,20 +44,21 @@ export function PageAgregarConvenio() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["convenios"]);
-    navigate("/convenio");
+    navigate("/contratos/:idcontrato/convenio");
   });
   const [value, setValue] = useState<AccordionValue>("datos-convenio"); //Mantiene el estado en un componente.
 
   function onSubmit(values: DatosConvenio) {
     console.log(values);
     setValue("datos-convenio");
+    guardarConvenio();
   }
   const datosConvenioForm = useForm<DatosConvenio>({
     resolver: zodResolver(datosConvenioSchema),
   });
   async function formulariosSonValidos() {
     if (!(await datosConvenioForm.trigger())) {
-      setValue("datos-generales");
+      setValue("datos-convenio");
 
       return false;
     }
@@ -71,7 +72,13 @@ export function PageAgregarConvenio() {
     if (!validos) return;
 
     const datosConvenio = datosConvenioForm.getValues();
-    const convenio = {};
+    const convenio = {
+      fechainicio: datosConvenio.fechainicio,
+      montoadicional: datosConvenio.montoadicional,
+      documento: datosConvenio.documento,
+      fechafinal: datosConvenio.fechafinal,
+      contratos: datosConvenio.contratos,
+    };
     console.log(convenio);
     mutation.mutate(convenio);
   }

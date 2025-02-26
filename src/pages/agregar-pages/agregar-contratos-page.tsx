@@ -165,7 +165,7 @@ export function PageAgregarContratos() {
         // documento: datosCumplimiento.documento,
         tipodecambio: datosCumplimiento.tipodecambio,
         inicio: datosCumplimiento.inicio,
-        anticipodoc: datosCumplimiento.anticipodoc,
+        // anticipodoc: datosCumplimiento.anticipodoc,
         fin: datosCumplimiento.fin,
         poliza: datosCumplimiento.poliza,
         aseguradora: datosCumplimiento.aseguradora,

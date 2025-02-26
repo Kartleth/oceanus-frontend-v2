@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const Contratado = z.object({
-  idempresa: z.number(),
+  idCliente: z.number(),
   logo: z.string().optional().nullable(),
   rfc: z.string(),
   razonsocial: z.string().optional().nullable(),

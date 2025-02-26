@@ -15,14 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export const datosFianzaCumplimientoSchema = z.object({
-  // documento: z.string({
-  //   required_error: "Nombre de contrato obligatorio.",
-  // }),
   tipodecambio: z.string({ required_error: "Campo obligatorio." }),
   idcontratofuente: z
     .string({ required_error: "Escribe correctamente el campo." })
     .optional(),
-  anticipodoc: z.string({ required_error: "" }),
+  // anticipodoc: z.string({ required_error: "" }),
   inicio: z
     .date({
       required_error: "Fecha de ingreso obligatoria.",
@@ -59,19 +56,6 @@ export const DatosFianzaCumplimientosForm: FC<
         className="grid grid-cols-3 gap-4"
         onSubmit={form.handleSubmit(onSubmitCon)}
       >
-        {/* <FormField
-          control={form.control}
-          name="documento"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Documento</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name="tipodecambio"
@@ -92,7 +76,7 @@ export const DatosFianzaCumplimientosForm: FC<
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="anticipodoc"
           render={({ field }) => (
@@ -104,7 +88,7 @@ export const DatosFianzaCumplimientosForm: FC<
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="inicio"

@@ -43,7 +43,6 @@ export const datosGeneralesSchema = z.object({
   montocontrato: z.string(),
   anticipocontrato: z.string(),
   direccion: z.string(),
-  convenio: z.string(),
   personalcontrato: z.string(),
   tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
 });
@@ -84,7 +83,7 @@ export const DatosGeneralesContratacionForm: FC<
           name="subcontrato"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tipo de contrato</FormLabel>
+              <FormLabel>Contrato</FormLabel>
               <FormControl>
                 <FormSelect
                   onValueChange={field.onChange}
@@ -152,19 +151,6 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="contratante"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nombre del Contratante</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name="contratado"
@@ -178,19 +164,6 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="facturas"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Facturas</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name="montocontrato"
@@ -244,19 +217,6 @@ export const DatosGeneralesContratacionForm: FC<
           render={({ field }) => (
             <FormItem>
               <FormLabel>Direccion del Contrato</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="convenio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Convenio del Contrato</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
