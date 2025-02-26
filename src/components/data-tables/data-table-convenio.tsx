@@ -99,13 +99,13 @@ export const columns: ColumnDef<Convenio>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Inicio de contrato
+          Monto adicional
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("iniciocontrato")}</div>
+      <div className="lowercase">{row.getValue("montoadicional") ?? "-"}</div>
     ),
   },
   {
