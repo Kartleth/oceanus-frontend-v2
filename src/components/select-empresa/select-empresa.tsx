@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useQuery } from "react-query";
 import { FormSelect, SelectItem } from "../ui/select";
-import { Empresa } from "@/modelos/empresa";
+import { Cliente } from "@/modelos/cliente";
 
 interface Props {
   value?: string;
@@ -12,10 +12,10 @@ export const SelectEmpresa: FC<Props> = ({ value, onChange }) => {
   const { status, data } = useQuery({
     queryKey: ["empresas"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3001/empresa");
+      const res = await fetch("http://localhost:3001/cliente");
       const data = await res.json();
 
-      const empresaSafeParse = Empresa.array().safeParse(data);
+      const empresaSafeParse = Cliente.array().safeParse(data);
 
       if (!empresaSafeParse.success) {
         console.error(empresaSafeParse.error.toString());
@@ -42,8 +42,8 @@ export const SelectEmpresa: FC<Props> = ({ value, onChange }) => {
     >
       {data?.map((empresa) => (
         <SelectItem
-          key={`Empresa ${empresa.idempresa}`}
-          value={empresa.idempresa.toString()}
+          key={`Empresa ${empresa.idCliente}`}
+          value={empresa.idCliente.toString()}
         >
           {empresa.razonsocial}
         </SelectItem>
