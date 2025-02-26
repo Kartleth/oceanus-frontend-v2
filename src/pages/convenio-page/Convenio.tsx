@@ -10,9 +10,11 @@ import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
-import { DataTableContratos } from "@/components/data-tables/data-table-contratos";
+import { DataTableConvenio } from "@/components/data-tables/data-table-convenio";
+import { useParams } from "react-router-dom";
 
 export default function Convenio() {
+  const { idcontrato } = useParams();
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
@@ -29,8 +31,7 @@ export default function Convenio() {
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
-          <Link to="/agregar-contratos">
+          <Link to="/agregar-convenio">
             <CirclePlus />
             Agregar Convenio
           </Link>
@@ -41,7 +42,7 @@ export default function Convenio() {
       </div>
       <div className="px-3"></div>
       <div className="px-3">
-        <DataTableContratos></DataTableContratos>
+        <DataTableConvenio idcontrato={Number(idcontrato)}></DataTableConvenio>
       </div>
     </Layout>
   );

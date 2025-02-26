@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { PersonalContrato } from "./personalContrato";
 import { Fianza } from "./datosFianza";
-import { Contratante } from "./datosContratante";
 import { Contratado } from "./datosContratado";
 import { Persona } from "./personal";
 
@@ -11,20 +10,27 @@ export const Contrato = z.object({
   subcontrato: z.string(),
   idcontratofuente: z.string().nullable(),
   numerocontrato: z.string(),
-  contratante: Contratante.nullable(),
-  contratado: Contratado.nullable(),
-  facturas: z.array(z.object({})),
-  iniciocontrato: z.string().date().optional().nullable(),
+  contratado: Contratado.nullable().optional(),
+  facturas: z.array(z.object({})).optional(),
+  iniciocontrato: z.string().date(),
   fincontrato: z.string().date().optional().nullable(),
   montocontrato: z.string(),
   anticipocontrato: z.string(),
   direccion: z.string(),
-  convenio: z.array(z.object({})).optional(),
-  personalcontrato: PersonalContrato.partial().array(),
-  fianzacumplimiento: Fianza.optional().nullable(),
-  fianzaanticipo: Fianza.optional().nullable(),
-  fianzaoculto: Fianza.optional().nullable(),
-  datosFianza: Fianza.nullable().optional(),
+  convenios: z
+    .object({
+      idconvenio: z.number(),
+      fechainicio: z.string().date().nullable(),
+      fechafinal: z.string().date().nullable(),
+      montoadicional: z.string().nullable(),
+      documento: z.string().nullable(),
+    })
+    .array()
+    .optional(),
+  personalcontrato: PersonalContrato.partial().array().optional(),
+  fianzaCumplimiento: Fianza.optional().nullable().optional(),
+  fianzaAnticipo: Fianza.optional().nullable().optional(),
+  fianzaOculto: Fianza.optional().nullable().optional(),
   datosPersonal: Persona.nullable().optional(),
 });
 

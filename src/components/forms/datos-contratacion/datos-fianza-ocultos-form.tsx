@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export const datosFianzaOcultosSchema = z.object({
-  documento: z.string({
-    required_error: "Nombre de contrato obligatorio.",
-  }),
+  // documento: z.string({
+  //   required_error: "Nombre de contrato obligatorio.",
+  // }),
   tipodecambio: z.string({ required_error: "Campo obligatorio." }),
   idcontratofuente: z
     .string({ required_error: "Escribe correctamente el campo." })
@@ -58,7 +58,7 @@ export const DatosFianzaOcultosForm: FC<DatosFianzaOcultosProps> = ({
         className="grid grid-cols-3 gap-4"
         onSubmit={form.handleSubmit(onSubmitCon)}
       >
-        <FormField
+        {/* <FormField
           control={form.control}
           name="documento"
           render={({ field }) => (
@@ -70,8 +70,8 @@ export const DatosFianzaOcultosForm: FC<DatosFianzaOcultosProps> = ({
               <FormMessage />
             </FormItem>
           )}
-        />
-          <FormField
+        /> */}
+        <FormField
           control={form.control}
           name="tipodecambio"
           render={({ field }) => (

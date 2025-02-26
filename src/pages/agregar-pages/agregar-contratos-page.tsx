@@ -70,12 +70,26 @@ export function PageAgregarContratos() {
     navigate("/contratos");
   });
   const [value, setValue] = useState<AccordionValue>("datos-generales"); //Mantiene el estado en un componente.
-  const datosGeneralesContratacionForm = useForm<DatosGeneralesContratacion>({
-    resolver: zodResolver(datosContratacionSchema),
-  });
+
   const datosGeneralesForm = useForm<DatosGeneralesContratacion>({
     resolver: zodResolver(datosGeneralesSchema),
+    defaultValues: {
+      anticipocontrato: "",
+      contratado: "",
+      convenio: "",
+      direccion: "",
+      fincontrato: new Date(),
+      idcontratofuente: "",
+      iniciocontrato: new Date(),
+      montocontrato: "",
+      nombrecontrato: "",
+      numerocontrato: "",
+      personalcontrato: "",
+      subcontrato: "",
+      tipocontrato: "",
+    },
   });
+
   function onSubmitGe(values: DatosGeneralesContratacion) {
     console.log(values);
     setValue("datos-cumplimiento");
@@ -141,15 +155,14 @@ export function PageAgregarContratos() {
     const datosOcultos = datosOcultosForm.getValues();
     const contrato = {
       nombreContrato: datosGenerales.nombrecontrato,
-      idContratante: 7,
-      idContratado: 13,
+      idContratado: datosGenerales.contratado,
       personal: [],
       tipoSubcontrato: datosGenerales.subcontrato,
       iniciocontrato: datosGenerales.iniciocontrato,
       fincontrato: datosGenerales.fincontrato,
       convenio: [],
       fianzaCumplimiento: {
-        documento: datosCumplimiento.documento,
+        // documento: datosCumplimiento.documento,
         tipodecambio: datosCumplimiento.tipodecambio,
         inicio: datosCumplimiento.inicio,
         anticipodoc: datosCumplimiento.anticipodoc,

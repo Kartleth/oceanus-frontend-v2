@@ -30,6 +30,7 @@ import { PageEditarTercero } from "./pages/editar-pages/editar-tercero";
 import { PageEditarCliente } from "./pages/editar-pages/editar-cliente";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 import Convenio from "./pages/convenio-page/Convenio";
+import { PageAgregarConvenio } from "./pages/agregar-pages/agregar-convenio-page";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,10 @@ function App() {
             <Route path="/contratos" element={<Contratos />} />
             <Route path="/convenio" element={<Convenio />} />
             <Route path="/clientes" element={<Clientes />} />
+            <Route
+              path="/contratos/:idcontrato/convenio"
+              element={<Convenio />}
+            />
             <Route path="/facturas" element={<Facturas />} />
             <Route path="/personal_terceros" element={<Terceros />} />
             <Route path="/cotizaciones" element={<Cotizaciones />} />
@@ -59,6 +64,7 @@ function App() {
               path="/agregar-contratos"
               element={<PageAgregarContratos />}
             />
+            <Route path="/agregar-convenio" element={<PageAgregarConvenio />} />
             <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}

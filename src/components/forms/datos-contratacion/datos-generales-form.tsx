@@ -13,6 +13,7 @@ import { FormSelect, SelectItem } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/datepicker";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SelectEmpresa } from "@/components/select-empresa/select-empresa";
 
 export const datosGeneralesSchema = z.object({
   nombrecontrato: z.string({
@@ -23,7 +24,7 @@ export const datosGeneralesSchema = z.object({
     .string({ required_error: "Escribe correctamente el campo." })
     .optional(),
   numerocontrato: z.string({ required_error: "" }),
-  contratante: z.string(),
+  // contratante: z.string(),
   contratado: z.string(),
   // facturas: z.string(),
   iniciocontrato: z
@@ -90,7 +91,7 @@ export const DatosGeneralesContratacionForm: FC<
                   defaultValue={field.value}
                   placeholder="Selecciona tipo de subcontrato"
                 >
-                  <SelectItem value="subcontrato">Subcontarto</SelectItem>
+                  <SelectItem value="subcontrato">Subcontrato</SelectItem>
                   <SelectItem value="contrato origen">
                     Contrato Origen
                   </SelectItem>
@@ -151,7 +152,7 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="contratante"
           render={({ field }) => (
@@ -163,7 +164,7 @@ export const DatosGeneralesContratacionForm: FC<
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="contratado"
@@ -171,7 +172,7 @@ export const DatosGeneralesContratacionForm: FC<
             <FormItem>
               <FormLabel>Nombre del Contratado</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <SelectEmpresa value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
