@@ -36,9 +36,6 @@ export default function Convenio() {
             Agregar Convenio
           </Link>
         </Button>
-        <Button className="bg-deepSea hover:bg-deepLightSea">
-          <Upload /> Subir Excel
-        </Button>
       </div>
       <div className="px-3"></div>
       <div className="px-3">
