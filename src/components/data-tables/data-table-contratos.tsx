@@ -140,7 +140,7 @@ export const columns: ColumnDef<Contrato>[] = [
       const queryClient = useQueryClient();
       const deteleContrato = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/contrato/${contrato.idcontrato}`,
+          `http://localhost:3001/contrato/${contrato.idContrato}`,
           {
             method: "delete",
             headers: {
@@ -168,10 +168,10 @@ export const columns: ColumnDef<Contrato>[] = [
             <DropdownMenuLabel>Acciones de contrato</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(contrato.idcontrato.toString())
+                navigator.clipboard.writeText(contrato.idContrato.toString())
               }
             >
-              <Link to={`/detalles-contratos/${contrato.idcontrato}`}>
+              <Link to={`/detalles-contratos/${contrato.idContrato}`}>
                 {" "}
                 Ver detalles
               </Link>
@@ -182,7 +182,7 @@ export const columns: ColumnDef<Contrato>[] = [
             <DropdownMenuItem>Agregar un Convenio</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/editar-contratos/${contrato.idcontrato}`}>
+              <Link to={`/editar-contratos/${contrato.idContrato}`}>
                 Editar
               </Link>
             </DropdownMenuItem>

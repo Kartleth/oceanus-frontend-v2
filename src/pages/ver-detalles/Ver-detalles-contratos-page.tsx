@@ -66,14 +66,14 @@ export function VerDetallesContratos() {
             Contrato
           </h1>
           <p className="max-w-2xl text-lg font-light text-foreground">
-            ID: {contrato?.idcontrato}, {contrato?.nombrecontrato}
+            ID: {contrato?.idContrato}, {contrato?.nombrecontrato}
           </p>
         </div>
 
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <IdCard />
-            <Link to={`/contratos/${contrato?.idcontrato}/convenio`}>
+            <Link to={`/contratos/${contrato?.idContrato}/convenio`}>
               Convenio{" "}
             </Link>
           </Button>
