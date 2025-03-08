@@ -14,7 +14,7 @@ import { DataTableConvenio } from "@/components/data-tables/data-table-convenio"
 import { useParams } from "react-router-dom";
 
 export default function Convenio() {
-  const { idcontrato } = useParams();
+  const { idcontrato: idContrato } = useParams();
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
@@ -23,7 +23,9 @@ export default function Convenio() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/contratos">Convenio</BreadcrumbLink>
+              <BreadcrumbLink href="/contratos/convenio">
+                Convenio
+              </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -39,7 +41,7 @@ export default function Convenio() {
       </div>
       <div className="px-3"></div>
       <div className="px-3">
-        <DataTableConvenio idcontrato={Number(idcontrato)}></DataTableConvenio>
+        <DataTableConvenio idcontrato={Number(idContrato)}></DataTableConvenio>
       </div>
     </Layout>
   );

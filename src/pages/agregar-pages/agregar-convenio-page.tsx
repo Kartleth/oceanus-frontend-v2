@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DatosConvenio,
   DatosConvenioForm,
@@ -68,6 +68,7 @@ export function PageAgregarConvenio() {
 
   async function guardarConvenio() {
     const validos = await formulariosSonValidos();
+    const { idContrato } = useParams();
 
     if (!validos) return;
 
@@ -77,7 +78,7 @@ export function PageAgregarConvenio() {
       montoadicional: datosConvenio.montoadicional,
       documento: datosConvenio.documento,
       fechafinal: datosConvenio.fechafinal,
-      contratos: datosConvenio.contratos,
+      idContrato: Number(idContrato),
     };
     console.log(convenio);
     mutation.mutate(convenio);
