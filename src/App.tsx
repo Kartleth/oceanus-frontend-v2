@@ -64,7 +64,10 @@ function App() {
               path="/agregar-contratos"
               element={<PageAgregarContratos />}
             />
-            <Route path="/agregar-convenio" element={<PageAgregarConvenio />} />
+            <Route
+              path="/contratos/:idcontrato/convenio/agregar-convenio"
+              element={<PageAgregarConvenio />}
+            />
             <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}

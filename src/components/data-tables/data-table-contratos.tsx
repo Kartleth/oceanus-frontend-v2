@@ -166,11 +166,7 @@ export const columns: ColumnDef<Contrato>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de contrato</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(contrato.idContrato.toString())
-              }
-            >
+            <DropdownMenuItem asChild>
               <Link to={`/detalles-contratos/${contrato.idContrato}`}>
                 {" "}
                 Ver detalles
@@ -179,9 +175,15 @@ export const columns: ColumnDef<Contrato>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Personal</DropdownMenuItem>
             <DropdownMenuItem>SubContratados</DropdownMenuItem>
-            <DropdownMenuItem>Agregar un Convenio</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                to={`/contratos/${contrato.idContrato}/convenio/agregar-convenio`}
+              >
+                Agregar un Convenio
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to={`/editar-contratos/${contrato.idContrato}`}>
                 Editar
               </Link>

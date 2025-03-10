@@ -33,7 +33,7 @@ export default function Convenio() {
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-          <Link to="/agregar-convenio">
+          <Link to={`/contratos/${idContrato}/convenio/agregar-convenio`}>
             <CirclePlus />
             Agregar Convenio
           </Link>

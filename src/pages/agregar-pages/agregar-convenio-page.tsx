@@ -29,6 +29,7 @@ type AccordionValue = "datos-convenio" | string;
 export function PageAgregarConvenio() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { idContrato } = useParams();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/convenio", {
@@ -68,7 +69,6 @@ export function PageAgregarConvenio() {
 
   async function guardarConvenio() {
     const validos = await formulariosSonValidos();
-    const { idContrato } = useParams();
 
     if (!validos) return;
 
