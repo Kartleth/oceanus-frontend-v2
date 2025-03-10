@@ -41,7 +41,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const columns: ColumnDef<Contrato>[] = [
   {
-    accessorKey: "idcontrato",
+    accessorKey: "idContrato",
     header: ({ column }) => {
       return (
         <Button
