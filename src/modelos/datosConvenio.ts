@@ -7,7 +7,7 @@ export const Convenio = z.object({
   fechafinal: z.string().date().nullable(),
   montoadicional: z.string().nullable(),
   documento: z.string().nullable(),
-  idContrato: Contrato.nullable(),
+  contrato: Contrato.nullable(),
 });
 
 export type Convenio = z.infer<typeof Convenio>;

@@ -29,7 +29,7 @@ type AccordionValue = "datos-convenio" | string;
 export function PageAgregarConvenio() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { idContrato } = useParams();
+  const { idcontrato } = useParams();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/convenio", {
@@ -45,7 +45,7 @@ export function PageAgregarConvenio() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["convenios"]);
-    navigate("/contratos/:idcontrato/convenio");
+    navigate(`/contratos/${idcontrato}/convenio`);
   });
   const [value, setValue] = useState<AccordionValue>("datos-convenio"); //Mantiene el estado en un componente.
 
@@ -78,7 +78,7 @@ export function PageAgregarConvenio() {
       montoadicional: datosConvenio.montoadicional,
       documento: datosConvenio.documento,
       fechafinal: datosConvenio.fechafinal,
-      idContrato: Number(idContrato),
+      idContrato: Number(idcontrato),
     };
     console.log(convenio);
     mutation.mutate(convenio);

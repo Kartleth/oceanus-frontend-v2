@@ -41,7 +41,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const columns: ColumnDef<Contrato>[] = [
   {
-    accessorKey: "idContrato",
+    accessorKey: "idcontrato",
     header: ({ column }) => {
       return (
         <Button
@@ -140,7 +140,7 @@ export const columns: ColumnDef<Contrato>[] = [
       const queryClient = useQueryClient();
       const deteleContrato = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/contrato/${contrato.idContrato}`,
+          `http://localhost:3001/contrato/${contrato.idcontrato}`,
           {
             method: "delete",
             headers: {
@@ -167,7 +167,7 @@ export const columns: ColumnDef<Contrato>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones de contrato</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to={`/detalles-contratos/${contrato.idContrato}`}>
+              <Link to={`/detalles-contratos/${contrato.idcontrato}`}>
                 {" "}
                 Ver detalles
               </Link>
@@ -177,14 +177,14 @@ export const columns: ColumnDef<Contrato>[] = [
             <DropdownMenuItem>SubContratados</DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link
-                to={`/contratos/${contrato.idContrato}/convenio/agregar-convenio`}
+                to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
               >
                 Agregar un Convenio
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-contratos/${contrato.idContrato}`}>
+              <Link to={`/editar-contratos/${contrato.idcontrato}`}>
                 Editar
               </Link>
             </DropdownMenuItem>

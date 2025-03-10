@@ -5,7 +5,7 @@ import { Contratado } from "./datosContratado";
 import { Persona } from "./personal";
 
 export const Contrato = z.object({
-  idContrato: z.number(),
+  idcontrato: z.number(),
   nombrecontrato: z.string(),
   subcontrato: z.string(),
   idcontratofuente: z.string().nullable(),

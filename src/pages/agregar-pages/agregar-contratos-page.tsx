@@ -153,6 +153,24 @@ export function PageAgregarContratos() {
     const datosAnticipo = datosAnticipoForm.getValues();
     const datosCumplimiento = datosCumplimientoForm.getValues();
     const datosOcultos = datosOcultosForm.getValues();
+    const agregarFianzaAnticipo =
+      datosAnticipo.tipodecambio &&
+      datosAnticipo.inicio &&
+      datosAnticipo.fin &&
+      datosAnticipo.monto;
+    const agregarFianzaCumplimiento =
+      datosCumplimiento.tipodecambio &&
+      datosCumplimiento.inicio &&
+      datosCumplimiento.fin &&
+      datosCumplimiento.monto;
+    const agregarFianzaOculto =
+      datosOcultos.tipodecambio &&
+      datosOcultos.inicio &&
+      datosOcultos.fin &&
+      datosOcultos.monto;
+    console.log("anticipo", agregarFianzaAnticipo);
+    console.log("anticipo", agregarFianzaCumplimiento);
+    console.log("anticipo", agregarFianzaOculto);
     const contrato = {
       nombreContrato: datosGenerales.nombrecontrato,
       idContratado: datosGenerales.contratado,
@@ -161,18 +179,20 @@ export function PageAgregarContratos() {
       iniciocontrato: datosGenerales.iniciocontrato,
       fincontrato: datosGenerales.fincontrato,
       convenio: [],
-      fianzaCumplimiento: {
-        // documento: datosCumplimiento.documento,
-        tipodecambio: datosCumplimiento.tipodecambio,
-        inicio: datosCumplimiento.inicio,
-        // anticipodoc: datosCumplimiento.anticipodoc,
-        fin: datosCumplimiento.fin,
-        poliza: datosCumplimiento.poliza,
-        aseguradora: datosCumplimiento.aseguradora,
-        monto: datosCumplimiento.monto,
-      },
-      fianzaOculto: datosOcultos,
-      fianzaAnticipo: datosAnticipo,
+      fianzaCumplimiento: !agregarFianzaCumplimiento
+        ? null
+        : {
+            // documento: datosCumplimiento.documento,
+            tipodecambio: datosCumplimiento.tipodecambio,
+            inicio: datosCumplimiento.inicio,
+            // anticipodoc: datosCumplimiento.anticipodoc,
+            fin: datosCumplimiento.fin,
+            poliza: datosCumplimiento.poliza,
+            aseguradora: datosCumplimiento.aseguradora,
+            monto: datosCumplimiento.monto,
+          },
+      fianzaOculto: !agregarFianzaOculto ? null : datosOcultos,
+      fianzaAnticipo: !agregarFianzaAnticipo ? null : datosAnticipo,
       montoContrato: datosGenerales.montocontrato,
       anticipoContrato: datosGenerales.anticipocontrato,
       direccion: datosGenerales.direccion,

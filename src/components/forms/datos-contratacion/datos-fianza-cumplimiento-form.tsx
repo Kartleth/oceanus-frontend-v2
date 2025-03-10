@@ -15,10 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export const datosFianzaCumplimientoSchema = z.object({
-  tipodecambio: z.string({ required_error: "Campo obligatorio." }),
-  idcontratofuente: z
-    .string({ required_error: "Escribe correctamente el campo." })
-    .optional(),
+  tipodecambio: z.string().optional(),
+  idcontratofuente: z.string().optional(),
   // anticipodoc: z.string({ required_error: "" }),
   inicio: z
     .date({
@@ -26,16 +24,17 @@ export const datosFianzaCumplimientoSchema = z.object({
     })
     .min(new Date(1914, 0, 1), {
       message: "Fecha de ingreso no puede ser antes de 1914.",
-    }),
+    })
+    .optional(),
   fin: z
     .date()
     .min(new Date(1914, 0, 1), {
       message: "Fecha de ingreso no puede ser antes de 1914.",
     })
     .optional(),
-  poliza: z.string(),
-  aseguradora: z.string(),
-  monto: z.string(),
+  poliza: z.string().optional(),
+  aseguradora: z.string().optional(),
+  monto: z.string().optional(),
 });
 
 export type DatosFianzaCumplimientos = z.infer<
