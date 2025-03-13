@@ -13,7 +13,7 @@ export const Contrato = z.object({
   contratado: Contratado.nullable().optional(),
   facturas: z.array(z.object({})).optional(),
   iniciocontrato: z.string().date(),
-  fincontrato: z.string().date().optional(),
+  fincontrato: z.string().date().optional().nullable(),
   montocontrato: z.string(),
   anticipocontrato: z.string(),
   direccion: z.string(),
