@@ -47,7 +47,7 @@ export function VerDetallesContratos() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/contrato">Contratos</BreadcrumbLink>
+              <BreadcrumbLink href="/contratos">Contratos</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
