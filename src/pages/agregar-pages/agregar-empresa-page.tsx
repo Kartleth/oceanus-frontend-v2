@@ -34,11 +34,17 @@ import {
   DatosRepresentanteForm,
   datosRepresentanteSchema,
 } from "@/components/forms/datos-cliente-forms/datos-representateCliente-form";
+import {
+  DatosContactoAdmin,
+  DatosContactoAdminForm,
+  datosContactoAdminSchema
+} from "@/components/forms/datos-cliente-forms/datos-contactoAdministrativoCliente-form";
 
 type AccordionValue =
   | "datos-cliente"
   | "datos-facturacionCliente"
-  | "datos-representante";
+  | "datos-representante"
+  | "datos-contactoAdmin";
 
 export function PageAgregarCliente() {
   const navigate = useNavigate();
@@ -71,6 +77,9 @@ export function PageAgregarCliente() {
   const datosRepresentanteForm = useForm<DatosRepresentante>({
     resolver: zodResolver(datosRepresentanteSchema),
   });
+  const datosContactoAdminForm = useForm<DatosContactoAdmin>({
+    resolver: zodResolver(datosContactoAdminSchema),
+  });
 
   function onSubmitEmp(values: DatosCliente) {
     console.log(values);
@@ -89,6 +98,10 @@ export function PageAgregarCliente() {
   }
   function onSubmitRepLeg(values: DatosRepresentante) {
     console.log(values);
+    setValue("datos-representante")
+  }
+  function onSubmitConAdm(values: DatosContactoAdmin) {
+    console.log(values);
     guardarCliente();
   }
 
@@ -105,6 +118,10 @@ export function PageAgregarCliente() {
       setValue("datos-representante");
       return false;
     }
+    if (!(await datosContactoAdminForm.trigger())) {
+      setValue("datos-contactoAdmin");
+      return false;
+    }
     return true;
   }
 
@@ -116,11 +133,13 @@ export function PageAgregarCliente() {
     const datosCliente = datosClienteForm.getValues();
     const datosFacturacionCliente = datosFacturacionClienteForm.getValues();
     const datosRepresentante = datosRepresentanteForm.getValues();
+    const datosContactoAdmin = datosContactoAdminForm.getValues();
 
     const cliente = {
       ...datosCliente,
       ...datosFacturacionCliente,
       ...datosRepresentante,
+      ...datosContactoAdmin
     };
 
     console.log("ESTA ES EL CLIENTE", cliente);
@@ -140,6 +159,9 @@ export function PageAgregarCliente() {
   ).length;
   const erroresRepresentante = Object.keys(
     datosRepresentanteForm.formState.errors
+  ).length;
+  const erroresContactoAdmin = Object.keys(
+    datosContactoAdminForm.formState.errors
   ).length;
 
   return (
@@ -220,6 +242,25 @@ export function PageAgregarCliente() {
                 form={datosRepresentanteForm}
                 onSubmitRepLeg={onSubmitRepLeg}
               ></DatosRepresentanteForm>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="datos-contactoAdmin">
+            <AccordionTrigger
+              data-hasErrors={erroresContactoAdmin > 0}
+              className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
+            >
+              {`Datos administrativo ${
+                erroresContactoAdmin > 0
+                  ? `(${erroresContactoAdmin} errores)`
+                  : ""
+              }`}
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-md bg-muted/50 p-4">
+              <DatosContactoAdminForm
+                form={datosContactoAdminForm}
+                onSubmitConAdm={onSubmitConAdm}
+              ></DatosContactoAdminForm>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

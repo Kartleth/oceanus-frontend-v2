@@ -29,19 +29,19 @@ export const datosContactoAdminSchema = z.object({
 export type DatosContactoAdmin = z.infer<typeof datosContactoAdminSchema>;
 
 interface DatosContactoAdminProps {
-  onSubmitRepLeg: (values: DatosContactoAdmin) => void;
+  onSubmitConAdm: (values: DatosContactoAdmin) => void;
   form: UseFormReturn<DatosContactoAdmin>;
 }
 
-export const DatosDatosContactoAdminForm: FC<DatosContactoAdminProps> = ({
+export const DatosContactoAdminForm: FC<DatosContactoAdminProps> = ({
   form,
-  onSubmitRepLeg,
+  onSubmitConAdm,
 }) => {
   return (
     <Form {...form}>
       <form
         className="grid grid-cols-3 gap-4"
-        onSubmit={form.handleSubmit(onSubmitRepLeg)}
+        onSubmit={form.handleSubmit(onSubmitConAdm)}
       >
         <FormField
           control={form.control}
