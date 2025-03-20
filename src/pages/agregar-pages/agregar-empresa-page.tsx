@@ -98,7 +98,7 @@ export function PageAgregarCliente() {
   }
   function onSubmitRepLeg(values: DatosRepresentante) {
     console.log(values);
-    setValue("datos-representante")
+    setValue("datos-contactoAdmin")
   }
   function onSubmitConAdm(values: DatosContactoAdmin) {
     console.log(values);
