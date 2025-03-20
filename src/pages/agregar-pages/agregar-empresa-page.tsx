@@ -231,7 +231,7 @@ export function PageAgregarCliente() {
               data-hasErrors={erroresRepresentante > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos representante ${
+              {`Datos Representante ${
                 erroresRepresentante > 0
                   ? `(${erroresRepresentante} errores)`
                   : ""
@@ -250,7 +250,7 @@ export function PageAgregarCliente() {
               data-hasErrors={erroresContactoAdmin > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[hasErrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos administrativo ${
+              {`Datos Administrativo ${
                 erroresContactoAdmin > 0
                   ? `(${erroresContactoAdmin} errores)`
                   : ""
