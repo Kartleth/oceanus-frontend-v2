@@ -189,6 +189,28 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
+              <Link
+                to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
+              >
+                Fianza de anticipo
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
+              >
+                Fianza de cumplimiento
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
+              >
+                Fianza de vicios ocultos
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
               <Link to={`/editar-contratos/${contrato.idcontrato}`}>
                 Editar
               </Link>
