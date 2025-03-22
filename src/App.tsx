@@ -31,6 +31,7 @@ import { PageEditarCliente } from "./pages/editar-pages/editar-cliente";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 import Convenio from "./pages/convenio-page/Convenio";
 import { PageAgregarConvenio } from "./pages/agregar-pages/agregar-convenio-page";
+import FianzaAnticipo from "./pages/fianzas/Fianza-anticipo";
 
 const queryClient = new QueryClient();
 
@@ -68,7 +69,10 @@ function App() {
               path="/contratos/:idcontrato/convenio/agregar-convenio"
               element={<PageAgregarConvenio />}
             />
-            <Route path="/contratos/:idcontrato/fianza-anticipo" />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo"
+              element={<FianzaAnticipo />}
+            />
             <Route path="/contratos/:idcontrato/fianza-cumplimiento" />
             <Route path="/contratos/:idcontrato/fianza-vicios-ocultos" />
             <Route
