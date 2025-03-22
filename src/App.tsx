@@ -32,6 +32,7 @@ import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page
 import Convenio from "./pages/convenio-page/Convenio";
 import { PageAgregarConvenio } from "./pages/agregar-pages/agregar-convenio-page";
 import FianzaAnticipo from "./pages/fianzas/Fianza-anticipo";
+import { VerDetallesFianzaAnticipo } from "./pages/ver-detalles/ver-detalles-fianza-anticipo";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,10 @@ function App() {
             <Route
               path="/contratos/:idcontrato/fianza-anticipo"
               element={<FianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo/detalles/:idFianzaAnticipo"
+              element={<VerDetallesFianzaAnticipo />}
             />
             <Route path="/contratos/:idcontrato/fianza-cumplimiento" />
             <Route path="/contratos/:idcontrato/fianza-vicios-ocultos" />
