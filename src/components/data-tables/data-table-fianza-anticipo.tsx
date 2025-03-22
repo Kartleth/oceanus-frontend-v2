@@ -44,7 +44,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const columns: ColumnDef<Fianza>[] = [
+export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
   {
     accessorKey: "idfianza",
     header: ({ column }) => {
@@ -178,11 +178,11 @@ export const columns: ColumnDef<Fianza>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const Subcontratado = row.original;
+      const Fianza = row.original;
       const queryClient = useQueryClient();
-      const detelePersona = useMutation(async () => {
+      const deleteFianza = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/subcontratados/${Subcontratado.idsubcontratado}`,
+          `http://localhost:3001/fianza/`,
           {
             method: "delete",
             headers: {
@@ -195,7 +195,7 @@ export const columns: ColumnDef<Fianza>[] = [
           console.error(resData);
         }
         console.log(resData);
-        queryClient.invalidateQueries(["subcontratado"]);
+        queryClient.invalidateQueries(["fianzaAnticipo"]);
       });
       return (
         <DropdownMenu>
@@ -210,31 +210,27 @@ export const columns: ColumnDef<Fianza>[] = [
             <DropdownMenuItem
               onClick={() =>
                 navigator.clipboard.writeText(
-                  Subcontratado.idsubcontratado.toString()
+                  Fianza.idfianza.toString()
                 )
               }
             >
-              <Link to={`/detalles-terceros/${Subcontratado.idsubcontratado}`}>
+              <Link
+                to={`/contratos/${contratoId}/fianza-anticipo/detalles/${row.original.idfianza}`}
+              >
                 Ver detalles
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link
-                to={`/subir-archivos-tercero/${Subcontratado.idsubcontratado}`}
-              >
-                Gestionar archivos
-              </Link>
+              <Link to={``}>Gestionar archivos</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-tercero/${Subcontratado.idsubcontratado}`}>
-                Editar
-              </Link>
+              <Link to={``}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                detelePersona.mutate();
+                deleteFianza.mutate();
               }}
             >
               Borrar
@@ -288,6 +284,7 @@ export function DataTableFianzaAnticipo({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const columns = React.useMemo(() => getColumns(contratoId), [contratoId]);
   const table = useReactTable({
     data: fianzaAnticipoQuery.data || [],
     columns,

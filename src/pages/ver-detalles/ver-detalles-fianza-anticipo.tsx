@@ -18,10 +18,10 @@ import { Fianza } from "@/modelos/fianza";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export function VerDetallesFianzaAnticipo() {
-  const { id } = useParams();
+  const { id, idFianzaAnticipo } = useParams();
   const fetchFianzaAnticipo = async (): Promise<Fianza> => {
     const response = await axios.get(
-      `http://localhost:3001/fianza/contrato/${id}/fianza-anticipo`
+      `http://localhost:3001/fianza/contrato/${id}/fianza-anticipo/${idFianzaAnticipo}`
     );
     return response.data;
   };
@@ -30,7 +30,7 @@ export function VerDetallesFianzaAnticipo() {
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Fianza>(["fianzaAnticipo", id], fetchFianzaAnticipo);
+  } = useQuery<Fianza>(["fianzaAnticipo", id, idFianzaAnticipo], fetchFianzaAnticipo);
 
   return (
     <Layout>
