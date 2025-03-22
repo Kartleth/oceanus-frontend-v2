@@ -308,32 +308,33 @@ export function DataTableFianzaAnticipo({
   });
 
   /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
-  const exportToExcel = (subcontratados: Subcontratado[]) => {
-    if (!subcontratados || subcontratados.length === 0) {
+  const exportToExcel = (fianzaAnticipo: Fianza[]) => {
+    if (!fianzaAnticipo || fianzaAnticipo.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
 
-    const datos = subcontratados.map((subcontratado) => ({
-      ID: subcontratado.idsubcontratado ?? "N/A",
-      Nombre: subcontratado.nombre ?? "N/A",
-      RFC: subcontratado.rfc ?? "N/A",
-      NSS: subcontratado.nss ?? "N/A",
-      INE: subcontratado.ine ?? "N/A",
-      CURP: subcontratado.curp ?? "N/A",
-      Estado: subcontratado.estado ?? "N/A",
+    const datos = fianzaAnticipo.map((fianzaAnticipo) => ({
+      ID: fianzaAnticipo.idfianza ?? "N/A",
+      TIPO: fianzaAnticipo.tipo ?? "N/A",
+      TIPO_CAMBIO: fianzaAnticipo.tipodecambio ?? "N/A",
+      INICIO: fianzaAnticipo.inicio ?? "N/A",
+      FIN: fianzaAnticipo.fin ?? "N/A",
+      POLIZA: fianzaAnticipo.poliza ?? "N/A",
+      ASEGURADORA: fianzaAnticipo.aseguradora ?? "N/A",
+      MONTO: fianzaAnticipo.monto ?? "N/A",
     }));
 
     // Exportar a Excel
     const worksheet = XLSX.utils.json_to_sheet(datos);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Cotizacion");
-    XLSX.writeFile(workbook, "Personal_de_tercero_oceanus.xlsx");
+    XLSX.writeFile(workbook, `Fianza_anticipo_contrato_${contratoId}.xlsx`);
   };
 
   // Exportar a pdf
-  const exportToPDF = (subcontratados: Subcontratado[]) => {
-    if (!subcontratados || subcontratados.length === 0) {
+  const exportToPDF = (fianzaAnticipo: Fianza[]) => {
+    if (!fianzaAnticipo || fianzaAnticipo.length === 0) {
       alert("No hay datos disponibles para exportar.");
       return;
     }
@@ -341,27 +342,28 @@ export function DataTableFianzaAnticipo({
     const logoPath = "src/assets/oceanus-logo-3.png";
 
     const camposBloque1 = [
-      { header: "ID", key: "idsubcontratado" },
-      { header: "Nombre", key: "nombre" },
-      { header: "RFC", key: "rfc" },
-      { header: "NSS", key: "nss" },
-      { header: "INE", key: "ine" },
-      { header: "CURP", key: "curp" },
-      { header: "Estado", key: "estado" },
+      { header: "ID", key: "idfianza" },
+      { header: "TIPO", key: "tipo" },
+      { header: "TIPO_CAMBIO", key: "tipodecambio" },
+      { header: "INICIO", key: "inicio" },
+      { header: "FIN", key: "fin" },
+      { header: "POLIZA", key: "poliza" },
+      { header: "ASEGURADORA", key: "aseguradora" },
+      { header: "MONTO", key: "monto" },
     ];
 
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
-      subcontratados: Subcontratado[],
+      fianzaAnticipo: Fianza[],
       campos: { header: string; key: string }[]
     ) => {
-      return subcontratados.map((subcontratado) => {
+      return fianzaAnticipo.map((fianzaAnticipo) => {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
             key
               .split(".")
-              .reduce((acc, curr) => acc?.[curr], subcontratado as any) ||
+              .reduce((acc, curr) => acc?.[curr], fianzaAnticipo as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -370,7 +372,7 @@ export function DataTableFianzaAnticipo({
     };
 
     // Generar los datos para cada bloque
-    const datosBloque1 = generarDatosBloque(subcontratados, camposBloque1);
+    const datosBloque1 = generarDatosBloque(fianzaAnticipo, camposBloque1);
 
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
@@ -390,7 +392,7 @@ export function DataTableFianzaAnticipo({
     const pageHeight = doc.internal.pageSize.height; // 210 mm
 
     // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DE SUBCONTRATADO";
+    const text1 = "DATOS DE FIANZA DE ANTICIPO";
     const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
@@ -438,12 +440,12 @@ export function DataTableFianzaAnticipo({
     generarTabla(datosBloque1, 30);
     doc.addPage();
 
-    doc.save("Personal_de_tercero_oceanus.pdf");
+    doc.save("Fianza_anticipo_oceanus.pdf");
   };
 
   // Imprimir datos
-  const handlePrint = (subcontratados: Subcontratado[]) => {
-    if (!subcontratados || subcontratados.length === 0) {
+  const handlePrint = (fianzaAnticipo: Fianza[]) => {
+    if (!fianzaAnticipo || fianzaAnticipo.length === 0) {
       alert("No hay datos disponibles para imprimir.");
       return;
     }
@@ -461,16 +463,16 @@ export function DataTableFianzaAnticipo({
     ];
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
-      subcontratados: Subcontratado[],
+      fianzaAnticipo: Fianza[],
       campos: { header: string; key: string }[]
     ) => {
-      return subcontratados.map((subcontratado) => {
+      return fianzaAnticipo.map((fianzaAnticipo) => {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
             key
               .split(".")
-              .reduce((acc, curr) => acc?.[curr], subcontratado as any) ||
+              .reduce((acc, curr) => acc?.[curr], fianzaAnticipo as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -479,7 +481,7 @@ export function DataTableFianzaAnticipo({
     };
 
     // Generar los datos para cada bloque
-    const datosBloque1 = generarDatosBloque(subcontratados, camposBloque1);
+    const datosBloque1 = generarDatosBloque(fianzaAnticipo, camposBloque1);
 
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
@@ -499,7 +501,7 @@ export function DataTableFianzaAnticipo({
     const pageHeight = doc.internal.pageSize.height; // 210 mm
 
     // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DE SUBCONTRATADO";
+    const text1 = "DATOS DE FIANZA ANTICIPO";
     const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
@@ -581,17 +583,17 @@ export function DataTableFianzaAnticipo({
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => exportToExcel(subcontratadosQuery.data || [])}
+              onClick={() => exportToExcel(fianzaAnticipoQuery.data || [])}
             >
               Exportar a Excel
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => exportToPDF(subcontratadosQuery.data || [])}
+              onClick={() => exportToPDF(fianzaAnticipoQuery.data || [])}
             >
               Exportar a PDF
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => handlePrint(subcontratadosQuery.data || [])}
+              onClick={() => handlePrint(fianzaAnticipoQuery.data || [])}
             >
               Imprimir
             </DropdownMenuItem>
