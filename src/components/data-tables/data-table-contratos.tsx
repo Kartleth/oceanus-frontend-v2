@@ -229,15 +229,27 @@ export const columns: ColumnDef<Contrato>[] = [
                 <DropdownMenuSubContent>
                   <DropdownMenuItem>
                     <CreditCard />
-                    <span>Fianza de Anticipo</span>
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-anticipo`}
+                    >
+                      Fianza de Anticipo
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <ShieldCheck />
-                    <span>Fianza de Cumplimiento</span>
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-cumplimiento`}
+                    >
+                      Fianza de Cumplimiento
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <EyeOff />
-                    <span>Fianza de Vicios ocultos</span>
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-vicios-ocultos`}
+                    >
+                      Fianza de Vicios ocultos
+                    </Link>
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>

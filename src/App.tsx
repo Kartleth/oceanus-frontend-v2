@@ -68,6 +68,9 @@ function App() {
               path="/contratos/:idcontrato/convenio/agregar-convenio"
               element={<PageAgregarConvenio />}
             />
+            <Route path="/contratos/:idcontrato/fianza-anticipo" />
+            <Route path="/contratos/:idcontrato/fianza-cumplimiento" />
+            <Route path="/contratos/:idcontrato/fianza-vicios-ocultos" />
             <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}
