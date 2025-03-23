@@ -22,8 +22,8 @@ export function VerDetallesFianzaAnticipo() {
     idFianzaAnticipo: string;
   }>();
 
-  console.log("ID del contrato:", idcontrato); // Para depuración
-  console.log("ID de la fianza:", idFianzaAnticipo); // Para depuración
+  console.log("ID del contrato:", idcontrato);
+  console.log("ID de la fianza:", idFianzaAnticipo);
 
   const fetchFianzaAnticipo = async (): Promise<Fianza> => {
     const response = await axios.get(

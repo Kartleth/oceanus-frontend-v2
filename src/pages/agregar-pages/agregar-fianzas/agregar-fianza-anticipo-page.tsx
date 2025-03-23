@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -19,119 +18,65 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { datosContratacionSchema } from "@/components/forms/datos-trabajador-forms/datos-contratacion-form";
-import {
-  DatosGeneralesContratacion,
-  DatosGeneralesContratacionForm,
-  datosGeneralesSchema,
-} from "@/components/forms/datos-contratacion/datos-generales-form";
-import {
-  DatosFianzaCumplimientos,
-  datosFianzaCumplimientoSchema,
-  DatosFianzaCumplimientosForm,
-} from "@/components/forms/datos-contratacion/datos-fianza-cumplimiento-form";
-import {
-  DatosFianzaOcultos,
-  DatosFianzaOcultosForm,
-  datosFianzaOcultosSchema,
-} from "@/components/forms/datos-contratacion/datos-fianza-ocultos-form";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaAnticipos,
   datosFianzaAnticipoSchema,
   DatosFianzaAnticiposForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
 
-type AccordionValue =
-  | "datos-anticipos"
+type AccordionValue = "datos-anticipos";
 
 export function PageAgregarFianzaAnticipo() {
+  const { idcontrato } = useParams<{
+    idcontrato: string;
+  }>();
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: any) => {
     console.log(data);
-    const res = await fetch("http://localhost:3001/contrato", {
-      method: "post",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-anticipo`,
+      {
+        method: "post",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const resData = await res.json();
     if (!res.ok) {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["contratos"]);
-    navigate("/contratos");
+    queryClient.invalidateQueries(["fianzaAnticipo"]);
+    navigate(`/contratos/${idcontrato}/fianza-anticipo/`);
   });
-  const [value, setValue] = useState<AccordionValue>("datos-generales"); //Mantiene el estado en un componente.
+  const [value, setValue] = useState<AccordionValue>("datos-anticipos"); //Mantiene el estado en un componente.
 
-  const datosGeneralesForm = useForm<DatosGeneralesContratacion>({
-    resolver: zodResolver(datosGeneralesSchema),
-    defaultValues: {
-      anticipocontrato: "",
-      contratado: "",
-      convenio: "",
-      direccion: "",
-      fincontrato: new Date(),
-      idcontratofuente: "",
-      iniciocontrato: new Date(),
-      montocontrato: "",
-      nombrecontrato: "",
-      numerocontrato: "",
-      personalcontrato: "",
-      subcontrato: "",
-      tipocontrato: "",
-    },
-  });
-
-  function onSubmitGe(values: DatosGeneralesContratacion) {
-    console.log(values);
-    setValue("datos-cumplimiento");
-  }
-  const datosCumplimientoForm = useForm<DatosFianzaCumplimientos>({
-    resolver: zodResolver(datosFianzaCumplimientoSchema),
-  });
-  function onSubmitCum(values: DatosFianzaCumplimientos) {
-    console.log(values);
-    setValue("datos-ocultos");
-  }
-
-  const datosOcultosForm = useForm<DatosFianzaOcultos>({
-    resolver: zodResolver(datosFianzaOcultosSchema),
-  });
-  function onSubmitOcu(values: DatosFianzaOcultos) {
-    console.log(values);
-    setValue("datos-anticipos");
-  }
-
-  const datosAnticipoForm = useForm<DatosFianzaAnticipos>({
+  const datosFianzaAnticipoForm = useForm<DatosFianzaAnticipos>({
     resolver: zodResolver(datosFianzaAnticipoSchema),
   });
+
   function onSubmitAntic(values: DatosFianzaAnticipos) {
     console.log(values);
     setValue("datos-anticipos");
-    guardarContratos();
+    guardarFianza();
+  }
+
+  async function guardarFianza() {
+    const validos = await formulariosSonValidos();
+    if (!validos) return;
+
+    const DatosTerceros = datosTercerosForm.getValues();
+    console.log(DatosTerceros);
+    mutation.mutate(DatosTerceros);
   }
 
   async function formulariosSonValidos() {
-    if (!(await datosGeneralesForm.trigger())) {
-      setValue("datos-generales");
-
-      return false;
-    }
-    if (!(await datosCumplimientoForm.trigger())) {
-      setValue("datos-cumplimiento");
-
-      return false;
-    }
-    if (!(await datosOcultosForm.trigger())) {
-      setValue("datos-ocultos");
-
-      return false;
-    }
-    if (!(await datosAnticipoForm.trigger())) {
+    if (!(await datosFianzaAnticipoForm.trigger())) {
       setValue("datos-anticipos");
 
       return false;
@@ -140,68 +85,8 @@ export function PageAgregarFianzaAnticipo() {
     return true;
   }
 
-  async function guardarContratos() {
-    const validos = await formulariosSonValidos();
-
-    if (!validos) return;
-
-    const datosGenerales = datosGeneralesForm.getValues();
-    const datosAnticipo = datosAnticipoForm.getValues();
-    const datosCumplimiento = datosCumplimientoForm.getValues();
-    const datosOcultos = datosOcultosForm.getValues();
-    const agregarFianzaAnticipo =
-      datosAnticipo.tipodecambio &&
-      datosAnticipo.inicio &&
-      datosAnticipo.fin &&
-      datosAnticipo.monto;
-    const agregarFianzaCumplimiento =
-      datosCumplimiento.tipodecambio &&
-      datosCumplimiento.inicio &&
-      datosCumplimiento.fin &&
-      datosCumplimiento.monto;
-    const agregarFianzaOculto =
-      datosOcultos.tipodecambio &&
-      datosOcultos.inicio &&
-      datosOcultos.fin &&
-      datosOcultos.monto;
-    console.log("anticipo", agregarFianzaAnticipo);
-    console.log("anticipo", agregarFianzaCumplimiento);
-    console.log("anticipo", agregarFianzaOculto);
-    const contrato = {
-      nombreContrato: datosGenerales.nombrecontrato,
-      idContratado: datosGenerales.contratado,
-      personal: [],
-      tipoSubcontrato: datosGenerales.subcontrato,
-      iniciocontrato: datosGenerales.iniciocontrato,
-      fincontrato: datosGenerales.fincontrato,
-      convenio: [],
-      fianzaCumplimiento: !agregarFianzaCumplimiento
-        ? null
-        : {
-            // documento: datosCumplimiento.documento,
-            tipodecambio: datosCumplimiento.tipodecambio,
-            inicio: datosCumplimiento.inicio,
-            // anticipodoc: datosCumplimiento.anticipodoc,
-            fin: datosCumplimiento.fin,
-            poliza: datosCumplimiento.poliza,
-            aseguradora: datosCumplimiento.aseguradora,
-            monto: datosCumplimiento.monto,
-          },
-      fianzaOculto: !agregarFianzaOculto ? null : datosOcultos,
-      fianzaAnticipo: !agregarFianzaAnticipo ? null : datosAnticipo,
-      montoContrato: datosGenerales.montocontrato,
-      anticipoContrato: datosGenerales.anticipocontrato,
-      direccion: datosGenerales.direccion,
-      numeroContrato: datosGenerales.numerocontrato,
-      facturas: [],
-      ordenes: [],
-    };
-    console.log(contrato);
-    mutation.mutate(contrato);
-  }
-
   const erroresGenerales = Object.keys(
-    datosGeneralesForm.formState.errors
+    datosFianzaAnticipoForm.formState.errors
   ).length;
 
   const erroresAnticipo = Object.keys(
