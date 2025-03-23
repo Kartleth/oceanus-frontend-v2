@@ -10,15 +10,17 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { BriefcaseBusiness } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import { Fianza } from "@/modelos/fianza";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export function VerDetallesFianzaAnticipo() {
-  const { idcontrato, idFianzaAnticipo } = useParams<{ idcontrato: string; idFianzaAnticipo: string }>();
+  const { idcontrato, idFianzaAnticipo } = useParams<{
+    idcontrato: string;
+    idFianzaAnticipo: string;
+  }>();
 
   console.log("ID del contrato:", idcontrato); // Para depuración
   console.log("ID de la fianza:", idFianzaAnticipo); // Para depuración
@@ -34,7 +36,10 @@ export function VerDetallesFianzaAnticipo() {
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Fianza>(["fianzaAnticipo", idcontrato, idFianzaAnticipo], fetchFianzaAnticipo);
+  } = useQuery<Fianza>(
+    ["fianzaAnticipo", idcontrato, idFianzaAnticipo],
+    fetchFianzaAnticipo
+  );
 
   return (
     <Layout>
@@ -44,9 +49,7 @@ export function VerDetallesFianzaAnticipo() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/contratos">
-                Contratos
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/contratos">Contratos</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
@@ -59,7 +62,9 @@ export function VerDetallesFianzaAnticipo() {
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo/detalles/${idFianzaAnticipo}`}>
+              <BreadcrumbLink
+                href={`/contratos/${idcontrato}/fianza-anticipo/detalles/${idFianzaAnticipo}`}
+              >
                 Detalles de fianza
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -74,22 +79,13 @@ export function VerDetallesFianzaAnticipo() {
           </div>
         ) : (
           <>
-            <Avatar className="p-4">
-              <AvatarImage
-                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    fianzaAnticipo?.idfianza ?? "Fianza"
-                )}&background=C4EEF8`}
-                alt="Avatar"
-                className="w-64 rounded-full p-2"
-              />
-            </Avatar>
-
-            <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
+            <div className="ml-6 container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
               <h1 className=" text-gray-600 text-xl font-bold leading-tight tracking-tighter xl:text-4xl md:text-3xl lg:leading-[1.1]">
                 Detalles de fianza de anticipo
               </h1>
               <p className="max-w-2xl lg:text-lg font-light text-foreground">
-                ID de fianza: {fianzaAnticipo?.idfianza ?? "No disponible"} , ID de contrato: {idcontrato ?? "No disponible"}
+                ID de fianza: {fianzaAnticipo?.idfianza ?? "No disponible"} , ID
+                de contrato: {idcontrato ?? "No disponible"}
               </p>
             </div>
 
@@ -102,7 +98,7 @@ export function VerDetallesFianzaAnticipo() {
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
-              <BriefcaseBusiness className="w-6 h-6" />
+              <CreditCard className="w-6 h-6" />
               <h2 className="font-medium text-xl tracking-tighter">
                 Datos de fianza de anticipo
               </h2>
