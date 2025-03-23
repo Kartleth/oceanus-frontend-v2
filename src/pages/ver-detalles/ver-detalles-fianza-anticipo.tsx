@@ -18,10 +18,14 @@ import { Fianza } from "@/modelos/fianza";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export function VerDetallesFianzaAnticipo() {
-  const { id, idFianzaAnticipo } = useParams();
+  const { idcontrato, idFianzaAnticipo } = useParams<{ idcontrato: string; idFianzaAnticipo: string }>();
+
+  console.log("ID del contrato:", idcontrato); // Para depuración
+  console.log("ID de la fianza:", idFianzaAnticipo); // Para depuración
+
   const fetchFianzaAnticipo = async (): Promise<Fianza> => {
     const response = await axios.get(
-      `http://localhost:3001/fianza/contrato/${id}/fianza-anticipo/${idFianzaAnticipo}`
+      `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-anticipo/${idFianzaAnticipo}`
     );
     return response.data;
   };
@@ -30,7 +34,7 @@ export function VerDetallesFianzaAnticipo() {
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Fianza>(["fianzaAnticipo", id, idFianzaAnticipo], fetchFianzaAnticipo);
+  } = useQuery<Fianza>(["fianzaAnticipo", idcontrato, idFianzaAnticipo], fetchFianzaAnticipo);
 
   return (
     <Layout>
@@ -48,14 +52,14 @@ export function VerDetallesFianzaAnticipo() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${id}/fianza-anticipo`}>
-                Fianzas de Anticipo de contrato {id}
+              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo`}>
+                Fianzas de Anticipo de contrato {idcontrato}
               </BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/detalles-fianza-anticipo">
+              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo/detalles/${idFianzaAnticipo}`}>
                 Detalles de fianza
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -81,11 +85,11 @@ export function VerDetallesFianzaAnticipo() {
             </Avatar>
 
             <div className="container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
-              <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+              <h1 className=" text-gray-600 text-xl font-bold leading-tight tracking-tighter xl:text-4xl md:text-3xl lg:leading-[1.1]">
                 Detalles de fianza de anticipo
               </h1>
-              <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {fianzaAnticipo?.idfianza ?? "No disponible"} , {fianzaAnticipo?.tipo  ?? "No disponible"}
+              <p className="max-w-2xl lg:text-lg font-light text-foreground">
+                ID de fianza: {fianzaAnticipo?.idfianza ?? "No disponible"} , ID de contrato: {idcontrato ?? "No disponible"}
               </p>
             </div>
 
