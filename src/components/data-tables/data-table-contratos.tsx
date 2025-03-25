@@ -174,7 +174,10 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Personal</DropdownMenuItem>
-            <DropdownMenuItem>SubContratados</DropdownMenuItem>
+            <DropdownMenuItem>
+              {" "}
+              <Link to={`/personal_terceros`}>SubContratados</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to={`/contratos/${contrato.idcontrato}/convenio`}>
                 Convenio
