@@ -49,7 +49,7 @@ export default function FianzaAnticipo() {
 
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-            <Link to="/agregar-contratos">
+            <Link to={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}>
               <CirclePlus />
               Agregar Fianza de Anticipo
             </Link>
