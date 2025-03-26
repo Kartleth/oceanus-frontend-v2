@@ -10,7 +10,12 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { FilePen, FileUser, IdCard, Receipt, ReceiptText, UserRound } from "lucide-react";
+import {
+  FilePen,
+  Receipt,
+  ReceiptText,
+  Shield,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
@@ -75,6 +80,11 @@ export function VerDetallesContratos() {
             <Receipt />
             <Link to={"/facturas"}>Facturas</Link>
           </Button>
+
+          <Button className="bg-deepSea hover:bg-deepLightSea">
+            <Shield />
+            Fianzas
+          </Button>
         </div>
       </div>
 
@@ -83,7 +93,9 @@ export function VerDetallesContratos() {
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
               <ReceiptText className="w-6 h-6 " />
-              <h2 className="font-medium text-xl ">Datos Generales de contrato</h2>
+              <h2 className="font-medium text-xl ">
+                Datos Generales de contrato
+              </h2>
             </div>
 
             <hr className="pb-6" />
