@@ -35,6 +35,7 @@ import FianzaAnticipo from "./pages/fianzas/Fianza-anticipo";
 import { VerDetallesFianzaAnticipo } from "./pages/ver-detalles/ver-detalles-fianza-anticipo";
 import { PageAgregarFianzaAnticipo } from "./pages/agregar-pages/agregar-fianzas/agregar-fianza-anticipo-page";
 import FianzaCumplimiento from "./pages/fianzas/Fianza-cumplimiento";
+import FianzaViciosOcultos from "./pages/fianzas/Fianza-vicios-ocultos";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ function App() {
               path="/contratos/:idcontrato/convenio/agregar-convenio"
               element={<PageAgregarConvenio />}
             />
+            {/* Rutas de fianzas */}
             <Route
               path="/contratos/:idcontrato/fianza-anticipo"
               element={<FianzaAnticipo />}
@@ -81,6 +83,10 @@ function App() {
               element={<FianzaCumplimiento />}
             />
             <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos"
+              element={<FianzaViciosOcultos />}
+            />
+            <Route
               path="/contratos/:idcontrato/fianza-anticipo/detalles/:idFianzaAnticipo"
               element={<VerDetallesFianzaAnticipo />}
             />
@@ -88,8 +94,6 @@ function App() {
               path="/contratos/:idcontrato/fianza-anticipo/agregar-fianza-anticipo"
               element={<PageAgregarFianzaAnticipo />}
             />
-            <Route path="/contratos/:idcontrato/fianza-cumplimiento" />
-            <Route path="/contratos/:idcontrato/fianza-vicios-ocultos" />
             <Route
               path="/agregar-trabajador"
               element={<PageAgregarTrabajador />}
