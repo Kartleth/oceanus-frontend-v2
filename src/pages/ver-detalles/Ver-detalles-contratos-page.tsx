@@ -10,11 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  FileUser,
-  IdCard,
-  UserRound,
-} from "lucide-react";
+import { FilePen, FileUser, IdCard, Receipt, ReceiptText, UserRound } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
@@ -69,25 +65,25 @@ export function VerDetallesContratos() {
 
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea">
-            <IdCard />
+            <FilePen />
             <Link to={`/contratos/${contrato?.idcontrato}/convenio`}>
               Convenio{" "}
             </Link>
           </Button>
 
           <Button className="bg-deepSea hover:bg-deepLightSea">
-            <FileUser />
+            <Receipt />
             <Link to={"/facturas"}>Facturas</Link>
           </Button>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-4">
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
-              <UserRound className="w-6 h-6" />
-              <h2 className="font-medium text-xl">Datos Generales</h2>
+              <ReceiptText className="w-6 h-6 " />
+              <h2 className="font-medium text-xl ">Datos Generales de contrato</h2>
             </div>
 
             <hr className="pb-6" />
