@@ -10,7 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -30,6 +30,7 @@ type AccordionValue = "datos-tercero";
 export function PageAgregarTercero() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { idcontrato } = useParams();
   const mutation = useMutation(async (data: unknown) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/subcontratados", {
@@ -45,7 +46,7 @@ export function PageAgregarTercero() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["subcontratados"]);
-    navigate("/personal_terceros");
+    navigate(`/contratos/${idcontrato}/personal_terceros`);
   });
   const [value, setValue] = useState<AccordionValue>("datos-tercero");
   const datosTercerosForm = useForm<DatosTerceros>({
@@ -61,8 +62,16 @@ export function PageAgregarTercero() {
     if (!validos) return;
 
     const DatosTerceros = datosTercerosForm.getValues();
-    console.log(DatosTerceros);
-    mutation.mutate(DatosTerceros);
+    const subcontratos = {
+      nombre: DatosTerceros.nombre,
+      rfc: DatosTerceros.rfc,
+      ine: DatosTerceros.ine,
+      nss: DatosTerceros.nss,
+      curp: DatosTerceros.curp,
+      idContrato: Number(idcontrato),
+    };
+    console.log(subcontratos);
+    mutation.mutate(subcontratos);
   }
 
   async function formulariosSonValidos() {
@@ -114,7 +123,9 @@ export function PageAgregarTercero() {
               className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos de tercero ${
-                erroresSubcontratado > 0 ? `(${erroresSubcontratado} errores)` : ""
+                erroresSubcontratado > 0
+                  ? `(${erroresSubcontratado} errores)`
+                  : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">

@@ -48,13 +48,17 @@ function App() {
             <Route path="/personal" element={<Page_personal />} />
             <Route path="/contratos" element={<Contratos />} />
             <Route path="/convenio" element={<Convenio />} />
+            <Route path="/personal_terceros" element={<Terceros />} />
             <Route path="/clientes" element={<Clientes />} />
             <Route
               path="/contratos/:idcontrato/convenio"
               element={<Convenio />}
             />
             <Route path="/facturas" element={<Facturas />} />
-            <Route path="/personal_terceros" element={<Terceros />} />
+            <Route
+              path="/contratos/:idcontrato/personal_terceros"
+              element={<Terceros />}
+            />
             <Route path="/cotizaciones" element={<Cotizaciones />} />
             <Route
               path="/detalles-contratos/:idcontrato"
@@ -67,6 +71,10 @@ function App() {
             <Route
               path="/contratos/:idcontrato/convenio/agregar-convenio"
               element={<PageAgregarConvenio />}
+            />
+            <Route
+              path="contratos/:idcontrato/personal_terceros/agregar-tercero"
+              element={<PageAgregarTercero />}
             />
             <Route
               path="/agregar-trabajador"
@@ -120,7 +128,6 @@ function App() {
               path="/subir-archivos-tercero/:id"
               element={<SubirArchivosTerceros />}
             />
-            <Route path="/agregar-tercero" element={<PageAgregarTercero />} />
             <Route path="/editar-tercero/:id" element={<PageEditarTercero />} />
             {/* Rutas para clientes */}
             <Route
