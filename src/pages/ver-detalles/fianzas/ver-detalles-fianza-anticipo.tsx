@@ -14,7 +14,7 @@ import { CreditCard } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
-import { Fianza } from "@/modelos/fianza";
+import { Fianza } from "@/modelos/datosFianza";
 
 export function VerDetallesFianzaAnticipo() {
   const { idcontrato, idFianzaAnticipo } = useParams<{

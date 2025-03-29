@@ -38,7 +38,7 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { Fianza } from "@/modelos/fianza";
+import { Fianza } from "@/modelos/datosFianza";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -437,17 +437,15 @@ export function DataTableFianzaAnticipo({
     generarTabla(datosBloque1, 30);
     doc.addPage();
 
-    doc.save("Fianza_anticipo_oceanus.pdf");
+    doc.save(`Fianza_anticipo_oceanus_${contratoId}.pdf`);
   };
 
   // Imprimir datos
-  const handlePrint = (fianzaAnticipo: Fianza[]) => {
+  const handlePrint = async (fianzaAnticipo: Fianza[]) => {
     if (!fianzaAnticipo || fianzaAnticipo.length === 0) {
       alert("No hay datos disponibles para imprimir.");
       return;
     }
-
-    const logoPath = "src/assets/oceanus-logo-3.png";
 
     const camposBloque1 = [
       { header: "ID", key: "idsubcontratado" },
@@ -486,9 +484,6 @@ export function DataTableFianzaAnticipo({
       unit: "mm",
       format: "a4",
     });
-
-    // Agregar el logo al lado izquierdo
-    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
