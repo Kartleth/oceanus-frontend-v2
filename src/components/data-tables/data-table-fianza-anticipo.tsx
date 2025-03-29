@@ -182,7 +182,7 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
       const queryClient = useQueryClient();
       const deleteFianza = useMutation(async () => {
         const res = await fetch(
-          `http://localhost:3001/fianza/`,
+          `http://localhost:3001/fianza/contrato/${contratoId}/${Fianza.idfianza}`,
           {
             method: "delete",
             headers: {
