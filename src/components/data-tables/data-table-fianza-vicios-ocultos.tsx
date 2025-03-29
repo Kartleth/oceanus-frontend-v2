@@ -210,7 +210,7 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
               }
             >
               <Link
-                to={`/contratos/${contratoId}/fianza-ViciosOcultos/detalles/${row.original.idfianza}`}
+                to={`/contratos/${contratoId}/fianza-vicios-ocultos/detalles/${row.original.idfianza}`}
               >
                 Ver detalles
               </Link>

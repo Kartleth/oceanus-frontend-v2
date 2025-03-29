@@ -40,6 +40,7 @@ import { VerDetallesFianzaCumplimiento } from "./pages/ver-detalles/fianzas/ver-
 import { PageEditarFianzaAnticipo } from "./pages/editar-pages/editar-fianzas/editar-fianza-anticipo";
 import { PageAgregarFianzaCumplimiento } from "./pages/agregar-pages/agregar-fianzas/agregar-fianza-cumplimiento";
 import { PageEditarFianzaCumplimiento } from "./pages/editar-pages/editar-fianzas/editar-fianza-cumplimiento";
+import { VerDetallesFianzaViciosOcultos } from "./pages/ver-detalles/fianzas/ver-detalles-fianza-vicios-ocultos";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,10 @@ function App() {
             <Route
               path="/contratos/:idcontrato/fianza-Cumplimiento/detalles/:idFianzaCumplimiento"
               element={<VerDetallesFianzaCumplimiento />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos/detalles/:idFianzaViciosO"
+              element={<VerDetallesFianzaViciosOcultos />}
             />
             <Route
               path="/contratos/:idcontrato/fianza-anticipo/agregar-fianza-anticipo"
