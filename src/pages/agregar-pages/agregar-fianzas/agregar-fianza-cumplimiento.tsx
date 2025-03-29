@@ -20,12 +20,12 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  DatosFianzaAnticipos,
-  datosFianzaAnticipoSchema,
-  DatosFianzaAnticiposForm,
-} from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
+  DatosFianzaCumplimientos,
+  datosFianzaCumplimientoSchema,
+  DatosFianzaCumplimientosForm,
+} from "@/components/forms/datos-contratacion/datos-fianza-cumplimiento-form";
 
-type AccordionValue = "datos-anticipos";
+type AccordionValue = "datos-cumplimiento";
 
 export function PageAgregarFianzaCumplimiento() {
   const { idcontrato } = useParams<{
@@ -52,14 +52,14 @@ export function PageAgregarFianzaCumplimiento() {
     }
     console.log(resData);
     queryClient.invalidateQueries(["fianza"]);
-    navigate(`/contratos/${idcontrato}/fianza-anticipo`);
+    navigate(`/contratos/${idcontrato}/fianza-cumplimiento`);
   });
-  const [value, setValue] = useState<AccordionValue>("datos-anticipos");
-  const datosFianzaAnticiposForm = useForm<DatosFianzaAnticipos>({
-    resolver: zodResolver(datosFianzaAnticipoSchema),
+  const [value, setValue] = useState<AccordionValue>("datos-cumplimiento");
+  const datosFianzaCumplimientoForm = useForm<DatosFianzaCumplimientos>({
+    resolver: zodResolver(datosFianzaCumplimientoSchema),
   });
 
-  function onSubmitAntic(values: DatosFianzaAnticipos) {
+  function onSubmitCum(values: DatosFianzaCumplimientos) {
     console.log(values);
     guardarFianza();
   }
@@ -68,32 +68,32 @@ export function PageAgregarFianzaCumplimiento() {
     const validos = await formulariosSonValidos();
     if (!validos) return;
 
-    const DatosFianzaAnticipos = datosFianzaAnticiposForm.getValues();
+    const DatosFianzaCumplimientos = datosFianzaCumplimientoForm.getValues();
     const formattedData = {
       idContrato: Number(idcontrato),
-      ...DatosFianzaAnticipos,
-      inicio: DatosFianzaAnticipos.inicio
-        ? DatosFianzaAnticipos.inicio.toISOString().split("T")[0]
+      ...DatosFianzaCumplimientos,
+      inicio: DatosFianzaCumplimientos.inicio
+        ? DatosFianzaCumplimientos.inicio.toISOString().split("T")[0]
         : undefined,
-      fin: DatosFianzaAnticipos.fin
-        ? DatosFianzaAnticipos.fin.toISOString().split("T")[0]
+      fin: DatosFianzaCumplimientos.fin
+        ? DatosFianzaCumplimientos.fin.toISOString().split("T")[0]
         : undefined,
-      monto: Number(DatosFianzaAnticipos.monto),
+      monto: Number(DatosFianzaCumplimientos.monto),
     };
     console.log("Estos son los datos mandados: ", formattedData);
     mutation.mutate(formattedData);
   }
 
   async function formulariosSonValidos() {
-    if (!(await datosFianzaAnticiposForm.trigger())) {
-      setValue("datos-anticipos");
+    if (!(await datosFianzaCumplimientoForm.trigger())) {
+      setValue("datos-cumplimiento");
       return false;
     }
     return true;
   }
 
-  const erroresAnticipo = Object.keys(
-    datosFianzaAnticiposForm.formState.errors
+  const erroresCumplimiento = Object.keys(
+    datosFianzaCumplimientoForm.formState.errors
   ).length;
 
   return (
@@ -110,14 +110,16 @@ export function PageAgregarFianzaCumplimiento() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo`}>
-                Fianzas de Anticipo de contrato {idcontrato}
+              <BreadcrumbLink
+                href={`/contratos/${idcontrato}/fianza-cumplimiento`}
+              >
+                Fianzas de Cumplimiento de contrato {idcontrato}
               </BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
             <BreadcrumbLink
-              href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}
+              href={`/contratos/${idcontrato}/fianza-cumplimiento/agregar-fianza-cumplimiento`}
             >
               Agregar fianza
             </BreadcrumbLink>
@@ -131,20 +133,20 @@ export function PageAgregarFianzaCumplimiento() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-anticipos">
+          <AccordionItem value="datos-cumplimiento">
             <AccordionTrigger
-              data-haserrors={erroresAnticipo > 0}
+              data-haserrors={erroresCumplimiento > 0}
               className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
-              {`Datos de Fianza de Anticipo ${
-                erroresAnticipo > 0 ? `(${erroresAnticipo} errores)` : ""
+              {`Datos de Fianza de Cumplimiento ${
+                erroresCumplimiento > 0 ? `(${erroresCumplimiento} errores)` : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
-              <DatosFianzaAnticiposForm
-                form={datosFianzaAnticiposForm}
-                onSubmit={onSubmitAntic}
-              ></DatosFianzaAnticiposForm>
+              <DatosFianzaCumplimientosForm
+                form={datosFianzaCumplimientoForm}
+                onSubmit={onSubmitCum}
+              ></DatosFianzaCumplimientosForm>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

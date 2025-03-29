@@ -67,8 +67,8 @@ export const DatosFianzaCumplimientosForm: FC<
                   defaultValue={field.value}
                   placeholder="Selecciona un tipo de cambio"
                 >
-                  <SelectItem value="peso">Peso</SelectItem>
-                  <SelectItem value="dolar">Dolar</SelectItem>
+                  <SelectItem value="PESO">Peso</SelectItem>
+                  <SelectItem value="DOLAR">Dolar</SelectItem>
                 </FormSelect>
               </FormControl>
               <FormMessage />
