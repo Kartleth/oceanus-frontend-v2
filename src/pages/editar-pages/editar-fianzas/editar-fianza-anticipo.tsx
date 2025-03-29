@@ -16,29 +16,59 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaAnticipos,
   datosFianzaAnticipoSchema,
   DatosFianzaAnticiposForm,
 } from "@/components/forms/datos-contratacion/datos-fianza-anticipo-form";
+import { Fianza } from "@/modelos/fianza";
 
 type AccordionValue = "datos-anticipos";
 
 export function PageEditarFianzaAnticipo() {
-  const { idcontrato } = useParams<{
+  const { idcontrato, idFianzaAnticipo } = useParams<{
     idcontrato: string;
+    idFianzaAnticipo: string;
   }>();
 
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["fianzaAnticipo", idcontrato, idFianzaAnticipo],
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-anticipo/${idFianzaAnticipo}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error(resData);
+        throw new Error(resData.message);
+      }
+      const fianzaParse = Fianza.safeParse(resData);
+      if (!fianzaParse.success) {
+        console.error(fianzaParse.error.format());
+        throw new Error("Error al parsear la fianza");
+      }
+      return fianzaParse.data;
+    },
+  });
+
   const mutation = useMutation(async (data: unknown) => {
     console.log(data);
     const res = await fetch(
-      `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-anticipo`,
+      `http://localhost:3001/fianza/${idcontrato}/${idFianzaAnticipo}`,
       {
+        method: "PUT",
+        body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
@@ -49,17 +79,20 @@ export function PageEditarFianzaAnticipo() {
       console.error(resData);
     }
     console.log(resData);
-    queryClient.invalidateQueries(["fianzaAnticipo"]);
+    queryClient.invalidateQueries([
+      "fianzaAnticipo",
+      idcontrato,
+      idFianzaAnticipo,
+    ]);
     navigate(`/contratos/${idcontrato}/fianza-anticipo`);
   });
-  const [value, setValue] = useState<AccordionValue>("datos-anticipos");
-  const datosFianzaAnticiposForm = useForm<DatosFianzaAnticipos>({
-    resolver: zodResolver(datosFianzaAnticipoSchema),
-  });
 
-  function onSubmitAntic(values: DatosFianzaAnticipos) {
-    console.log(values);
-    guardarFianza();
+  async function formulariosSonValidos() {
+    if (!(await datosFianzaAnticiposForm.trigger())) {
+      setValue("datos-anticipos");
+      return false;
+    }
+    return true;
   }
 
   async function guardarFianza() {
@@ -81,18 +114,26 @@ export function PageEditarFianzaAnticipo() {
     console.log("Estos son los datos mandados: ", formattedData);
     mutation.mutate(formattedData);
   }
+  const [value, setValue] = useState<AccordionValue | undefined>();
 
-  async function formulariosSonValidos() {
-    if (!(await datosFianzaAnticiposForm.trigger())) {
+  const datosFianzaAnticiposForm = useForm<DatosFianzaAnticipos>({
+    resolver: zodResolver(datosFianzaAnticipoSchema),
+  });
+
+  useEffect(() => {
+    if (data) {
+      datosFianzaAnticiposForm.reset({
+        tipodecambio: data.tipodecambio,
+        inicio: data.inicio ? new Date(data.inicio) : undefined,
+        fin: data.fin ? new Date(data.fin) : undefined,
+        poliza: data.poliza,
+        aseguradora: data.aseguradora,
+        monto: data.monto,
+      });
       setValue("datos-anticipos");
-      return false;
     }
-    return true;
-  }
-
-  const erroresAnticipo = Object.keys(
-    datosFianzaAnticiposForm.formState.errors
-  ).length;
+    console.log(data);
+  }, [datosFianzaAnticiposForm, data]);
 
   return (
     <Layout>
@@ -115,9 +156,9 @@ export function PageEditarFianzaAnticipo() {
 
             <BreadcrumbSeparator />
             <BreadcrumbLink
-              href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}
+              href={`/contratos/${idcontrato}/fianza-anticipo/editar-fianza-anticipo/${idFianzaAnticipo}`}
             >
-              Agregar fianza
+              Editar fianza
             </BreadcrumbLink>
           </BreadcrumbList>
         </Breadcrumb>
@@ -130,18 +171,13 @@ export function PageEditarFianzaAnticipo() {
           onValueChange={setValue}
         >
           <AccordionItem value="datos-anticipos">
-            <AccordionTrigger
-              data-haserrors={erroresAnticipo > 0}
-              className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
-            >
-              {`Datos de Fianza de Anticipo ${
-                erroresAnticipo > 0 ? `(${erroresAnticipo} errores)` : ""
-              }`}
+            <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
+              Datos de fianza de anticipo
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">
               <DatosFianzaAnticiposForm
                 form={datosFianzaAnticiposForm}
-                onSubmit={onSubmitAntic}
+                onSubmit={() => guardarFianza()}
               ></DatosFianzaAnticiposForm>
             </AccordionContent>
           </AccordionItem>

@@ -112,9 +112,9 @@ export function PageEditarTercero() {
     console.log(data);
   }, [data, datosTercerosForm]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  //if (isLoading) {
+  //  return <div>Loading...</div>;
+  //}
 
   return (
     <Layout>

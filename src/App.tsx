@@ -37,6 +37,7 @@ import { PageAgregarFianzaAnticipo } from "./pages/agregar-pages/agregar-fianzas
 import FianzaCumplimiento from "./pages/fianzas/Fianza-cumplimiento";
 import FianzaViciosOcultos from "./pages/fianzas/Fianza-vicios-ocultos";
 import { VerDetallesFianzaCumplimiento } from "./pages/ver-detalles/fianzas/ver-detalles-fianza-cumplimiento";
+import { PageEditarFianzaAnticipo } from "./pages/editar-pages/editar-fianzas/editar-fianza-anticipo";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,10 @@ function App() {
             <Route
               path="/contratos/:idcontrato/fianza-anticipo/agregar-fianza-anticipo"
               element={<PageAgregarFianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo/editar-fianza-anticipo/:idFianzaAnticipo"
+              element={<PageEditarFianzaAnticipo />}
             />
             <Route
               path="/agregar-trabajador"
