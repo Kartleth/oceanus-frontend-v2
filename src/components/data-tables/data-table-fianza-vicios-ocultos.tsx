@@ -221,7 +221,7 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={``}>Editar</Link>
+              <Link to={`/contratos/${contratoId}/fianza-vicios-ocultos/editar-fianza-vicios-ocultos/${row.original.idfianza}`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
