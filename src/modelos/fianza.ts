@@ -3,7 +3,8 @@ import { z } from "zod";
 export const Fianza = z.object({
   idfianza: z.number(),
   tipo: z.enum(["ANTICIPO", "OCULTO", "CUMPLIMIENTO"]),
-  documento: z.string(),
+  documento: z.string().nullable().optional(),
+  anticipodoc: z.string().nullable().optional(),
   tipodecambio: z.enum(["PESO","DOLAR"]),
   inicio: z.string().date().nullable(),
   fin: z.string().date().nullable(),

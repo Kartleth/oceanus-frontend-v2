@@ -54,7 +54,7 @@ export function PageAgregarFianzaAnticipo() {
     queryClient.invalidateQueries(["fianzaAnticipo"]);
     navigate(`/contratos/${idcontrato}/fianza-anticipo`);
   });
-  const [value, setValue] = useState<AccordionValue>("datos-anticipos"); //Mantiene el estado en un componente.
+  const [value, setValue] = useState<AccordionValue>("datos-anticipos");
   const datosFianzaAnticiposForm = useForm<DatosFianzaAnticipos>({
     resolver: zodResolver(datosFianzaAnticipoSchema),
   });
@@ -69,8 +69,19 @@ export function PageAgregarFianzaAnticipo() {
     if (!validos) return;
 
     const DatosFianzaAnticipos = datosFianzaAnticiposForm.getValues();
-    console.log(DatosFianzaAnticipos);
-    mutation.mutate(DatosFianzaAnticipos);
+    const formattedData = {
+      idContrato: Number(idcontrato),
+      ...DatosFianzaAnticipos,
+      inicio: DatosFianzaAnticipos.inicio
+        ? DatosFianzaAnticipos.inicio.toISOString().split("T")[0]
+        : undefined,
+      fin: DatosFianzaAnticipos.fin
+        ? DatosFianzaAnticipos.fin.toISOString().split("T")[0]
+        : undefined,
+      monto: Number(DatosFianzaAnticipos.monto),
+    };
+    console.log("Estos son los datos mandados: ", formattedData);
+    mutation.mutate(formattedData);
   }
 
   async function formulariosSonValidos() {
@@ -105,9 +116,11 @@ export function PageAgregarFianzaAnticipo() {
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
-            <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}>
-                Agregar fianza
-              </BreadcrumbLink>
+            <BreadcrumbLink
+              href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}
+            >
+              Agregar fianza
+            </BreadcrumbLink>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
