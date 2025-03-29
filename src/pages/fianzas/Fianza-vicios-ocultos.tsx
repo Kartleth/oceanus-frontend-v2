@@ -42,7 +42,7 @@ export default function FianzaViciosOcultos() {
       <div className="flex items-center">
         <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
           <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-            Fianzas de vicios de oculto
+            Fianzas de vicios de ocultos
           </h1>
           <p className="max-w-2xl text-lg font-light text-foreground">
             ID del contrato: {idcontrato}
@@ -55,7 +55,7 @@ export default function FianzaViciosOcultos() {
               to={`/contratos/${idcontrato}/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos`}
             >
               <CirclePlus />
-              Agregar Fianza de vicios de oculto
+              Agregar Fianza de vicios de ocultos
             </Link>
           </Button>
         </div>
