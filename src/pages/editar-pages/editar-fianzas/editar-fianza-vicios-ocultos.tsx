@@ -41,7 +41,6 @@ export function PageEditarFianzaViciosOcultos() {
     queryKey: ["fianzaOcultos", idcontrato, idFianzaViciosO],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-oculto/${idFianzaViciosO}`,
         {
           headers: {
             "Content-Type": "application/json",
