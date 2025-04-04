@@ -9,10 +9,11 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DataTableTerceros } from "@/components/data-tables/data-table-terceros";
 
 export default function Terceros() {
+  const { idcontrato: idContrato } = useParams();
   return (
     <Layout>
       <div>
@@ -33,7 +34,7 @@ export default function Terceros() {
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
           <Link
-            to="/agregar-tercero"
+            to={`/contratos/${idContrato}/personal_terceros/agregar-tercero`}
             className="flex items-center space-x-2"
           >
             <CirclePlus className="w-5 h-5" />

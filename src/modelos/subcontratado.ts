@@ -12,7 +12,7 @@ export const Subcontratado = z.object({
   curp: z.string().max(18),
   estado: EstadoSubcontratado,
   doc: z.string().nullable(),
-  constrato: Contrato.nullable(),
+  contrato: Contrato.nullable(),
 });
 
 export type Subcontratado = z.infer<typeof Subcontratado>;
