@@ -86,7 +86,7 @@ export function PageAgregarTercero() {
   const erroresSubcontratado = Object.keys(
     datosTercerosForm.formState.errors
   ).length;
-
+  const { idcontrato: idContrato } = useParams();
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4 bg-gray-50">
@@ -103,7 +103,9 @@ export function PageAgregarTercero() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/agregar-tercero`}>
+              <BreadcrumbLink
+                href={`/contratos/${idContrato}/personal_terceros/agregar-tercero`}
+              >
                 Agregar tercero
               </BreadcrumbLink>
             </BreadcrumbItem>

@@ -23,7 +23,7 @@ export default function Terceros() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/personal_terceros">
+                <BreadcrumbLink href="/contratos/personal_terceros">
                   Personal de terceros
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -43,7 +43,7 @@ export default function Terceros() {
         </Button>
       </div>
       <div className="px-3">
-        <DataTableTerceros></DataTableTerceros>
+        <DataTableTerceros idcontrato={Number(idContrato)}></DataTableTerceros>
       </div>
     </Layout>
   );

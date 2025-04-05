@@ -163,7 +163,9 @@ export const columns: ColumnDef<Subcontratado>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/editar-tercero/${Subcontratado.idsubcontratado}`}>Editar</Link>
+              <Link to={`/editar-tercero/${Subcontratado.idsubcontratado}`}>
+                Editar
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -179,18 +181,21 @@ export const columns: ColumnDef<Subcontratado>[] = [
   },
 ];
 
-export function DataTableTerceros() {
+export function DataTableTerceros({ idcontrato }: { idcontrato: number }) {
   const subcontratadosQuery = useQuery({
-    queryKey: ["subcontratado"],
+    queryKey: ["subcontratado", idcontrato],
     queryFn: async () => {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
-      const res = await fetch("http://localhost:3001/subcontratados", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `http://localhost:3001/subcontratados/contrato/${idcontrato}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const resData = await res.json();
       if (!res.ok) {
         console.error(resData);
