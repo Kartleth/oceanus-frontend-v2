@@ -43,10 +43,12 @@ export function PageAgregarTercero() {
     const resData = await res.json();
     if (!res.ok) {
       console.error(resData);
+      throw new Error(resData.message || "Error al guardar subcontratado");
     }
-    console.log(resData);
+    console.log("Respuesta del backend:", resData);
+
     queryClient.invalidateQueries(["subcontratados"]);
-    navigate(`/contratos/${idcontrato}/personal_terceros`);
+    return resData;
   });
   const [value, setValue] = useState<AccordionValue>("datos-tercero");
 
@@ -80,12 +82,14 @@ export function PageAgregarTercero() {
       nss: DatosTerceros.nss,
       curp: DatosTerceros.curp,
       idContrato: Number(idcontrato),
+      estado: DatosTerceros.estado,
     };
     console.log(subcontratados);
     mutation.mutate(subcontratados, {
       onSuccess: (data) => {
         // Qué hacer si la mutación fue exitosa
         console.log("Subcontratado guardado correctamente", data);
+        navigate(`/contratos/${idcontrato}/personal_terceros`);
       },
       onError: (error) => {
         // Qué hacer si hubo un error
