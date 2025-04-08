@@ -34,13 +34,19 @@ import {
   DatosRepresentanteForm,
   datosRepresentanteSchema,
 } from "@/components/forms/datos-cliente-forms/datos-representateCliente-form";
+import {
+  DatosContactoAdmin,
+  DatosContactoAdminForm,
+  datosContactoAdminSchema,
+} from "@/components/forms/datos-cliente-forms/datos-contactoAdministrativoCliente-form";
 
 import { Cliente } from "@/modelos/cliente";
 
 type AccordionValue =
   | "datos-cliente"
   | "datos-facturacionCliente"
-  | "datos-representante";
+  | "datos-representante"
+  | "datos-contactoAdmin";
 
 export function PageEditarCliente() {
   const queryClient = useQueryClient();
@@ -89,20 +95,20 @@ export function PageEditarCliente() {
   async function formulariosSonValidos() {
     if (!(await datosClienteForm.trigger())) {
       setValue("datos-cliente");
-
       return false;
     }
     if (!(await datosFacturacionClienteForm.trigger())) {
       setValue("datos-facturacionCliente");
-
       return false;
     }
     if (!(await datosRepresentanteForm.trigger())) {
       setValue("datos-representante");
-
       return false;
     }
-
+    if (!(await datosContactoAdminForm.trigger())) {
+      setValue("datos-contactoAdmin");
+      return false;
+    }
     return true;
   }
 
@@ -114,11 +120,13 @@ export function PageEditarCliente() {
     const datosCliente = datosClienteForm.getValues();
     const datosFacturacionCliente = datosFacturacionClienteForm.getValues();
     const datosRepresentante = datosRepresentanteForm.getValues();
+    const datosContactoAdmin = datosContactoAdminForm.getValues();
 
     const cliente = {
       ...datosCliente,
       ...datosFacturacionCliente,
       ...datosRepresentante,
+      ...datosContactoAdmin,
     };
     console.log(cliente);
     mutation.mutate(cliente);
@@ -131,6 +139,9 @@ export function PageEditarCliente() {
   });
   const datosRepresentanteForm = useForm<DatosRepresentante>({
     resolver: zodResolver(datosRepresentanteSchema),
+  });
+  const datosContactoAdminForm = useForm<DatosContactoAdmin>({
+    resolver: zodResolver(datosContactoAdminSchema),
   });
 
   const [value, setValue] = useState<AccordionValue | undefined>();
@@ -157,6 +168,11 @@ export function PageEditarCliente() {
         representantelegal: data.representantelegal ?? "",
         correoRepresentantelegal: data.correoRepresentantelegal ?? "",
         telefonoRepresentantelegal: data.telefonoRepresentantelegal ?? "",
+      });
+      datosContactoAdminForm.reset({
+        nombreAdministrativo: data.nombreAdministrativo ?? "",
+        correoAdministrativo: data.correoAdministrativo ?? "",
+        telefonoAdministrativo: data.telefonoAdministrativo ?? "",
       });
 
       setValue("datos-cliente");
@@ -227,7 +243,19 @@ export function PageEditarCliente() {
             <AccordionContent className="p-4">
               <DatosRepresentanteForm
                 form={datosRepresentanteForm}
-                onSubmitRepLeg={() => guardarCliente()}
+                onSubmitRepLeg={() => setValue("datos-contactoAdmin")}
+              />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="datos-contactoAdmin">
+            <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
+              Datos Administrativo
+            </AccordionTrigger>
+            <AccordionContent className="p-4">
+              <DatosContactoAdminForm
+                form={datosContactoAdminForm}
+                onSubmitConAdm={() => guardarCliente()}
               />
             </AccordionContent>
           </AccordionItem>

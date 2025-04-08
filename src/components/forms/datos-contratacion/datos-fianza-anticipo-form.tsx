@@ -16,8 +16,8 @@ import { Button } from "@/components/ui/button";
 
 export const datosFianzaAnticipoSchema = z.object({
   tipodecambio: z.string().optional(),
-  idcontratofuente: z.string().optional(),
-  // anticipodoc: z.string({ required_error: "" }),
+  documento: z.string().nullable().optional(),
+  anticipodoc: z.string().nullable().optional(),
   inicio: z
     .date()
     .min(new Date(1914, 0, 1), {
@@ -32,7 +32,7 @@ export const datosFianzaAnticipoSchema = z.object({
     .optional(),
   poliza: z.string().optional(),
   aseguradora: z.string().optional(),
-  monto: z.string().optional(),
+  monto: z.coerce.number().optional(),
 });
 
 export type DatosFianzaAnticipos = z.infer<typeof datosFianzaAnticipoSchema>;
@@ -64,8 +64,8 @@ export const DatosFianzaAnticiposForm: FC<DatosFianzaAnticiposProps> = ({
                   defaultValue={field.value}
                   placeholder="Selecciona un tipo de cambio"
                 >
-                  <SelectItem value="peso">Peso</SelectItem>
-                  <SelectItem value="dolar">Dolar</SelectItem>
+                  <SelectItem value="PESO">Peso</SelectItem>
+                  <SelectItem value="DOLAR">Dolar</SelectItem>
                 </FormSelect>
               </FormControl>
               <FormMessage />

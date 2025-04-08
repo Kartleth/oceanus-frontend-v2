@@ -13,7 +13,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  CreditCard,
+  EyeOff,
+  FilePenLine,
+  FilePlus2,
+  FileText,
+  MoreHorizontal,
+  Shield,
+  ShieldCheck,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +33,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -174,24 +189,74 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Personal</DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link to={`/contratos/${contrato.idcontrato}/personal_terceros`}>
-                SubContratados
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to={`/contratos/${contrato.idcontrato}/convenio`}>
-                Convenio
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
-              >
-                Agregar un Convenio
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuItem>SubContratados</DropdownMenuItem>
+
             <DropdownMenuSeparator />
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <FileText />
+                <span>Convenios</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>
+                    <FilePenLine />
+                    <Link to={`/contratos/${contrato.idcontrato}/convenio`}>
+                      Gestionar Convenios
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FilePlus2 />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/convenio/agregar-convenio`}
+                    >
+                      Agregar Convenio
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <Shield />
+                <span>Fianzas</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>
+                    <CreditCard />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-anticipo`}
+                    >
+                      Fianza de Anticipo
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ShieldCheck />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-cumplimiento`}
+                    >
+                      Fianza de Cumplimiento
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <EyeOff />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/fianza-vicios-ocultos`}
+                    >
+                      Fianza de Vicios ocultos
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem asChild>
               <Link to={`/editar-contratos/${contrato.idcontrato}`}>
                 Editar

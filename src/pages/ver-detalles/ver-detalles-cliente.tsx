@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Building2, ReceiptText, Scale } from "lucide-react";
+import { Building2, Phone, ReceiptText, Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
@@ -74,7 +74,8 @@ export function VerDetallesCliente() {
                 Detalles de cliente
               </h1>
               <p className="max-w-2xl text-lg font-light text-foreground">
-                ID: {cliente?.idCliente ?? "No disponible"} , {cliente?.razonsocial  ?? "No disponible"}
+                ID: {cliente?.idCliente ?? "No disponible"} ,{" "}
+                {cliente?.razonsocial ?? "No disponible"}
               </p>
             </div>
 
@@ -353,7 +354,71 @@ export function VerDetallesCliente() {
                   <Input
                     disabled
                     type="string"
-                    value={cliente?.telefonoRepresentantelegal ?? "No disponible"}
+                    value={
+                      cliente?.telefonoRepresentantelegal ?? "No disponible"
+                    }
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
+        <div className="grid auto-rows-min gap-4">
+          <div className="rounded-xl bg-muted/50 p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Phone className="w-6 h-6" />
+              <h2 className="font-medium text-xl tracking-tighter">
+                Contacto administrativo
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Nombre de administrativo
+                </Label>
+                {/* Skeleton Loader */}
+                {!cliente ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="text"
+                    value={cliente?.nombreAdministrativo ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Correo de administrativo
+                </Label>
+                {/* Skeleton Loader */}
+                {!cliente ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="email"
+                    value={cliente?.correoAdministrativo ?? "No disponible"}
+                    className="bg-white disabled:opacity-100"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="" className="mb-2">
+                  Teléfono de administrativo
+                </Label>
+                {/* Skeleton Loader */}
+                {!cliente ? (
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                ) : (
+                  <Input
+                    disabled
+                    type="string"
+                    value={cliente?.telefonoAdministrativo ?? "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}

@@ -31,6 +31,18 @@ import { PageEditarCliente } from "./pages/editar-pages/editar-cliente";
 import { PagePersonalEmpresa } from "./pages/personal-page/personal-empresa-page";
 import Convenio from "./pages/convenio-page/Convenio";
 import { PageAgregarConvenio } from "./pages/agregar-pages/agregar-convenio-page";
+import FianzaAnticipo from "./pages/fianzas/Fianza-anticipo";
+import { VerDetallesFianzaAnticipo } from "./pages/ver-detalles/fianzas/ver-detalles-fianza-anticipo";
+import { PageAgregarFianzaAnticipo } from "./pages/agregar-pages/agregar-fianzas/agregar-fianza-anticipo-page";
+import FianzaCumplimiento from "./pages/fianzas/Fianza-cumplimiento";
+import FianzaViciosOcultos from "./pages/fianzas/Fianza-vicios-ocultos";
+import { VerDetallesFianzaCumplimiento } from "./pages/ver-detalles/fianzas/ver-detalles-fianza-cumplimiento";
+import { PageEditarFianzaAnticipo } from "./pages/editar-pages/editar-fianzas/editar-fianza-anticipo";
+import { PageAgregarFianzaCumplimiento } from "./pages/agregar-pages/agregar-fianzas/agregar-fianza-cumplimiento";
+import { PageEditarFianzaCumplimiento } from "./pages/editar-pages/editar-fianzas/editar-fianza-cumplimiento";
+import { VerDetallesFianzaViciosOcultos } from "./pages/ver-detalles/fianzas/ver-detalles-fianza-vicios-ocultos";
+import { PageAgregarFianzaViciosOcultos } from "./pages/agregar-pages/agregar-fianzas/agregar-fianza-vicios-ocultos";
+import { PageEditarFianzaViciosOcultos } from "./pages/editar-pages/editar-fianzas/editar-fianza-vicios-ocultos";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +84,58 @@ function App() {
               path="/contratos/:idcontrato/convenio/agregar-convenio"
               element={<PageAgregarConvenio />}
             />
+
+            {/* Rutas de fianzas */}
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo"
+              element={<FianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-cumplimiento"
+              element={<FianzaCumplimiento />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos"
+              element={<FianzaViciosOcultos />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo/detalles/:idFianzaAnticipo"
+              element={<VerDetallesFianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-Cumplimiento/detalles/:idFianzaCumplimiento"
+              element={<VerDetallesFianzaCumplimiento />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos/detalles/:idFianzaViciosO"
+              element={<VerDetallesFianzaViciosOcultos />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo/agregar-fianza-anticipo"
+              element={<PageAgregarFianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-cumplimiento/agregar-fianza-cumplimiento"
+              element={<PageAgregarFianzaCumplimiento />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos"
+              element={<PageAgregarFianzaViciosOcultos />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-anticipo/editar-fianza-anticipo/:idFianzaAnticipo"
+              element={<PageEditarFianzaAnticipo />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-cumplimiento/editar-fianza-cumplimiento/:idFianzaCumplimiento"
+              element={<PageEditarFianzaCumplimiento />}
+            />
+            <Route
+              path="/contratos/:idcontrato/fianza-vicios-ocultos/editar-fianza-vicios-ocultos/:idFianzaViciosO"
+              element={<PageEditarFianzaViciosOcultos />}
+            />
+            {/* Fin de rutas de fianzas */}
+
             <Route
               path="contratos/:idcontrato/personal_terceros/agregar-tercero"
               element={<PageAgregarTercero />}

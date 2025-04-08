@@ -12,38 +12,43 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FC } from "react";
 
-export const datosRepresentanteSchema = z.object({
-  representantelegal: z.string().nullable().optional(),
-  correoRepresentantelegal: z
+export const datosContactoAdminSchema = z.object({
+  nombreAdministrativo: z.string().optional().nullable(),
+  correoAdministrativo: z
     .string()
     .email({ message: "Correo electrónico incorrecto." })
-    .nullable().optional(),
-    telefonoRepresentantelegal: z
+    .nullable()
+    .optional(),
+  telefonoAdministrativo: z
     .string()
     .regex(/^\d{10}$/, { message: "Número de teléfono debe tener 10 dígitos." })
-    .nullable().optional(),
+    .nullable()
+    .optional(),
 });
 
-export type DatosRepresentante = z.infer<typeof datosRepresentanteSchema>;
+export type DatosContactoAdmin = z.infer<typeof datosContactoAdminSchema>;
 
-interface DatosRepresentanteProps {
-  onSubmitRepLeg: (values: DatosRepresentante) => void;
-  form: UseFormReturn<DatosRepresentante>;
+interface DatosContactoAdminProps {
+  onSubmitConAdm: (values: DatosContactoAdmin) => void;
+  form: UseFormReturn<DatosContactoAdmin>;
 }
 
-export const DatosRepresentanteForm: FC<DatosRepresentanteProps> = ({ form, onSubmitRepLeg }) => {
+export const DatosContactoAdminForm: FC<DatosContactoAdminProps> = ({
+  form,
+  onSubmitConAdm,
+}) => {
   return (
     <Form {...form}>
       <form
         className="grid grid-cols-3 gap-4"
-        onSubmit={form.handleSubmit(onSubmitRepLeg)}
+        onSubmit={form.handleSubmit(onSubmitConAdm)}
       >
         <FormField
           control={form.control}
-          name="representantelegal"
+          name="nombreAdministrativo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Representante legal</FormLabel>
+              <FormLabel>Nombre de administrativo</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -53,10 +58,10 @@ export const DatosRepresentanteForm: FC<DatosRepresentanteProps> = ({ form, onSu
         />
         <FormField
           control={form.control}
-          name="correoRepresentantelegal"
+          name="correoAdministrativo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Correo de representante legal</FormLabel>
+              <FormLabel>Correo de Administrativo</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -66,10 +71,10 @@ export const DatosRepresentanteForm: FC<DatosRepresentanteProps> = ({ form, onSu
         />
         <FormField
           control={form.control}
-          name="telefonoRepresentantelegal"
+          name="telefonoAdministrativo"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Teléfono</FormLabel>
+              <FormLabel>Teléfono de Administrativo</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -78,7 +83,7 @@ export const DatosRepresentanteForm: FC<DatosRepresentanteProps> = ({ form, onSu
           )}
         />
         <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
-          Siguiente
+          Guardar
         </Button>
       </form>
     </Form>

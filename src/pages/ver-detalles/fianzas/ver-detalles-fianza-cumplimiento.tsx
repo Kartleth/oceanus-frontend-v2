@@ -10,32 +10,36 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  FilePen,
-  Receipt,
-  ReceiptText,
-  Shield,
-} from "lucide-react";
+import { CreditCard } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
-import { Contrato } from "@/modelos/datosContratos";
-import { Button } from "@/components/ui/button";
+import { Fianza } from "@/modelos/datosFianza";
 
-export function VerDetallesContratos() {
-  const { idcontrato } = useParams();
-  const fetchContrato = async () => {
+export function VerDetallesFianzaCumplimiento() {
+  const { idcontrato, idFianzaCumplimiento } = useParams<{
+    idcontrato: string;
+    idFianzaCumplimiento: string;
+  }>();
+
+  console.log("ID del contrato:", idcontrato);
+  console.log("ID de la fianza:", idFianzaCumplimiento);
+
+  const fetchFianzaCumplimiento = async (): Promise<Fianza> => {
     const response = await axios.get(
-      `http://localhost:3001/contrato/${idcontrato}`
+      `http://localhost:3001/fianza/contrato/${idcontrato}/fianza-cumplimiento/${idFianzaCumplimiento}`
     );
     return response.data;
   };
   const {
-    data: contrato,
+    data: fianzaCumplimiento,
     isLoading,
     isError, //lo dejare para cuando pongamos página de error
     error,
-  } = useQuery<Contrato>(["contrato", idcontrato], fetchContrato);
+  } = useQuery<Fianza>(
+    ["fianzaCumplimiento", idcontrato, idFianzaCumplimiento],
+    fetchFianzaCumplimiento
+  );
 
   return (
     <Layout>
@@ -51,50 +55,52 @@ export function VerDetallesContratos() {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/detalles-contratos/${idcontrato}`}>
-                Detalles
+              <BreadcrumbLink
+                href={`/contratos/${idcontrato}/fianza-cumplimiento`}
+              >
+                Fianzas de cumplimiento de contrato {idcontrato}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href={`/contratos/${idcontrato}/fianza-cumplimiento/detalles/${idFianzaCumplimiento}`}
+              >
+                Detalles de fianza
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+
       <div className="flex items-center">
-        <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
-          <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-            Contrato
-          </h1>
-          <p className="max-w-2xl text-lg font-light text-foreground">
-            ID: {contrato?.idcontrato}, {contrato?.nombrecontrato}
-          </p>
-        </div>
-
-        <div className="px-3 w-full flex justify-end gap-2 ">
-          <Button className="bg-deepSea hover:bg-deepLightSea">
-            <FilePen />
-            <Link to={`/contratos/${contrato?.idcontrato}/convenio`}>
-              Convenio{" "}
-            </Link>
-          </Button>
-
-          <Button className="bg-deepSea hover:bg-deepLightSea">
-            <Receipt />
-            <Link to={"/facturas"}>Facturas</Link>
-          </Button>
-
-          <Button className="bg-deepSea hover:bg-deepLightSea">
-            <Shield />
-            Fianzas
-          </Button>
-        </div>
+        {isLoading ? (
+          <div className="flex items-center space-x-4 w-full p-6">
+            <div className="w-full h-20 bg-gray-200 animate-pulse rounded-md"></div>
+          </div>
+        ) : (
+          <>
+            <div className="ml-6 container flex flex-col items-start gap-1 py-4 md:py-6 lg:py-8 sm:-mb-2">
+              <h1 className=" text-gray-600 text-xl font-bold leading-tight tracking-tighter xl:text-4xl md:text-3xl lg:leading-[1.1]">
+                Detalles de fianza de cumplimiento
+              </h1>
+              <p className="max-w-2xl lg:text-lg font-light text-foreground">
+                ID de fianza: {fianzaCumplimiento?.idfianza ?? "No disponible"}{" "}
+                , ID de contrato: {idcontrato ?? "No disponible"}
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-4 text-gray-600">
         <div className="grid auto-rows-min gap-4">
           <div className="rounded-xl bg-muted/50 p-4 -mt-4">
             <div className="flex items-center gap-2 mb-4">
-              <ReceiptText className="w-6 h-6 " />
-              <h2 className="font-medium text-xl ">
-                Datos Generales de contrato
+              <CreditCard className="w-6 h-6" />
+              <h2 className="font-medium text-xl tracking-tighter">
+                Datos de fianza de cumplimiento
               </h2>
             </div>
 
@@ -102,162 +108,128 @@ export function VerDetallesContratos() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Nombre Contrato
+                  id
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.nombrecontrato || "No disponible"}
+                    value={fianzaCumplimiento?.idfianza || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Numero de Contrato
+                  Tipo
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.numerocontrato || "No disponible"}
+                    value={fianzaCumplimiento?.tipo || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Contratado
+                  Tipo de cambio
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.contratado?.razonsocial || "No disponible"}
+                    value={fianzaCumplimiento.tipodecambio || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Subcontrato
+                  Inicio
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.subcontrato || "No disponible"}
+                    value={fianzaCumplimiento?.inicio || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Inicio contrato
+                  Fin
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.iniciocontrato || "No disponible"}
+                    value={fianzaCumplimiento?.fin || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Fin contrato
+                  Poliza
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.fincontrato || "No disponible"}
+                    value={fianzaCumplimiento?.poliza || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Monto Contrato
+                  Aseguradora
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.montocontrato || "No disponible"}
+                    value={fianzaCumplimiento?.aseguradora || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="" className="mb-2">
-                  Anticipo Contrato
+                  Monto
                 </Label>
                 {/* Skeleton Loader */}
-                {!contrato ? (
+                {!fianzaCumplimiento ? (
                   <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
                 ) : (
                   <Input
                     disabled
                     type="text"
-                    value={contrato?.anticipocontrato || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Direccion
-                </Label>
-                {/* Skeleton Loader */}
-                {!contrato ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={contrato?.direccion || "No disponible"}
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Tipo Contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!contrato ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={
-                      contrato?.datosPersonal?.tipocontrato || "No disponible"
-                    }
+                    value={fianzaCumplimiento?.monto || "No disponible"}
                     className="bg-white disabled:opacity-100"
                   />
                 )}

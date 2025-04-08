@@ -23,6 +23,11 @@ export const Cliente = z.object({
   nombrecontrato: z.string().optional().nullable(),
   fechavencimientoconstancia: z.string().nullable().optional(),
 
+  //Datos de contacto administrativo
+  nombreAdministrativo: z.string().optional().nullable(),
+  correoAdministrativo: z.string().optional().nullable(),
+  telefonoAdministrativo: z.string().optional().nullable(),
+
   // Relaciones
   //contratosEmitidos: z.array(z.unknown()).optional(), // Si necesitas agregar detalles de contratos, los defines aquí
   //contratosRecibidos: z.array(z.unknown()).optional(),
