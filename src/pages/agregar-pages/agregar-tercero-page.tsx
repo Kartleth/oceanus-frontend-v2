@@ -31,7 +31,7 @@ export function PageAgregarTercero() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { idcontrato } = useParams();
-  const mutation = useMutation(async (data: unknown) => {
+  const mutation = useMutation(async (data: any) => {
     console.log(data);
     const res = await fetch("http://localhost:3001/subcontratados", {
       method: "post",
@@ -49,30 +49,16 @@ export function PageAgregarTercero() {
     navigate(`/contratos/${idcontrato}/personal_terceros`);
   });
   const [value, setValue] = useState<AccordionValue>("datos-tercero");
-  const datosTercerosForm = useForm<DatosTerceros>({
-    resolver: zodResolver(datosTercerosSchema),
-  });
+
   function onSubmit(values: DatosTerceros) {
     console.log(values);
+    setValue("datos-tercero");
     guardarSubcontratado();
   }
 
-  async function guardarSubcontratado() {
-    const validos = await formulariosSonValidos();
-    if (!validos) return;
-
-    const DatosTerceros = datosTercerosForm.getValues();
-    const subcontratos = {
-      nombre: DatosTerceros.nombre,
-      rfc: DatosTerceros.rfc,
-      ine: DatosTerceros.ine,
-      nss: DatosTerceros.nss,
-      curp: DatosTerceros.curp,
-      idContrato: Number(idcontrato),
-    };
-    console.log(subcontratos);
-    mutation.mutate(subcontratos);
-  }
+  const datosTercerosForm = useForm<DatosTerceros>({
+    resolver: zodResolver(datosTercerosSchema),
+  });
 
   async function formulariosSonValidos() {
     if (!(await datosTercerosForm.trigger())) {
@@ -83,9 +69,35 @@ export function PageAgregarTercero() {
     return true;
   }
 
+  async function guardarSubcontratado() {
+    const validos = await formulariosSonValidos();
+    if (!validos) return;
+    const DatosTerceros = datosTercerosForm.getValues();
+    const subcontratados = {
+      nombre: DatosTerceros.nombre,
+      rfc: DatosTerceros.rfc,
+      ine: DatosTerceros.ine,
+      nss: DatosTerceros.nss,
+      curp: DatosTerceros.curp,
+      idContrato: Number(idcontrato),
+    };
+    console.log(subcontratados);
+    mutation.mutate(subcontratados, {
+      onSuccess: (data) => {
+        // Qué hacer si la mutación fue exitosa
+        console.log("Subcontratado guardado correctamente", data);
+      },
+      onError: (error) => {
+        // Qué hacer si hubo un error
+        console.error("Error al guardar subcontratado", error);
+      },
+    });
+  }
+
   const erroresSubcontratado = Object.keys(
     datosTercerosForm.formState.errors
   ).length;
+
   const { idcontrato: idContrato } = useParams();
   return (
     <Layout>

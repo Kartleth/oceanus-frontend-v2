@@ -57,6 +57,7 @@ export function PageAgregarConvenio() {
   const datosConvenioForm = useForm<DatosConvenio>({
     resolver: zodResolver(datosConvenioSchema),
   });
+  
   async function formulariosSonValidos() {
     if (!(await datosConvenioForm.trigger())) {
       setValue("datos-convenio");
