@@ -100,6 +100,7 @@ export function PageEditarContratos() {
       numeroContrato: datosGenerales.numerocontrato,
       facturas: [],
       ordenes: [],
+      tipoContrato: datosGenerales.tipocontrato,
     };
     console.log(contrato);
     mutation.mutate(contrato);
@@ -119,6 +120,8 @@ export function PageEditarContratos() {
         numerocontrato: data.numerocontrato,
         iniciocontrato: new Date(data.iniciocontrato),
         fincontrato: data.fincontrato ? new Date(data.fincontrato) : new Date(),
+        contratado: data.contratado ?? "",
+        tipocontrato: data.tipocontrato,
         montocontrato: data.montocontrato,
         anticipocontrato: data.anticipocontrato,
         direccion: data.direccion,
@@ -151,7 +154,6 @@ export function PageEditarContratos() {
                 Editar contrato
               </BreadcrumbLink>
             </BreadcrumbItem>
-
           </BreadcrumbList>
         </Breadcrumb>
       </header>
