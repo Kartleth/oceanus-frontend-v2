@@ -189,14 +189,36 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Personal</DropdownMenuItem>
-            <DropdownMenuItem>
-              {" "}
-              <Link to={`/contratos/${contrato.idcontrato}/personal_terceros`}>
-                SubContratados
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <FileText />
+                <span>Subcontratos</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>
+                    {" "}
+                    <FilePenLine />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/personal_terceros`}
+                    >
+                      Gestionar Subcontratos
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FilePlus2 />
+                    <Link
+                      to={`/contratos/${contrato.idcontrato}/personal_terceros/agregar-tercero`}
+                    >
+                      Agregar Subcontrato
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuSub>
+              <DropdownMenuSubContent></DropdownMenuSubContent>
               <DropdownMenuSubTrigger>
                 <FileText />
                 <span>Convenios</span>
