@@ -3,6 +3,7 @@ import {
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
@@ -23,8 +24,13 @@ export default function Convenio() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/contratos/convenio">
-                Convenio
+              <BreadcrumbLink href="/contratos">Contratos</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/contratos/${idContrato}/convenio`}>
+                Convenio {idContrato}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -32,6 +38,14 @@ export default function Convenio() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
+        <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
+          <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+            Convenio
+          </h1>
+          <p className="max-w-2xl text-lg font-light text-foreground">
+            ID del contrato: {idContrato}
+          </p>
+        </div>
         <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
           <Link to={`/contratos/${idContrato}/convenio/agregar-convenio`}>
             <CirclePlus />

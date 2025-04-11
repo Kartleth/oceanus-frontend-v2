@@ -218,7 +218,6 @@ export const columns: ColumnDef<Contrato>[] = [
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuSub>
-              <DropdownMenuSubContent></DropdownMenuSubContent>
               <DropdownMenuSubTrigger>
                 <FileText />
                 <span>Convenios</span>
