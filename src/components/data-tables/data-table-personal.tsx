@@ -42,7 +42,6 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import ErrorComponent from "../error-component";
 
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const columns: ColumnDef<Persona>[] = [
   {
@@ -175,7 +174,9 @@ export const columns: ColumnDef<Persona>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/subir-archivos/${persona.id}`}>Gestionar archivos</Link>
+              <Link to={`/subir-archivos/${persona.id}`}>
+                Gestionar archivos
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to={`/reporte-de-empleado/${persona.id}`}>
@@ -271,37 +272,13 @@ export function DataTableDemo() {
     const datos = personas.map((persona) => ({
       ID: persona.id,
       Nombre: persona.nombre,
-      "Fecha de Nacimiento": persona.fechanacimiento,
       CURP: persona.curp,
       RFC: persona.rfc,
-      "Número Fijo": persona.numerofijo,
-      "Número Celular": persona.numerocelular,
-      Dirección: persona.direccion,
-      "Número de Licencia": persona.numerolicencia,
-      "Número de Pasaporte": persona.numeropasaporte,
       "Fecha de Ingreso": persona.fechaingreso,
       Estado: persona.estado,
       "Tipo de Contrato": persona.tipocontrato,
       "Inicio del Contrato": persona.iniciocontrato,
       "Fin del Contrato": persona.fincontrato,
-      Correo: persona.correo,
-      INE: persona.ine,
-      "Estado Civil": persona.estadocivil,
-      "Cédula Profesional": persona.datosAcademicos?.cedula || "N/A",
-      Carrera: persona.datosAcademicos?.carrera || "N/A",
-      "Experiencia Laboral": persona.datosAcademicos?.explaboral || "N/A",
-      Certificaciones: persona.datosAcademicos?.certificaciones || "N/A",
-      "Grado de Estudios": persona.datosAcademicos?.gradoestudios || "N/A",
-      Alergias: persona.datosMedicos?.alergias || "N/A",
-      "Enfermedades Crónicas": persona.datosMedicos?.enfercronicas || "N/A",
-      Lesiones: persona.datosMedicos?.lesiones || "N/A",
-      "Alergias a Medicamentos": persona.datosMedicos?.alergiasmed || "N/A",
-      "Número de Emergencia": persona.datosMedicos?.numemergencia || "N/A",
-      "Número de Seguro": persona.datosMedicos?.numseguro || "N/A",
-      "Tipo de Sangre": persona.datosMedicos?.tiposangre || "N/A",
-      "Contacto de Emergencia": persona.datosMedicos?.nombremergencia || "N/A",
-      Género: persona.datosMedicos?.genero || "N/A",
-      "Relación de Emergencia": persona.datosMedicos?.relaemergencia || "N/A",
     }));
 
     // Exportar a Excel
@@ -327,43 +304,11 @@ export function DataTableDemo() {
       { header: "Fecha de Nacimiento", key: "fechanacimiento" },
       { header: "CURP", key: "curp" },
       { header: "RFC", key: "rfc" },
-      { header: "Número Fijo", key: "numerofijo" },
-      { header: "Número Celular", key: "numerocelular" },
-      { header: "Dirección", key: "direccion" },
-      { header: "Número de Licencia", key: "numerolicencia" },
-      { header: "Número de Pasaporte", key: "numeropasaporte" },
-    ];
-
-    const camposBloque2 = [
       { header: "Fecha de Ingreso", key: "fechaingreso" },
       { header: "Estado", key: "estado" },
-      { header: "Tipo de Contrato", key: "tipocontrato" },
+      { header: "Tipo de contrato", key: "tipocontrato" },
       { header: "Inicio del Contrato", key: "iniciocontrato" },
       { header: "Fin del Contrato", key: "fincontrato" },
-      { header: "Correo", key: "correo" },
-      { header: "INE", key: "ine" },
-      { header: "Estado Civil", key: "estadocivil" },
-      { header: "Cédula Profesional", key: "datosAcademicos.cedula" },
-      { header: "Carrera", key: "datosAcademicos.carrera" },
-    ];
-
-    const camposBloque3 = [
-      { header: "Experiencia Laboral", key: "datosAcademicos.explaboral" },
-      { header: "Certificaciones", key: "datosAcademicos.certificaciones" },
-      { header: "Grado de Estudios", key: "datosAcademicos.gradoestudios" },
-      { header: "Alergias", key: "datosMedicos.alergias" },
-      {
-        header: "Enfermedades Crónicas",
-        key: "datosMedicos.enfercronicas",
-      },
-      { header: "Lesiones", key: "datosMedicos.lesiones" },
-      {
-        header: "Alergias a Medicamentos",
-        key: "datosMedicos.alergiasmed",
-      },
-      { header: "Número de Emergencia", key: "datosMedicos.numemergencia" },
-      { header: "Número de Seguro", key: "datosMedicos.numseguro" },
-      { header: "Tipo de Sangre", key: "datosMedicos.tiposangre" },
     ];
 
     // Función para mapear los datos a cada bloque
@@ -385,8 +330,6 @@ export function DataTableDemo() {
 
     // Generar los datos para cada bloque
     const datosBloque1 = generarDatosBloque(personas, camposBloque1);
-    const datosBloque2 = generarDatosBloque(personas, camposBloque2);
-    const datosBloque3 = generarDatosBloque(personas, camposBloque3);
 
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
@@ -403,17 +346,15 @@ export function DataTableDemo() {
 
     // Medidas de la página A4 en horizontal
     const pageWidth = doc.internal.pageSize.width; // 297 mm
-    const pageHeight = doc.internal.pageSize.height; // 210 mm
 
-    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
+    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado horizontalmente debajo del logo y encabezado)
     const text1 = "DATOS DE PERSONALES GENERALES";
-    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    const fontSize1 = doc.getFontSize();
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
-    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
-    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
+    const xPosition1 = (pageWidth - textWidth1) / 2;
+    const yPosition1 = 30; // Justo debajo del logo y del texto alineado a la derecha
 
-    // Dibujar el primer título centrado en la página
     doc.text(text1, xPosition1, yPosition1);
 
     // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
@@ -466,10 +407,6 @@ export function DataTableDemo() {
 
     generarTabla(datosBloque1, 30);
     doc.addPage();
-    generarTabla(datosBloque2, 30);
-    doc.addPage();
-    generarTabla(datosBloque3, 30);
-
     doc.save("Reporte_Personas.pdf");
   };
 
@@ -561,7 +498,8 @@ export function DataTableDemo() {
         const bloque: any = {};
         campos.forEach((campo) => {
           const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] = (persona as Record<string, unknown>)[campoLower] || "N/A";
+          bloque[campo] =
+            (persona as Record<string, unknown>)[campoLower] || "N/A";
         });
         return bloque;
       });
