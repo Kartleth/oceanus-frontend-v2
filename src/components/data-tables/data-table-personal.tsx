@@ -272,13 +272,37 @@ export function DataTableDemo() {
     const datos = personas.map((persona) => ({
       ID: persona.id,
       Nombre: persona.nombre,
+      "Fecha de Nacimiento": persona.fechanacimiento,
       CURP: persona.curp,
       RFC: persona.rfc,
+      "Número Fijo": persona.numerofijo,
+      "Número Celular": persona.numerocelular,
+      Dirección: persona.direccion,
+      "Número de Licencia": persona.numerolicencia,
+      "Número de Pasaporte": persona.numeropasaporte,
       "Fecha de Ingreso": persona.fechaingreso,
       Estado: persona.estado,
       "Tipo de Contrato": persona.tipocontrato,
       "Inicio del Contrato": persona.iniciocontrato,
       "Fin del Contrato": persona.fincontrato,
+      Correo: persona.correo,
+      INE: persona.ine,
+      "Estado Civil": persona.estadocivil,
+      "Cédula Profesional": persona.datosAcademicos?.cedula || "N/A",
+      Carrera: persona.datosAcademicos?.carrera || "N/A",
+      "Experiencia Laboral": persona.datosAcademicos?.explaboral || "N/A",
+      Certificaciones: persona.datosAcademicos?.certificaciones || "N/A",
+      "Grado de Estudios": persona.datosAcademicos?.gradoestudios || "N/A",
+      Alergias: persona.datosMedicos?.alergias || "N/A",
+      "Enfermedades Crónicas": persona.datosMedicos?.enfercronicas || "N/A",
+      Lesiones: persona.datosMedicos?.lesiones || "N/A",
+      "Alergias a Medicamentos": persona.datosMedicos?.alergiasmed || "N/A",
+      "Número de Emergencia": persona.datosMedicos?.numemergencia || "N/A",
+      "Número de Seguro": persona.datosMedicos?.numseguro || "N/A",
+      "Tipo de Sangre": persona.datosMedicos?.tiposangre || "N/A",
+      "Contacto de Emergencia": persona.datosMedicos?.nombremergencia || "N/A",
+      Género: persona.datosMedicos?.genero || "N/A",
+      "Relación de Emergencia": persona.datosMedicos?.relaemergencia || "N/A",
     }));
 
     // Exportar a Excel
@@ -417,6 +441,8 @@ export function DataTableDemo() {
   };
 
   // Imprimir datos
+  // Ruta de la imagen
+  const logoPath = "src/assets/oceanus-logo-3.png";
   const handlePrint = (personas: Persona[]) => {
     if (!personas || personas.length === 0) {
       alert("No hay datos disponibles para imprimir.");
@@ -429,100 +455,112 @@ export function DataTableDemo() {
       format: "a4",
     });
 
+    const leftMargin = 10;
+    const rightMargin = 10;
+    const pageWidth = doc.internal.pageSize.width;
+
+    // Logo más pequeño
+    const logoWidth = 12;
+    const logoHeight = 12;
+    const logoY = 7;
+    doc.addImage(logoPath, "PNG", leftMargin, logoY, logoWidth, logoHeight);
+
+    // Título derecho
+    const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
+    const fontSize = 11;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text("Reporte Detallado de Personas", 14, 20);
+    doc.setFontSize(fontSize);
+
+    const textWidth2 =
+      (doc.getStringUnitWidth(text2) * fontSize) / doc.internal.scaleFactor;
+    const xPosition2 = pageWidth - rightMargin - textWidth2;
+    const yPosition2 = logoY + logoHeight / 2 + 1; // Alineado verticalmente al centro del logo
+    doc.text(text2, xPosition2, yPosition2);
+
+    // Línea azul decorativa
+    const lineY = 25;
+    doc.setDrawColor(41, 128, 185);
+    doc.setLineWidth(0.5);
+    doc.line(leftMargin, lineY, pageWidth - rightMargin, lineY);
+
+    // Título principal
+    const text1 = "DATOS DE PERSONALES GENERALES";
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2;
+    const yPosition1 = lineY + 8;
+    doc.text(text1, xPosition1, yPosition1);
+
+    // Ajusta la posición del texto
 
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
-        head: [Object.keys(datos[0])],
-        body: datos.map((persona) => Object.values(persona)),
-        startY,
+        head: [Object.keys(datos[0])], // Cabecera de la tabla
+        body: datos.map((persona) => Object.values(persona)), // Filas de la tabla
+        startY, // Comienza en la posición Y proporcionada
         theme: "grid",
         headStyles: {
-          fillColor: [22, 160, 133],
-          textColor: [255, 255, 255],
-          fontSize: 7,
+          fillColor: [41, 128, 185], // Azul intenso para la cabecera
+          textColor: [255, 255, 255], // Texto blanco
+          fontSize: 7, // Tamaño de la fuente reducido
+          fontStyle: "bold",
         },
         bodyStyles: {
-          fontSize: 6,
-          cellPadding: 1,
+          fontSize: 6, // Tamaño de la fuente reducido
+          cellPadding: 2, // Espaciado reducido dentro de las celdas
+          textColor: [51, 51, 51], // Color gris oscuro para el texto
+        },
+        alternateRowStyles: {
+          fillColor: [241, 245, 249], // Azul claro para filas alternas
         },
         styles: {
           overflow: "linebreak",
-          fontSize: 6,
-          cellWidth: "auto",
+          cellWidth: "auto", // Ajuste automático del ancho de las celdas
+          lineColor: [200, 200, 200], // Bordes grises claros
+          lineWidth: 0.1, // Grosor de los bordes
         },
         columnStyles: {
-          0: { cellWidth: 12 },
-          1: { cellWidth: "auto" },
+          0: { cellWidth: 15 }, // Ancho específico para la primera columna
+          1: { cellWidth: "auto" }, // Ancho automático para otras columnas
         },
         margin: { top: 25 },
-        pageBreak: "auto",
+        pageBreak: "auto", // El salto de página se maneja automáticamente
       });
     };
 
     const camposBloque1 = [
-      "ID",
-      "Nombre",
-      "Fecha de Nacimiento",
-      "CURP",
-      "RFC",
-      "Número Fijo",
-      "Número Celular",
-      "Dirección",
-      "Número de Licencia",
-      "Número de Pasaporte",
-    ];
-    const camposBloque2 = [
-      "Fecha de Ingreso",
-      "Estado",
-      "Tipo de Contrato",
-      "Inicio del Contrato",
-      "Fin del Contrato",
-      "Correo",
-      "INE",
-      "Estado Civil",
-      "Cédula Profesional",
-      "Carrera",
-    ];
-    const camposBloque3 = [
-      "Experiencia Laboral",
-      "Certificaciones",
-      "Grado de Estudios",
-      "Alergias",
-      "Enfermedades Crónicas",
-      "Lesiones",
-      "Alergias a Medicamentos",
-      "Número de Emergencia",
-      "Número de Seguro",
-      "Tipo de Sangre",
+      { header: "ID", key: "id" },
+      { header: "Nombre", key: "nombre" },
+      { header: "Fecha de Nacimiento", key: "fechanacimiento" },
+      { header: "CURP", key: "curp" },
+      { header: "RFC", key: "rfc" },
+      { header: "Fecha de Ingreso", key: "fechaingreso" },
+      { header: "Estado", key: "estado" },
+      { header: "Tipo de contrato", key: "tipocontrato" },
+      { header: "Inicio del Contrato", key: "iniciocontrato" },
+      { header: "Fin del Contrato", key: "fincontrato" },
     ];
 
-    const generarDatosBloque = (personas: Persona[], campos: string[]) => {
+    // Función para mapear los datos a cada bloque
+    const generarDatosBloque = (
+      personas: Persona[],
+      campos: { header: string; key: string }[]
+    ) => {
       return personas.map((persona) => {
-        const bloque: any = {};
-        campos.forEach((campo) => {
-          const campoLower = campo.toLowerCase().replace(/\s/g, "");
-          bloque[campo] =
-            (persona as Record<string, unknown>)[campoLower] || "N/A";
+        const bloque: Record<string, string> = {};
+        campos.forEach(({ header, key }) => {
+          const valor =
+            key.split(".").reduce((acc, curr) => acc?.[curr], persona as any) ||
+            "N/A";
+          bloque[header] = valor;
         });
         return bloque;
       });
     };
 
     const datosBloque1 = generarDatosBloque(personas, camposBloque1);
-    const datosBloque2 = generarDatosBloque(personas, camposBloque2);
-    const datosBloque3 = generarDatosBloque(personas, camposBloque3);
 
-    generarTabla(datosBloque1, 30);
-
-    doc.addPage();
-    generarTabla(datosBloque2, 30);
-
-    doc.addPage();
-    generarTabla(datosBloque3, 30);
-
+    generarTabla(datosBloque1, 40);
     // Convertir el PDF a un blob
     const pdfBlob = doc.output("blob");
 
