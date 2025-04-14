@@ -338,35 +338,41 @@ export function DataTableDemo() {
       format: "a4",
     });
 
-    // Agregar el logo al lado izquierdo
-    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+    const leftMargin = 10;
+    const rightMargin = 10;
+    const pageWidth = doc.internal.pageSize.width;
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
+    // Logo más pequeño
+    const logoWidth = 12;
+    const logoHeight = 12;
+    const logoY = 7;
+    doc.addImage(logoPath, "PNG", leftMargin, logoY, logoWidth, logoHeight);
 
-    // Medidas de la página A4 en horizontal
-    const pageWidth = doc.internal.pageSize.width; // 297 mm
-
-    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado horizontalmente debajo del logo y encabezado)
-    const text1 = "DATOS DE PERSONALES GENERALES";
-    const fontSize1 = doc.getFontSize();
-    const textWidth1 =
-      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
-    const xPosition1 = (pageWidth - textWidth1) / 2;
-    const yPosition1 = 30; // Justo debajo del logo y del texto alineado a la derecha
-
-    doc.text(text1, xPosition1, yPosition1);
-
-    // Segundo título: "OCEANUS SUPERVISION Y PROYECTOS" (alineado a la derecha en el encabezado)
+    // Título derecho
     const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
-    const fontSize2 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
-    const textWidth2 =
-      (doc.getStringUnitWidth(text2) * fontSize2) / doc.internal.scaleFactor;
-    const xPosition2 = pageWidth - textWidth2 - 10; // Alineación a la derecha con margen
-    const yPosition2 = 15; // Ubicación en el encabezado, un poco hacia abajo
+    const fontSize = 11;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(fontSize);
 
-    // Dibujar el segundo título alineado a la derecha en el encabezado
+    const textWidth2 =
+      (doc.getStringUnitWidth(text2) * fontSize) / doc.internal.scaleFactor;
+    const xPosition2 = pageWidth - rightMargin - textWidth2;
+    const yPosition2 = logoY + logoHeight / 2 + 1; // Alineado verticalmente al centro del logo
     doc.text(text2, xPosition2, yPosition2);
+
+    // Línea azul decorativa
+    const lineY = 25;
+    doc.setDrawColor(41, 128, 185);
+    doc.setLineWidth(0.5);
+    doc.line(leftMargin, lineY, pageWidth - rightMargin, lineY);
+
+    // Título principal
+    const text1 = "DATOS DE PERSONALES GENERALES";
+    const textWidth1 =
+      (doc.getStringUnitWidth(text1) * fontSize) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2;
+    const yPosition1 = lineY + 8;
+    doc.text(text1, xPosition1, yPosition1);
 
     // Ajusta la posición del texto
 
@@ -405,7 +411,7 @@ export function DataTableDemo() {
       });
     };
 
-    generarTabla(datosBloque1, 30);
+    generarTabla(datosBloque1, 40);
     doc.addPage();
     doc.save("Reporte_Personas.pdf");
   };
