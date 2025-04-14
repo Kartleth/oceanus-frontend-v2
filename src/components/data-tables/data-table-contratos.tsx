@@ -53,6 +53,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { Link } from "react-router-dom";
 import { Contrato } from "@/modelos/datosContratos";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import * as XLSX from "xlsx";
 
 export const columns: ColumnDef<Contrato>[] = [
   {
@@ -355,6 +356,59 @@ export function DataTableContratos() {
     },
   });
 
+  /*LÓGICA PARA EXPORTAR DATOS PARA EXCEL Y PDF*/
+  const exportToExcel = (contratos: Contrato[]) => {
+    if (!contratos || contratos.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+
+    const datos = contratos.map((contrato) => ({
+      ID: contrato.idcontrato,
+      Nombre: contrato.nombrecontrato,
+      "Inicio de contrato": contrato.iniciocontrato,
+      "Fin de contrato": contrato.fincontrato,
+      Numero_de_contrato: contrato.numerocontrato,
+      montocontrato: contrato.montocontrato,
+      facturas: contrato.facturas,
+      idcontratofuente: contrato.idcontratofuente,
+      Direccion: contrato.direccion,
+      anticipocontrato: contrato.anticipocontrato,
+      convenios: contrato.convenios,
+      personalcontrato: contrato.personalcontrato,
+      fianzacumplimiento: contrato.fianzaCumplimiento,
+      fianzaanticipo: contrato.fianzaAnticipo,
+      fianzaoculto: contrato.fianzaOculto,
+      datospersonal: contrato.datosPersonal,
+    }));
+
+    //Exportar a Excel
+    const worksheet = XLSX.utils.json_to_sheet(datos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Personas");
+    XLSX.writeFile(workbook, "Contratos.xlsx");
+  };
+  //Exportar a pdf
+  const exportToPDF = (contratos: Contrato[]) => {
+    if (!contratos || contratos.length === 0) {
+      alert("No hay datos disponibles para exportar.");
+      return;
+    }
+    const logoPath = "src/assets/oceanus-logo-3.png";
+
+    const camposBloque1 = [
+      { header: "ID", key: "idcontrato" },
+      { header: "Nombre", key: "nombrecontrato" },
+      { header: "Inicio de contrato", key: "iniciocontrato" },
+      { header: "Fin de contrato", key: "fincontrato" },
+      { header: "montocontrato", key: "montocontrato" },
+      { header: "Fecha de Ingreso", key: "fechaingreso" },
+      { header: "Estado", key: "estado" },
+      { header: "Tipo de contrato", key: "tipocontrato" },
+      { header: "Inicio del Contrato", key: "iniciocontrato" },
+      { header: "Fin del Contrato", key: "fincontrato" },
+    ];
+  };
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -374,7 +428,11 @@ export function DataTableContratos() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Acciones de tabla</DropdownMenuLabel>
-            <DropdownMenuItem>Exportar a Excel</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => exportToExcel(contratosQuery.data || [])}
+            >
+              Exportar a Excel
+            </DropdownMenuItem>
             <DropdownMenuItem>Exportar a PDF</DropdownMenuItem>
             <DropdownMenuItem>Imprimir</DropdownMenuItem>
           </DropdownMenuContent>
