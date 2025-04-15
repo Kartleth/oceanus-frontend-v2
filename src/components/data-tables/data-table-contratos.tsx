@@ -291,7 +291,6 @@ export const columns: ColumnDef<Contrato>[] = [
                 Editar
               </Link>
             </DropdownMenuItem>
-
             <DropdownMenuItem
               onClick={() => {
                 deteleContrato.mutate();
