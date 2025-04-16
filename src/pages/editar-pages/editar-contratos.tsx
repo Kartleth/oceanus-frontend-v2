@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -35,7 +34,7 @@ export function PageEditarContratos() {
   const params = useParams();
   const id = params.id;
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["contrato", id],
     queryFn: async () => {
       const res = await fetch(`http://localhost:3001/contrato/${id}`, {
@@ -86,24 +85,8 @@ export function PageEditarContratos() {
     if (!validos) return;
 
     const datosGenerales = datosGeneralesForm.getValues();
-    const contrato = {
-      nombreContrato: datosGenerales.nombrecontrato,
-      idContratado: datosGenerales.contratado,
-      personal: [],
-      tipoSubcontrato: datosGenerales.subcontrato,
-      iniciocontrato: datosGenerales.iniciocontrato,
-      fincontrato: datosGenerales.fincontrato,
-      convenio: [],
-      montoContrato: datosGenerales.montocontrato,
-      anticipoContrato: datosGenerales.anticipocontrato,
-      direccion: datosGenerales.direccion,
-      numeroContrato: datosGenerales.numerocontrato,
-      facturas: [],
-      ordenes: [],
-      tipoContrato: datosGenerales.tipocontrato,
-    };
-    console.log(contrato);
-    mutation.mutate(contrato);
+    console.log(datosGenerales);
+    mutation.mutate(datosGenerales);
   }
 
   const [value, setValue] = useState<AccordionValue | undefined>();
@@ -117,7 +100,7 @@ export function PageEditarContratos() {
       datosGeneralesForm.reset({
         nombrecontrato: data.nombrecontrato,
         subcontrato: data.subcontrato,
-        numerocontrato: data.numerocontrato,
+        numerocontrato: data.numerocontrato ?? "",
         iniciocontrato: new Date(data.iniciocontrato),
         fincontrato: data.fincontrato ? new Date(data.fincontrato) : new Date(),
         contratado: data.contratado ?? "",
@@ -127,14 +110,10 @@ export function PageEditarContratos() {
         direccion: data.direccion,
       });
 
-      setValue("datos-contrato");
+      setValue("datos-generales");
     }
     console.log(data);
-  }, [data]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  }, [data, datosGeneralesForm]);
 
   return (
     <Layout>
@@ -171,7 +150,7 @@ export function PageEditarContratos() {
             <AccordionContent className="p-4">
               <DatosGeneralesContratacionForm
                 form={datosGeneralesForm}
-                onSubmitCon={() => setValue("datos-generales")}
+                onSubmitCon={() => guardarContratos()}
               />
             </AccordionContent>
           </AccordionItem>

@@ -53,27 +53,6 @@ export const DatosContratacionForm: FC<DatosContratacionProps> = ({
       >
         <FormField
           control={form.control}
-          name="tipocontrato"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo de contrato</FormLabel>
-              <FormControl>
-                <FormSelect
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  placeholder="Selecciona tipo de contrato"
-                >
-                  <SelectItem value="indefinido">Indefinido</SelectItem>
-                  <SelectItem value="temporal">Temporal</SelectItem>
-                  <SelectItem value="porObra">Por Obra</SelectItem>
-                </FormSelect>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="estado"
           render={({ field }) => (
             <FormItem>

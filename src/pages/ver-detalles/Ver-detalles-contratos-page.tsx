@@ -244,24 +244,6 @@ export function VerDetallesContratos() {
                   />
                 )}
               </div>
-              <div className="flex flex-col">
-                <Label htmlFor="" className="mb-2">
-                  Tipo Contrato
-                </Label>
-                {/* Skeleton Loader */}
-                {!contrato ? (
-                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-                ) : (
-                  <Input
-                    disabled
-                    type="text"
-                    value={
-                      contrato?.datosPersonal?.tipocontrato || "No disponible"
-                    }
-                    className="bg-white disabled:opacity-100"
-                  />
-                )}
-              </div>
             </div>
           </div>
         </div>
