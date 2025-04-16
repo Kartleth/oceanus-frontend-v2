@@ -54,22 +54,34 @@ export function PageEditarContratos() {
     },
   });
 
-  const mutation = useMutation(async (data: unknown) => {
-    console.log(data);
-    const res = await fetch(`http://localhost:3001/contrato/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const resData = await res.json();
-    if (!res.ok) {
-      console.error(resData);
-    }
-    console.log(resData);
-    queryClient.invalidateQueries(["contrato"]);
-    navigate("/contratos");
+  const mutation = useMutation({
+    mutationFn: async (data: unknown) => {
+      console.log("Datos enviados:", data);
+      const res = await fetch(`http://localhost:3001/contrato/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        console.error("Error en la respuesta:", resData);
+        throw new Error(resData.message || "Error al actualizar contrato");
+      }
+
+      return resData;
+    },
+    onSuccess: () => {
+      console.log("Contrato actualizado con éxito");
+      queryClient.invalidateQueries(["contrato"]);
+      navigate("/contratos");
+    },
+    onError: (error) => {
+      console.error("Error al guardar el contrato:", error);
+      alert("Hubo un error al guardar el contrato");
+    },
   });
 
   async function formulariosSonValidos() {
@@ -85,8 +97,14 @@ export function PageEditarContratos() {
     if (!validos) return;
 
     const datosGenerales = datosGeneralesForm.getValues();
-    console.log(datosGenerales);
-    mutation.mutate(datosGenerales);
+    console.log("Datos antes de enviar:", datosGenerales);
+    const payload = {
+      ...datosGenerales,
+      idContratado: parseInt(datosGenerales.contratado, 10),
+    };
+
+    console.log("Datos enviados:", payload);
+    mutation.mutate(payload);
   }
 
   const [value, setValue] = useState<AccordionValue | undefined>();
@@ -103,15 +121,16 @@ export function PageEditarContratos() {
         numerocontrato: data.numerocontrato ?? "",
         iniciocontrato: new Date(data.iniciocontrato),
         fincontrato: data.fincontrato ? new Date(data.fincontrato) : new Date(),
-        contratado: data.contratado ?? "",
+        contratado: data.contratado?.idCliente?.toString() ?? "",
         montocontrato: data.montocontrato,
         anticipocontrato: data.anticipocontrato,
         direccion: data.direccion,
+        personalcontrato: data.personalcontrato || "",
       });
 
       setValue("datos-generales");
     }
-    console.log(data);
+    console.log("Este es data: ", data);
   }, [data, datosGeneralesForm]);
 
   return (

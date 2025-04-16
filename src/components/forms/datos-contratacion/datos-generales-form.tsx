@@ -25,7 +25,7 @@ export const datosGeneralesSchema = z.object({
     .optional(),
   numerocontrato: z.string({ required_error: "" }),
   // contratante: z.string(),
-  contratado: z.string(),
+  contratado: z.string().nonempty("Selecciona un cliente"),
   // facturas: z.string(),
   iniciocontrato: z
     .date({
@@ -57,8 +57,8 @@ interface DatosGeneralesContratacionProps {
 export const DatosGeneralesContratacionForm: FC<
   DatosGeneralesContratacionProps
 > = ({ onSubmitCon, form }) => {
-  const tipoContrato = form.watch("tipocontrato");
-  const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
+  //const tipoContrato = form.watch("tipocontrato");
+  //const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
   return (
     <Form {...form}>
       <form
@@ -135,7 +135,7 @@ export const DatosGeneralesContratacionForm: FC<
         <FormField
           control={form.control}
           name="fincontrato"
-          disabled={disableContractEnd}
+          //disabled={disableContractEnd}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fecha final del Contrato</FormLabel>
@@ -216,7 +216,10 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+        <Button
+          type="submit"
+          className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea"
+        >
           Guardar
         </Button>
       </form>
