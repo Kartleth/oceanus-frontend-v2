@@ -11,16 +11,27 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
+  CreditCard,
+  EyeOff,
   FilePen,
   Receipt,
   ReceiptText,
   Shield,
+  ShieldCheck,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import { Contrato } from "@/modelos/datosContratos";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function VerDetallesContratos() {
   const { idcontrato } = useParams();
@@ -69,6 +80,41 @@ export function VerDetallesContratos() {
         </div>
 
         <div className="px-3 w-full flex justify-end gap-2 ">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-deepSea hover:bg-deepLightSea">
+                <Shield />
+                Fianzas
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Fianzas de contrato {contrato?.idcontrato}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <CreditCard />
+                <Link to={`/contratos/${contrato?.idcontrato}/fianza-anticipo`}>
+                  Fianza de Anticipo
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <ShieldCheck />
+                <Link
+                  to={`/contratos/${contrato?.idcontrato}/fianza-cumplimiento`}
+                >
+                  Fianza de Cumplimiento
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <EyeOff />
+                <Link
+                  to={`/contratos/${contrato?.idcontrato}/fianza-vicios-ocultos`}
+                >
+                  Fianza de Vicios ocultos
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <FilePen />
             <Link to={`/contratos/${contrato?.idcontrato}/convenio`}>
@@ -79,11 +125,6 @@ export function VerDetallesContratos() {
           <Button className="bg-deepSea hover:bg-deepLightSea">
             <Receipt />
             <Link to={"/facturas"}>Facturas</Link>
-          </Button>
-
-          <Button className="bg-deepSea hover:bg-deepLightSea">
-            <Shield />
-            Fianzas
           </Button>
         </div>
       </div>
