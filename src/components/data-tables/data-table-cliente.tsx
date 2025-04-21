@@ -162,9 +162,7 @@ export const columns: ColumnDef<Cliente>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link to={`/personal-cliente`}>
-                Ver personal de clientes
-              </Link>
+              <Link to={`/personal-cliente`}>Ver personal de clientes</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
@@ -249,7 +247,7 @@ export function DataTableClientes() {
       ID: cliente.idCliente ?? "N/A",
       "Razón social": cliente.razonsocial ?? "N/A",
       Correo: cliente.correo ?? "N/A",
-      "Teléfono": cliente.telefono ?? "N/A",
+      Teléfono: cliente.telefono ?? "N/A",
       Logo: cliente.logo ?? "N/A",
       "Representante legal": cliente.representantelegal ?? "N/A",
       "Correo rep": cliente.correoRepresentantelegal ?? "N/A",
@@ -262,7 +260,7 @@ export function DataTableClientes() {
       Banco: cliente.numerocuenta ?? "N/A",
       "Nombre de contrato": cliente.nombrecontrato ?? "N/A",
       "Fecha de vencimiento de constancia":
-      cliente.fechavencimientoconstancia ?? "N/A",
+        cliente.fechavencimientoconstancia ?? "N/A",
     }));
 
     // Exportar a Excel
@@ -291,16 +289,6 @@ export function DataTableClientes() {
       { header: "Telefono de rep", key: "telefonoRepresentantelegal" },
     ];
 
-    const camposBloque2 = [
-      { header: "RFC", key: "rfc" },
-      { header: "Correo de facturaciónl", key: "correofacturacion" },
-      { header: "Constancia fiscal", key: "constanciafiscal" },
-      { header: "Tipo de régimen", key: "tiporegimen" },
-      { header: "Número de cuenta", key: "numerocuenta" },
-      { header: "Banco", key: "banco" },
-      { header: "Fecha de vencimiento de constancia", key: "fechavencimientoconstancia" },
-    ];
-
     // Función para mapear los datos a cada bloque
     const generarDatosBloque = (
       clientes: Cliente[],
@@ -310,9 +298,7 @@ export function DataTableClientes() {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
-            key
-              .split(".")
-              .reduce((acc, curr) => acc?.[curr], cliente as any) ||
+            key.split(".").reduce((acc, curr) => acc?.[curr], cliente as any) ||
             "N/A";
           bloque[header] = valor;
         });
@@ -322,7 +308,6 @@ export function DataTableClientes() {
 
     // Generar los datos para cada bloque
     const datosBloque1 = generarDatosBloque(clientes, camposBloque1);
-    const datosBloque2 = generarDatosBloque(clientes, camposBloque2);
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
       orientation: "landscape",
@@ -330,26 +315,43 @@ export function DataTableClientes() {
       format: "a4",
     });
 
-    // Agregar el logo al lado izquierdo
-    doc.addImage(logoPath, "PNG", 5, 5, 20, 20); // Ajusta la posición del logo según sea necesario
+    const leftMargin = 10;
+    const rightMargin = 10;
+    const pageWidth = doc.internal.pageSize.width;
 
+    // Logo más pequeño
+    const logoWidth = 12;
+    const logoHeight = 12;
+    const logoY = 7;
+    doc.addImage(logoPath, "PNG", leftMargin, logoY, logoWidth, logoHeight);
+
+    // Título derecho
+    const text2 = "OCEANUS SUPERVISION Y PROYECTOS";
+    const fontSize = 11;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
+    doc.setFontSize(fontSize);
 
-    // Medidas de la página A4 en horizontal
-    const pageWidth = doc.internal.pageSize.width; // 297 mm
-    const pageHeight = doc.internal.pageSize.height; // 210 mm
+    const textWidth2 =
+      (doc.getStringUnitWidth(text2) * fontSize) / doc.internal.scaleFactor;
+    const xPosition2 = pageWidth - rightMargin - textWidth2;
+    const yPosition2 = logoY + logoHeight / 2 + 1; // Alineado verticalmente al centro del logo
+    doc.text(text2, xPosition2, yPosition2);
 
-    // Primer título: "DATOS DE PERSONALES GENERALES" (centrado en el centro de la página)
-    const text1 = "DATOS DEL CLIENTE";
-    const fontSize1 = doc.getFontSize(); // Obtener el tamaño de la fuente en uso
+    // Línea azul decorativa
+    const lineY = 25;
+    doc.setDrawColor(41, 128, 185);
+    doc.setLineWidth(0.5);
+    doc.line(leftMargin, lineY, pageWidth - rightMargin, lineY);
+
+    // Título principal
+    const text1 = "DATOS DE CLIENTES";
     const textWidth1 =
-      (doc.getStringUnitWidth(text1) * fontSize1) / doc.internal.scaleFactor;
-    const xPosition1 = (pageWidth - textWidth1) / 2; // Centrado horizontalmente
-    const yPosition1 = pageHeight / 2; // Posición vertical centrada (mitad de la página)
-
-    // Dibujar el primer título centrado en la página
+      (doc.getStringUnitWidth(text1) * fontSize) / doc.internal.scaleFactor;
+    const xPosition1 = (pageWidth - textWidth1) / 2;
+    const yPosition1 = lineY + 8;
     doc.text(text1, xPosition1, yPosition1);
+
+    // Ajusta la posición del texto
 
     const generarTabla = (datos: any[], startY: number) => {
       autoTable(doc, {
@@ -386,9 +388,7 @@ export function DataTableClientes() {
       });
     };
 
-    generarTabla(datosBloque1, 30);
-    doc.addPage();
-    generarTabla(datosBloque2, 30);
+    generarTabla(datosBloque1, 40);
 
     doc.save("Clientes_oceanus.pdf");
   };
@@ -419,7 +419,10 @@ export function DataTableClientes() {
       { header: "Tipo de régimen", key: "tiporegimen" },
       { header: "Número de cuenta", key: "numerocuenta" },
       { header: "Banco", key: "banco" },
-      { header: "Fecha de vencimiento de constancia", key: "fechavencimientoconstancia" },
+      {
+        header: "Fecha de vencimiento de constancia",
+        key: "fechavencimientoconstancia",
+      },
     ];
 
     // Función para mapear los datos a cada bloque
@@ -431,9 +434,7 @@ export function DataTableClientes() {
         const bloque: Record<string, string> = {};
         campos.forEach(({ header, key }) => {
           const valor =
-            key
-              .split(".")
-              .reduce((acc, curr) => acc?.[curr], cliente as any) ||
+            key.split(".").reduce((acc, curr) => acc?.[curr], cliente as any) ||
             "N/A";
           bloque[header] = valor;
         });

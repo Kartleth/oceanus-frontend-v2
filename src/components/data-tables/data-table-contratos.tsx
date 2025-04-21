@@ -465,7 +465,7 @@ export function DataTableContratos() {
     doc.line(leftMargin, lineY, pageWidth - rightMargin, lineY);
 
     // Título principal
-    const text1 = "DATOS DE PERSONALES GENERALES";
+    const text1 = "DATOS DE CONTRATOS";
     const textWidth1 =
       (doc.getStringUnitWidth(text1) * fontSize) / doc.internal.scaleFactor;
     const xPosition1 = (pageWidth - textWidth1) / 2;
