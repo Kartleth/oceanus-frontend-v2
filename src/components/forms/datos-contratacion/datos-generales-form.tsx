@@ -44,7 +44,7 @@ export const datosGeneralesSchema = z.object({
   anticipocontrato: z.string(),
   direccion: z.string(),
   personalcontrato: z.string(),
-  tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
+  //tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
 });
 
 export type DatosGeneralesContratacion = z.infer<typeof datosGeneralesSchema>;

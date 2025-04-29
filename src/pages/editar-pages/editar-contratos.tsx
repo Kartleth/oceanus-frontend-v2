@@ -98,9 +98,10 @@ export function PageEditarContratos() {
 
     const datosGenerales = datosGeneralesForm.getValues();
     console.log("Datos antes de enviar:", datosGenerales);
+    const { contratado, ...rest } = datosGenerales;
     const payload = {
-      ...datosGenerales,
-      idContratado: parseInt(datosGenerales.contratado, 10),
+      ...rest,
+      contratado: parseInt(contratado, 10),
     };
 
     console.log("Datos enviados:", payload);
@@ -125,7 +126,7 @@ export function PageEditarContratos() {
         montocontrato: data.montocontrato,
         anticipocontrato: data.anticipocontrato,
         direccion: data.direccion,
-        personalcontrato: data.personalcontrato || "",
+        personalcontrato: typeof data.personalcontrato === "string" ? data.personalcontrato : "",
       });
 
       setValue("datos-generales");
