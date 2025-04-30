@@ -173,7 +173,7 @@ export function PageEditarContratos() {
           value={value}
           onValueChange={setValue}
         >
-          <AccordionItem value="datos-personales">
+          <AccordionItem value="datos-generales">
             <AccordionTrigger className="bg-gray-100 text-gray-800 font-bold p-4 rounded-t-md border-b border-gray-300 transition-all hover:bg-gray-200">
               Datos Generales
             </AccordionTrigger>
