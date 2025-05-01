@@ -4,6 +4,9 @@ import { Fianza } from "./datosFianza";
 import { Contratado } from "./datosContratado";
 import { Persona } from "./personal";
 
+export const TipoContratoEnum = z.enum(["indefinido", "temporal", "porObra"]);
+export type TipoContratoEnum = z.infer<typeof TipoContratoEnum>;
+
 export const Contrato = z.object({
   idcontrato: z.number(),
   nombrecontrato: z.string(),

@@ -75,15 +75,6 @@ export function PageAgregarTrabajador() {
   function onSubmitCon(values: DatosContratacion) {
     console.log(values);
 
-    if (values.tipocontrato !== "indefinido" && !values.fincontrato) {
-      datosContratacionForm.setError("fincontrato", {
-        message: "La fecha de fin de contrato es obligatoria.",
-        type: "required",
-      });
-
-      return;
-    }
-
     guardarTrabajador();
   }
   const datosAcademicosForm = useForm<DatosAcademicos>({

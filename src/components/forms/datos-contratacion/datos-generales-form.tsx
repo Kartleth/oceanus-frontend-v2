@@ -25,7 +25,7 @@ export const datosGeneralesSchema = z.object({
     .optional(),
   numerocontrato: z.string({ required_error: "" }),
   // contratante: z.string(),
-  contratado: z.string(),
+  contratado: z.string().nonempty("Selecciona un cliente"),
   // facturas: z.string(),
   iniciocontrato: z
     .date({
@@ -44,7 +44,7 @@ export const datosGeneralesSchema = z.object({
   anticipocontrato: z.string(),
   direccion: z.string(),
   personalcontrato: z.string(),
-  tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
+  //tipocontrato: z.string({ required_error: "Tipo de contrato obligatorio." }),
 });
 
 export type DatosGeneralesContratacion = z.infer<typeof datosGeneralesSchema>;
@@ -57,8 +57,8 @@ interface DatosGeneralesContratacionProps {
 export const DatosGeneralesContratacionForm: FC<
   DatosGeneralesContratacionProps
 > = ({ onSubmitCon, form }) => {
-  const tipoContrato = form.watch("tipocontrato");
-  const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
+  //const tipoContrato = form.watch("tipocontrato");
+  //const disableContractEnd = tipoContrato?.toLowerCase() === "indefinido";
   return (
     <Form {...form}>
       <form
@@ -135,7 +135,7 @@ export const DatosGeneralesContratacionForm: FC<
         <FormField
           control={form.control}
           name="fincontrato"
-          disabled={disableContractEnd}
+          //disabled={disableContractEnd}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Fecha final del Contrato</FormLabel>
@@ -172,27 +172,6 @@ export const DatosGeneralesContratacionForm: FC<
               <FormLabel>Monto del Contrato</FormLabel>
               <FormControl>
                 <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="tipocontrato"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo de contrato</FormLabel>
-              <FormControl>
-                <FormSelect
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  placeholder="Selecciona tipo de contrato"
-                >
-                  <SelectItem value="indefinido">Indefinido</SelectItem>
-                  <SelectItem value="temporal">Temporal</SelectItem>
-                  <SelectItem value="porObra">Por Obra</SelectItem>
-                </FormSelect>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -237,7 +216,10 @@ export const DatosGeneralesContratacionForm: FC<
             </FormItem>
           )}
         />
-        <Button className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea">
+        <Button
+          type="submit"
+          className="col-span-3 w-fit justify-self-end bg-deepSea hover:bg-deepLightSea"
+        >
           Guardar
         </Button>
       </form>
