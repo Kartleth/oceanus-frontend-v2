@@ -19,6 +19,7 @@ export const Fianza = z.object({
   }).refine((val) => val > 0, {
     message: "El monto debe ser mayor a 0",
   }),
+  idcontrato: z.number().optional().nullable(),
 });
 
 export type Fianza = z.infer<typeof Fianza>;
