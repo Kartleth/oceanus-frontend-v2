@@ -506,9 +506,7 @@ export function DataTableArchivos({
         },
         cell: ({ row }) => (
           <div className="capitalize">
-            {row.getValue("nombreDocumentoSubido") === "-"
-              ? "No subido"
-              : row.getValue("nombreDocumentoSubido")}
+            {row.getValue("nombreDocumentoSubido")}
           </div>
         ),
       },
