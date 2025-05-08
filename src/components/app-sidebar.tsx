@@ -50,11 +50,6 @@ const data = {
       icon: Receipt,
     },
     {
-      name: "Terceros",
-      url: "/personal_terceros",
-      icon: NetworkIcon,
-    },
-    {
       name: "Cotizaciones",
       url: "/cotizaciones",
       icon: Calculator,

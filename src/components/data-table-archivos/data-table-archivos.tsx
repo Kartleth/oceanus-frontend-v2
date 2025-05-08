@@ -68,6 +68,21 @@ const documentacionMap: { [key in DocumentacionKey]: string } = {
   comprodomicilio: "Comprobante de Domicilio",
 };
 
+// Tipos de archivo permitidos
+const ALLOWED_FILE_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+];
+
+const ALLOWED_FILE_EXTENSIONS = ".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx";
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 async function fetchDocumentacion(personaId: number) {
   try {
     const response = await fetch(
@@ -139,10 +154,50 @@ async function uploadDocumento(
   documentKey: string,
   file: File
 ) {
+  // Validar tipo de archivo
+  const allowedTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/octet-stream", // Algunos archivos Excel pueden reportar este tipo
+  ];
+
+  // Validar extensión como respaldo
+  const allowedExtensions = [
+    ".pdf",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
+  ];
+  const fileExtension = file.name.split(".").pop()?.toLowerCase();
+
+  if (
+    !allowedTypes.includes(file.type) &&
+    !allowedExtensions.includes(`.${fileExtension}`)
+  ) {
+    throw new Error(
+      `Tipo de archivo no permitido. Solo se aceptan: ${ALLOWED_FILE_EXTENSIONS}`
+    );
+  }
+
+  // Validar tamaño de archivo
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error("El archivo es demasiado grande (máximo 5MB)");
+  }
+
   const formData = new FormData();
   formData.append(documentKey, file);
+  formData.append("filename", file.name);
 
-  console.log("Uploading document:", documentKey, file);
+  console.log("Uploading document:", documentKey, file.name, file.size);
 
   const response = await fetch(
     `http://localhost:3001/documentacion/${idUsuario}/updateDoc/${documentKey}`,
@@ -156,12 +211,11 @@ async function uploadDocumento(
   );
 
   if (!response.ok) {
-    throw new Error("Error al subir el documento");
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Error al subir el documento");
   }
 
-  const data = await response.json();
-  const newFilePath = data.newFilePath;
-  return newFilePath;
+  return await response.json();
 }
 //--------------------------------------------------------------------------
 
@@ -176,14 +230,14 @@ interface Documento {
 interface ActionCellProps {
   row: { original: Documento };
   onDelete: (documentKey: string) => void;
-  onUpload: (documentKey: string, file: File) => void;
+  onUpload: (documentKey: string, file: File) => Promise<void>;
 }
 
 const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
   const documentos = row.original;
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [fileName, setFileName] = React.useState<string>("");
+  const [fileInputKey, setFileInputKey] = React.useState(Date.now());
 
   const uploadDocMutation = useMutation(
     ({
@@ -196,34 +250,45 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
       file: File;
     }) => uploadDocumento(idUsuario, documentKey, file),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [documentos.documentKey, documentos.idUsuario],
-        });
-
-        console.log("Documento subido exitosamente");
+      onMutate: () => {
+        setIsLoading(true);
       },
-      onError: (error) => {
-        console.error("Error al subir el documento:", error);
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: ["documentacion", documentos.idUsuario],
+        });
+        console.log("Documento subido exitosamente:", data);
+      },
+      onError: (error: Error) => {
+        console.error("Error al subir el documento:", error.message);
+        alert(`Error al subir el documento: ${error.message}`);
+      },
+      onSettled: () => {
+        setIsLoading(false);
+        setFileInputKey(Date.now()); // Forzar remount del input
       },
     }
   );
+
   const deleteDocMutation = useMutation(
     () => deleteDocumento(documentos.idUsuario, documentos.documentKey),
     {
+      onMutate: () => {
+        setIsLoading(true);
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: ["documentacion", documentos.idUsuario],
         });
-
         onDelete(documentos.documentKey);
-
-        console.log(
-          `Documento con clave '${documentos.documentKey}' y usuario ID ${documentos.idUsuario} eliminado exitosamente.`
-        );
+        console.log("Documento eliminado exitosamente");
       },
-      onError: (error) => {
-        console.error("Error al eliminar el documento:", error);
+      onError: (error: Error) => {
+        console.error("Error al eliminar el documento:", error.message);
+        alert(`Error al eliminar el documento: ${error.message}`);
+      },
+      onSettled: () => {
+        setIsLoading(false);
       },
     }
   );
@@ -232,30 +297,35 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (!file) {
-      console.log("No file selected");
+    if (!file) return;
+
+    if (isLoading) {
+      console.log("Ya hay una subida en progreso");
       return;
     }
 
-    console.log("File selected:", file);
-
-    setIsLoading(true);
-
     try {
-      const response = await uploadDocMutation.mutateAsync({
+      // Validación adicional del tamaño
+      if (file.size > MAX_FILE_SIZE) {
+        throw new Error(
+          `El archivo es demasiado grande. Tamaño máximo permitido: ${
+            MAX_FILE_SIZE / (1024 * 1024)
+          }MB`
+        );
+      }
+
+      await uploadDocMutation.mutateAsync({
         idUsuario: documentos.idUsuario,
         documentKey: documentos.documentKey,
         file,
       });
-      console.log("Upload response:", response);
-      const newFileName = response.newFilePath;
-      setFileName(newFileName);
-      onUpload(documentos.documentKey, file);
+
+      await onUpload(documentos.documentKey, file);
     } catch (error) {
-      console.error("Error al subir el documento:", error);
-    } finally {
-      setIsLoading(false);
-      event.target.value = "";
+      console.error("Error en el proceso de subida:", error);
+      alert(
+        error instanceof Error ? error.message : "Error al subir el archivo"
+      );
     }
   };
 
@@ -265,12 +335,17 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     const downloadUrl = `http://localhost:3001/documentacion/${documentos.idUsuario}/getDoc/${documentos.documentKey}`;
     window.open(downloadUrl, "_blank");
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
+        <Button variant="ghost" className="h-8 w-8 p-0" disabled={isLoading}>
           <span className="sr-only">Open menu</span>
-          <MoreHorizontal />
+          {isLoading ? (
+            <span className="animate-spin">⏳</span>
+          ) : (
+            <MoreHorizontal />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -284,38 +359,40 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
         <DropdownMenuItem
           onSelect={(event) => {
             event.preventDefault();
-            console.log("Agregar/Editar Documento clicked");
-            console.log("documentos.documentKey:", documentos.documentKey);
+            if (isLoading) return;
 
             const fileInput = document.getElementById(
               `file-input-${documentos.documentKey}`
-            );
+            ) as HTMLInputElement;
 
             if (fileInput) {
-              console.log("File input element:", fileInput);
               fileInput.click();
-            } else {
-              console.error("File input element not found");
             }
           }}
+          disabled={isLoading}
         >
-          {tieneDocumentoSubido ? "Editar" : "Agregar"} Documento
+          {isLoading
+            ? "Procesando..."
+            : tieneDocumentoSubido
+            ? "Reemplazar Documento"
+            : "Agregar Documento"}
         </DropdownMenuItem>
         {tieneDocumentoSubido && (
-          <DropdownMenuItem onClick={() => deleteDocMutation.mutate()}>
+          <DropdownMenuItem
+            onClick={() => deleteDocMutation.mutate()}
+            disabled={isLoading}
+          >
             Eliminar
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
-      {/* Input oculto para subir archivos */}
       <input
+        key={fileInputKey}
         id={`file-input-${documentos.documentKey}`}
         type="file"
         className="hidden"
-        onChange={(event) => {
-          console.log("File input changed");
-          handleFileChange(event);
-        }}
+        onChange={handleFileChange}
+        accept={ALLOWED_FILE_EXTENSIONS}
       />
     </DropdownMenu>
   );
@@ -334,24 +411,21 @@ export function DataTableArchivos({
   const [rowSelection, setRowSelection] = React.useState({});
   const queryClient = useQueryClient();
 
-  React.useEffect(() => {
-    if (!personaId) return;
-
-    async function loadData() {
-      try {
-        const tableData = await prepareTableData(personaId);
-        setData(tableData);
-        console.log("Data loaded:", tableData);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
+  const loadData = React.useCallback(async () => {
+    try {
+      const tableData = await prepareTableData(personaId);
+      setData(tableData);
+    } catch (error) {
+      console.error("Error loading data:", error);
     }
-
-    loadData();
   }, [personaId]);
 
-  const handleDelete = (documentKey: string) => {
-    console.log("Deleting document:", documentKey);
+  React.useEffect(() => {
+    if (!personaId) return;
+    loadData();
+  }, [personaId, loadData]);
+
+  const handleDelete = React.useCallback((documentKey: string) => {
     setData((prevData) =>
       prevData.map((item) =>
         item.documentKey === documentKey
@@ -363,97 +437,122 @@ export function DataTableArchivos({
           : item
       )
     );
-  };
+  }, []);
 
-  const handleUpload = async (documentKey: string, file: File) => {
-    console.log("Uploading document:", documentKey, file);
-    try {
-      const newFileName = await uploadDocumento(personaId, documentKey, file);
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.documentKey === documentKey
-            ? {
-                ...item,
-                nombreDocumentoSubido: newFileName,
-                estatus: "Subido",
+  const handleUpload = React.useCallback(
+    async (documentKey: string, file: File) => {
+      try {
+        const newFileName = await uploadDocumento(personaId, documentKey, file);
+
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.documentKey === documentKey
+              ? {
+                  ...item,
+                  nombreDocumentoSubido: newFileName.newFilePath || file.name,
+                  estatus: "Subido",
+                }
+              : item
+          )
+        );
+
+        // Invalidar la caché de react-query
+        queryClient.invalidateQueries(["documentacion", personaId]);
+      } catch (error) {
+        console.error("Error en handleUpload:", error);
+        throw error;
+      }
+    },
+    [personaId, queryClient]
+  );
+
+  const columns: ColumnDef<Documento>[] = React.useMemo(
+    () => [
+      {
+        accessorKey: "nombreDocumentoEsperado",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
               }
-            : item
-        )
-      );
-      console.log("Document uploaded and state updated");
-    } catch (error) {
-      console.error("Error al subir el documento:", error);
-    }
-  };
-
-  const columns: ColumnDef<Documento>[] = [
-    {
-      accessorKey: "nombreDocumentoEsperado",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nombre documento esperado
-            <ArrowUpDown />
-          </Button>
-        );
+            >
+              Nombre documento esperado
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div className="capitalize">
+            {row.getValue("nombreDocumentoEsperado")}
+          </div>
+        ),
       },
-      cell: ({ row }) => (
-        <div className="lowercase">
-          {row.getValue("nombreDocumentoEsperado")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "nombreDocumentoSubido",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Documento subido
-            <ArrowUpDown />
-          </Button>
-        );
+      {
+        accessorKey: "nombreDocumentoSubido",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Documento subido
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div className="capitalize">
+            {row.getValue("nombreDocumentoSubido") === "-"
+              ? "No subido"
+              : row.getValue("nombreDocumentoSubido")}
+          </div>
+        ),
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("nombreDocumentoSubido")}</div>
-      ),
-    },
-    {
-      accessorKey: "estatus",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      {
+        accessorKey: "estatus",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Estatus
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div
+            className={`capitalize ${
+              row.getValue("estatus") === "Subido"
+                ? "text-green-600"
+                : "text-red-600"
+            }`}
           >
-            Estatus de subida
-            <ArrowUpDown />
-          </Button>
-        );
+            {row.getValue("estatus")}
+          </div>
+        ),
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("estatus")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => (
-        <>
+      {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => (
           <ActionCell
             row={row}
             onDelete={handleDelete}
             onUpload={handleUpload}
           />
-        </>
-      ),
-    },
-  ];
+        ),
+      },
+    ],
+    [handleDelete, handleUpload]
+  );
 
   const table = useReactTable({
     data,
@@ -479,16 +578,15 @@ export function DataTableArchivos({
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filtrar..."
+            placeholder="Filtrar documentos..."
             value={(table.getState().globalFilter as string) ?? ""}
             onChange={(event) => table.setGlobalFilter(event.target.value)}
             className="max-w-sm"
           />
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columnas <ChevronDown />
+                Columnas <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -505,7 +603,11 @@ export function DataTableArchivos({
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      {column.id === "nombreDocumentoEsperado"
+                        ? "Documento"
+                        : column.id === "nombreDocumentoSubido"
+                        ? "Archivo Subido"
+                        : column.id}
                     </DropdownMenuCheckboxItem>
                   );
                 })}
@@ -555,7 +657,7 @@ export function DataTableArchivos({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    No se encontraron documentos.
                   </TableCell>
                 </TableRow>
               )}
@@ -570,7 +672,7 @@ export function DataTableArchivos({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Previous
+              Anterior
             </Button>
             <Button
               variant="outline"
@@ -578,7 +680,7 @@ export function DataTableArchivos({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next
+              Siguiente
             </Button>
           </div>
         </div>

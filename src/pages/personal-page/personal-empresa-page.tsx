@@ -38,14 +38,10 @@ export function PagePersonalEmpresa() {
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
         <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
           <Link to="/agregar-trabajador">
             <CirclePlus />
             Agregar trabajador
           </Link>
-        </Button>
-        <Button className="bg-deepSea hover:bg-deepLightSea">
-          <Upload /> Subir Excel
         </Button>
       </div>
 
