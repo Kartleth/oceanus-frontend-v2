@@ -34,6 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 type DocumentacionKey =
   | "credencial"
@@ -525,17 +526,17 @@ export function DataTableArchivos({
             </Button>
           );
         },
-        cell: ({ row }) => (
-          <div
-            className={`capitalize ${
-              row.getValue("estatus") === "Subido"
-                ? "text-green-600"
-                : "text-red-600"
-            }`}
-          >
-            {row.getValue("estatus")}
-          </div>
-        ),
+        cell: ({ row }) => {
+          const estatus = row.getValue("estatus") as string;
+          return (
+            <Badge
+              variant={estatus === "Subido" ? "secondary" : "outline"}
+              className="capitalize"
+            >
+              {estatus}
+            </Badge>
+          );
+        },
       },
       {
         id: "actions",
