@@ -66,12 +66,14 @@ export default function FianzaCumplimiento() {
 
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-            <Link
-              to={`/contratos/${idcontrato}/fianza-cumplimiento/agregar-fianza-cumplimiento`}
-            >
-              <CirclePlus />
-              Agregar Fianza de cumplimiento
-            </Link>
+          <Link
+            to={`/contratos/${idcontrato}/fianza-cumplimiento/agregar-fianza-cumplimiento${
+              fromDetails ? "?from=details" : ""
+            }`}
+          >
+            <CirclePlus className="h-4 w-4" />
+            Agregar Fianza de Cumplimiento
+          </Link>
           </Button>
         </div>
       </div>

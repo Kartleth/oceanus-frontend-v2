@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import Layout from "@/components/Layout";
 import {
@@ -21,6 +21,9 @@ export function VerDetallesFianzaCumplimiento() {
     idcontrato: string;
     idFianzaCumplimiento: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   console.log("ID del contrato:", idcontrato);
   console.log("ID de la fianza:", idFianzaCumplimiento);
@@ -54,13 +57,35 @@ export function VerDetallesFianzaCumplimiento() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/contratos/${idcontrato}/fianza-cumplimiento`}
-              >
-                Fianzas de cumplimiento de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/contratos/${idcontrato}/fianza-cumplimiento?from=details`}
+                    >
+                      Fianzas de Cumplimiento de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-cumplimiento`}>
+                    Fianzas de Cumplimiento de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaCumplimientos,
   datosFianzaCumplimientoSchema,
@@ -31,6 +31,9 @@ export function PageAgregarFianzaCumplimiento() {
   const { idcontrato } = useParams<{
     idcontrato: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -109,15 +112,38 @@ export function PageAgregarFianzaCumplimiento() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/contratos/${idcontrato}/fianza-cumplimiento`}
-              >
-                Fianzas de Cumplimiento de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/contratos/${idcontrato}/fianza-cumplimiento?from=details`}
+                    >
+                      Fianzas de Cumplimiento de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-cumplimiento`}>
+                    Fianzas de Cumplimiento de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
+
             <BreadcrumbLink
               href={`/contratos/${idcontrato}/fianza-cumplimiento/agregar-fianza-cumplimiento`}
             >
@@ -139,7 +165,9 @@ export function PageAgregarFianzaCumplimiento() {
               className="[&[data-state=open]]:bg-gray-200 data-[haserrors=true]:text-destructive p-4 rounded-t-md transition-colors"
             >
               {`Datos de Fianza de Cumplimiento ${
-                erroresCumplimiento > 0 ? `(${erroresCumplimiento} errores)` : ""
+                erroresCumplimiento > 0
+                  ? `(${erroresCumplimiento} errores)`
+                  : ""
               }`}
             </AccordionTrigger>
             <AccordionContent className="rounded-b-md bg-muted/50 p-4">

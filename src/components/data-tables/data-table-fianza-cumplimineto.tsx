@@ -181,12 +181,15 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
       const Fianza = row.original;
       const queryClient = useQueryClient();
       const deleteFianza = useMutation(async () => {
-        const res = await fetch(`http://localhost:3001/fianza/contrato/${contratoId}/${Fianza.idfianza}`, {
-          method: "delete",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `http://localhost:3001/fianza/contrato/${contratoId}/${Fianza.idfianza}`,
+          {
+            method: "delete",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const resData = await res.json();
         if (!res.ok) {
           console.error(resData);
@@ -210,7 +213,13 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
               }
             >
               <Link
-                to={`/contratos/${contratoId}/fianza-Cumplimiento/detalles/${row.original.idfianza}`}
+                to={`/contratos/${contratoId}/fianza-cumplimiento/detalles/${
+                  row.original.idfianza
+                }${
+                  location.search.includes("from=details")
+                    ? "?from=details"
+                    : ""
+                }`}
               >
                 Ver detalles
               </Link>
@@ -221,7 +230,11 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/contratos/${contratoId}/fianza-cumplimiento/editar-fianza-cumplimiento/${row.original.idfianza}`}>Editar</Link>
+              <Link
+                to={`/contratos/${contratoId}/fianza-cumplimiento/editar-fianza-cumplimiento/${row.original.idfianza}`}
+              >
+                Editar
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
