@@ -164,7 +164,7 @@ async function uploadDocumento(
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "application/vnd.ms-excel",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "application/octet-stream", // Algunos archivos Excel pueden reportar este tipo
+    "application/octet-stream",
   ];
 
   // Validar extensión como respaldo
@@ -189,7 +189,6 @@ async function uploadDocumento(
     );
   }
 
-  // Validar tamaño de archivo
   if (file.size > MAX_FILE_SIZE) {
     throw new Error("El archivo es demasiado grande (máximo 5MB)");
   }
@@ -266,7 +265,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
       },
       onSettled: () => {
         setIsLoading(false);
-        setFileInputKey(Date.now()); // Forzar remount del input
+        setFileInputKey(Date.now());
       },
     }
   );
@@ -306,7 +305,6 @@ const ActionCell: React.FC<ActionCellProps> = ({ row, onDelete, onUpload }) => {
     }
 
     try {
-      // Validación adicional del tamaño
       if (file.size > MAX_FILE_SIZE) {
         throw new Error(
           `El archivo es demasiado grande. Tamaño máximo permitido: ${
