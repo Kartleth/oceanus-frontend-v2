@@ -71,7 +71,7 @@ export function VerDetallesFianzaViciosOcultos() {
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link
-                      to={`/contratos/${idcontrato}/fianza-vicios-ocultos`}
+                      to={`/contratos/${idcontrato}/fianza-vicios-ocultos?from=details`}
                     >
                       Fianzas de Vicios ocultos de contrato {idcontrato}
                     </Link>

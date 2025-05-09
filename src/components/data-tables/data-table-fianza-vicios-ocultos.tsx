@@ -229,9 +229,19 @@ export const getColumns = (contratoId: string): ColumnDef<Fianza>[] => [
               <Link to={``}>Gestionar archivos</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem
+              onClick={() =>
+                navigator.clipboard.writeText(Fianza.idfianza.toString())
+              }
+            >
               <Link
-                to={`/contratos/${contratoId}/fianza-vicios-ocultos/editar-fianza-vicios-ocultos/${row.original.idfianza}?from=details`}
+                to={`/contratos/${contratoId}/fianza-vicios-ocultos/editar-fianza-vicios-ocultos/${
+                  row.original.idfianza
+                }${
+                  location.search.includes("from=details")
+                    ? "?from=details"
+                    : ""
+                }`}
               >
                 Editar
               </Link>

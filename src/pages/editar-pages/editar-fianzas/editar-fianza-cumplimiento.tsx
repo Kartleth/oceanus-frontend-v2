@@ -5,6 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaCumplimientos,
   datosFianzaCumplimientoSchema,
@@ -33,6 +34,9 @@ export function PageEditarFianzaCumplimiento() {
     idcontrato: string;
     idFianzaCumplimiento: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -122,7 +126,7 @@ export function PageEditarFianzaCumplimiento() {
 
   useEffect(() => {
     if (data) {
-        datosFianzaCumplimientoForm.reset({
+      datosFianzaCumplimientoForm.reset({
         tipodecambio: data.tipodecambio,
         inicio: data.inicio ? new Date(data.inicio) : undefined,
         fin: data.fin ? new Date(data.fin) : undefined,
@@ -148,18 +152,38 @@ export function PageEditarFianzaCumplimiento() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-cumplimiento`}>
-                Fianzas de Cumplimiento de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/contratos/${idcontrato}/fianza-cumplimiento?from=details`}
+                    >
+                      Fianzas de Cumplimiento de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-cumplimiento`}>
+                    Fianzas de Cumplimiento de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
-            <BreadcrumbLink
-              href={`/contratos/${idcontrato}/fianza-cumplimiento/editar-fianza-cumplimiento/${idFianzaCumplimiento}`}
-            >
-              Editar fianza
-            </BreadcrumbLink>
+            <BreadcrumbPage>Editar fianza</BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
