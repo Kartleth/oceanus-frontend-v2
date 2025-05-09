@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import Layout from "@/components/Layout";
 import {
@@ -21,6 +21,9 @@ export function VerDetallesFianzaAnticipo() {
     idcontrato: string;
     idFianzaAnticipo: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   console.log("ID del contrato:", idcontrato);
   console.log("ID de la fianza:", idFianzaAnticipo);
@@ -54,11 +57,31 @@ export function VerDetallesFianzaAnticipo() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo`}>
-                Fianzas de Anticipo de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>Detalles</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/contratos/${idcontrato}/fianza-anticipo?from=details`}>
+                      Fianzas de Anticipo de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-anticipo`}>
+                    Fianzas de Anticipo de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>

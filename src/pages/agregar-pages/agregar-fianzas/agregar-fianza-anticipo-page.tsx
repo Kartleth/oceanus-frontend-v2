@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaAnticipos,
   datosFianzaAnticipoSchema,
@@ -31,6 +31,9 @@ export function PageAgregarFianzaAnticipo() {
   const { idcontrato } = useParams<{
     idcontrato: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -109,13 +112,38 @@ export function PageAgregarFianzaAnticipo() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo`}>
-                Fianzas de Anticipo de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/contratos/${idcontrato}/fianza-anticipo?from=details`}
+                    >
+                      Fianzas de Anticipo de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-anticipo`}>
+                    Fianzas de Anticipo de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
+
             <BreadcrumbLink
               href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}
             >
