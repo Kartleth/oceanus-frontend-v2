@@ -49,7 +49,7 @@ export default function FianzaAnticipo() {
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <Link to={`/contratos/${idcontrato}/fianza-anticipo`}>
-                  Fianzas de Anticipo
+                  Fianzas de Anticipo de contrato {idcontrato}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>

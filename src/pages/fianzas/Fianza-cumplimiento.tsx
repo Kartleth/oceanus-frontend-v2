@@ -10,12 +10,13 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import { DataTableFianzaAnticipo } from "@/components/data-tables/data-table-fianza-anticipo";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { DataTableFianzaCumplimiento } from "@/components/data-tables/data-table-fianza-cumplimineto";
 
 export default function FianzaCumplimiento() {
   const { idcontrato } = useParams<{ idcontrato: string }>();
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
@@ -28,6 +29,19 @@ export default function FianzaCumplimiento() {
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
+
+            {fromDetails && (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
 
             <BreadcrumbItem>
               <BreadcrumbLink
