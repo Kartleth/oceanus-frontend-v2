@@ -85,7 +85,7 @@ function App() {
               element={<PageAgregarConvenio />}
             />
 
-            {/* Rutas de fianzas */}
+            {/* Rutas de fianzas - Versión optimizada */}
             <Route
               path="/contratos/:idcontrato/fianza-anticipo"
               element={<FianzaAnticipo />}
@@ -98,18 +98,22 @@ function App() {
               path="/contratos/:idcontrato/fianza-vicios-ocultos"
               element={<FianzaViciosOcultos />}
             />
+
+            {/* Detalles de fianzas */}
             <Route
               path="/contratos/:idcontrato/fianza-anticipo/detalles/:idFianzaAnticipo"
               element={<VerDetallesFianzaAnticipo />}
             />
             <Route
-              path="/contratos/:idcontrato/fianza-Cumplimiento/detalles/:idFianzaCumplimiento"
+              path="/contratos/:idcontrato/fianza-cumplimiento/detalles/:idFianzaCumplimiento"
               element={<VerDetallesFianzaCumplimiento />}
             />
             <Route
               path="/contratos/:idcontrato/fianza-vicios-ocultos/detalles/:idFianzaViciosO"
               element={<VerDetallesFianzaViciosOcultos />}
             />
+
+            {/* Agregar fianzas */}
             <Route
               path="/contratos/:idcontrato/fianza-anticipo/agregar-fianza-anticipo"
               element={<PageAgregarFianzaAnticipo />}
@@ -122,6 +126,8 @@ function App() {
               path="/contratos/:idcontrato/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos"
               element={<PageAgregarFianzaViciosOcultos />}
             />
+
+            {/* Editar fianzas */}
             <Route
               path="/contratos/:idcontrato/fianza-anticipo/editar-fianza-anticipo/:idFianzaAnticipo"
               element={<PageEditarFianzaAnticipo />}
@@ -160,10 +166,6 @@ function App() {
               path="/detalles-trabajador/:id"
               element={<VerDetallesPersonal />}
             />
-            {/* <Route
-            path="/detalles-contratos/:id"
-            element={<VerDetallesContratos />}
-          /> */}
             <Route
               path="/reporte-de-empleado/:id"
               element={<VerReportePersonal />}

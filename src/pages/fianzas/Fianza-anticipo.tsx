@@ -10,11 +10,14 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { DataTableFianzaAnticipo } from "@/components/data-tables/data-table-fianza-anticipo";
 
 export default function FianzaAnticipo() {
   const { idcontrato } = useParams<{ idcontrato: string }>();
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
@@ -23,23 +26,40 @@ export default function FianzaAnticipo() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/contratos">Contratos</BreadcrumbLink>
+              <BreadcrumbLink asChild>
+                <Link to="/contratos">Contratos</Link>
+              </BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
+            {fromDetails && (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
+
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-anticipo`}>
-                Fianzas de Anticipo de contrato {idcontrato}
+              <BreadcrumbLink asChild>
+                <Link to={`/contratos/${idcontrato}/fianza-anticipo`}>
+                  Fianzas de Anticipo
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
 
-      <div className="flex items-center">
-        <div className="container flex flex-col items-start gap-1 py-4 px-5 md:py-6 lg:py-8 sm:-mb-2">
-          <h1 className=" text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 md:p-6">
+        <div>
+          <h1 className="text-gray-600 text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
             Fianzas de Anticipo
           </h1>
           <p className="max-w-2xl text-lg font-light text-foreground">
@@ -47,21 +67,20 @@ export default function FianzaAnticipo() {
           </p>
         </div>
 
-        <div className="px-3 w-full flex justify-end gap-2 ">
-          <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-            <Link to={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}>
-              <CirclePlus />
-              Agregar Fianza de Anticipo
-            </Link>
-          </Button>
-        </div>
+        <Button className="bg-deepSea hover:bg-deepLightSea gap-2" asChild>
+          <Link
+            to={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo${
+              fromDetails ? "?from=details" : ""
+            }`}
+          >
+            <CirclePlus className="h-4 w-4" />
+            Agregar Fianza de Anticipo
+          </Link>
+        </Button>
       </div>
 
-      <div className="px-3"></div>
-      <div className="px-3">
-        <DataTableFianzaAnticipo
-          contratoId={idcontrato ?? ""}
-        ></DataTableFianzaAnticipo>
+      <div className="px-4 pb-4">
+        <DataTableFianzaAnticipo contratoId={idcontrato ?? ""} />
       </div>
     </Layout>
   );

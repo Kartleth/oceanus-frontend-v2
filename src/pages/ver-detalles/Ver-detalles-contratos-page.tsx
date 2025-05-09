@@ -92,14 +92,14 @@ export function VerDetallesContratos() {
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <CreditCard />
-                <Link to={`/contratos/${contrato?.idcontrato}/fianza-anticipo`}>
+                <Link to={`/contratos/${contrato?.idcontrato}/fianza-anticipo?from=details`}>
                   Fianza de Anticipo
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <ShieldCheck />
                 <Link
-                  to={`/contratos/${contrato?.idcontrato}/fianza-cumplimiento`}
+                  to={`/contratos/${contrato?.idcontrato}/fianza-cumplimiento?from=details`}
                 >
                   Fianza de Cumplimiento
                 </Link>
@@ -107,7 +107,7 @@ export function VerDetallesContratos() {
               <DropdownMenuItem>
                 <EyeOff />
                 <Link
-                  to={`/contratos/${contrato?.idcontrato}/fianza-vicios-ocultos`}
+                  to={`/contratos/${contrato?.idcontrato}/fianza-vicios-ocultos?from=details`}
                 >
                   Fianza de Vicios ocultos
                 </Link>
