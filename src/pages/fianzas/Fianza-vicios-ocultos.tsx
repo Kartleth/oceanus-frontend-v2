@@ -10,11 +10,14 @@ import { Separator } from "@radix-ui/react-separator";
 import Layout from "../../components/Layout";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { DataTableFianzaViciosOcultos } from "@/components/data-tables/data-table-fianza-vicios-ocultos";
 
 export default function FianzaViciosOcultos() {
   const { idcontrato } = useParams<{ idcontrato: string }>();
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
+
   return (
     <Layout>
       <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-gray-50 p-4">
@@ -27,6 +30,19 @@ export default function FianzaViciosOcultos() {
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />
+
+            {fromDetails && (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
 
             <BreadcrumbItem>
               <BreadcrumbLink
