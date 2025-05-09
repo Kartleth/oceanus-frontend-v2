@@ -6,6 +6,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -85,11 +86,7 @@ export function VerDetallesFianzaAnticipo() {
 
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/contratos/${idcontrato}/fianza-anticipo/detalles/${idFianzaAnticipo}`}
-              >
-                Detalles de fianza
-              </BreadcrumbLink>
+              <BreadcrumbPage>Detalles de fianza</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

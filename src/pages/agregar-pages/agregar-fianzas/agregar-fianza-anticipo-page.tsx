@@ -5,6 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -144,11 +145,7 @@ export function PageAgregarFianzaAnticipo() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbLink
-              href={`/contratos/${idcontrato}/fianza-anticipo/agregar-fianza-anticipo`}
-            >
-              Agregar fianza
-            </BreadcrumbLink>
+            <BreadcrumbPage>Agregar fianza</BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
