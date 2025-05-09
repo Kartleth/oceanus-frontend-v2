@@ -28,18 +28,14 @@ export default function Contratos() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
-          <Link to="/agregar-contratos">
-            <CirclePlus />
-            Agregar contratos
+        <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
+          <Link to="/agregar-contratos" className="flex items-center space-x-2">
+            <CirclePlus className="w-5 h-5" />
+            <span>Agregar contrato</span>
           </Link>
         </Button>
-        <Button className="bg-deepSea hover:bg-deepLightSea">
-          <Upload /> Subir Excel
-        </Button>
       </div>
-      <div className="px-3"></div>
+
       <div className="px-3">
         <DataTableContratos></DataTableContratos>
       </div>

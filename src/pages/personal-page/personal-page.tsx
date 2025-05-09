@@ -4,7 +4,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList
+  BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -28,17 +28,14 @@ export function Page_personal() {
       </header>
 
       <div className="py-6 px-3 space-x-2 flex justify-end">
-        <Button
-          className="bg-deepSea hover:bg-deepLightSea"
-         asChild={true}>
-          {/* Este se debe de poner entre llaves, es un boolean por ende se debe confirmar como true o false, se puede dejar asi, pero no lo hagas. */}
-          <Link to="/agregar-trabajador">
-            <CirclePlus />
-            Agregar trabajador
+        <Button className="bg-deepSea hover:bg-deepLightSea flex items-center space-x-2">
+          <Link
+            to="/agregar-trabajador"
+            className="flex items-center space-x-2"
+          >
+            <CirclePlus className="w-5 h-5" />
+            <span>Agregar trabajador</span>
           </Link>
-        </Button>
-        <Button className="bg-deepSea hover:bg-deepLightSea">
-          <Upload /> Subir Excel
         </Button>
       </div>
 
