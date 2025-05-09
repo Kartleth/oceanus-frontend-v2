@@ -5,6 +5,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   DatosFianzaOcultos,
   DatosFianzaOcultosForm,
@@ -31,6 +32,9 @@ export function PageAgregarFianzaViciosOcultos() {
   const { idcontrato } = useParams<{
     idcontrato: string;
   }>();
+
+  const { search } = useLocation();
+  const fromDetails = new URLSearchParams(search).get("from") === "details";
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -109,18 +113,38 @@ export function PageAgregarFianzaViciosOcultos() {
 
             <BreadcrumbSeparator />
 
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/contratos/${idcontrato}/fianza-vicios-ocultos`}>
-                Fianzas de vicios de ocultos de contrato {idcontrato}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {fromDetails ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/detalles-contratos/${idcontrato}`}>
+                      Detalles
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/contratos/${idcontrato}/fianza-vicios-ocultos?from=details`}
+                    >
+                      Fianzas de Vicios ocultos de contrato {idcontrato}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to={`/contratos/${idcontrato}/fianza-vicios-ocultos`}>
+                    Fianzas de Vicios ocultos de contrato {idcontrato}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
 
             <BreadcrumbSeparator />
-            <BreadcrumbLink
-              href={`/contratos/${idcontrato}/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos`}
-            >
-              Agregar fianza
-            </BreadcrumbLink>
+            <BreadcrumbPage>Agregar fianza</BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
       </header>

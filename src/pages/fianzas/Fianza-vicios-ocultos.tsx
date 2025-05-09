@@ -48,7 +48,7 @@ export default function FianzaViciosOcultos() {
               <BreadcrumbLink
                 href={`/contratos/${idcontrato}/fianza-vicios-ocultos`}
               >
-                Fianzas de vicios de ocultos de contrato {idcontrato}
+                Fianzas de Vicios ocultos de contrato {idcontrato}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -67,12 +67,14 @@ export default function FianzaViciosOcultos() {
 
         <div className="px-3 w-full flex justify-end gap-2 ">
           <Button className="bg-deepSea hover:bg-deepLightSea" asChild={true}>
-            <Link
-              to={`/contratos/${idcontrato}/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos`}
-            >
-              <CirclePlus />
-              Agregar Fianza de vicios de ocultos
-            </Link>
+          <Link
+            to={`/contratos/${idcontrato}/fianza-vicios-ocultos/agregar-fianza-vicios-ocultos${
+              fromDetails ? "?from=details" : ""
+            }`}
+          >
+            <CirclePlus className="h-4 w-4" />
+            Agregar Fianza de Vicios ocultos
+          </Link>
           </Button>
         </div>
       </div>
